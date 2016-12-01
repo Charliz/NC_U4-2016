@@ -14,14 +14,14 @@ public class JdbcUtils {
     }
 
     public static void closeQuietly(ResultSet rs) {
-        // реализует итератор
+
         if (rs != null) {
             try {
                 rs.close();
                 System.out.println("result set closed");
             } catch (SQLException e) {
                 System.out.println("Cannot close result set");
-                // NOP
+
             }
         }
     }

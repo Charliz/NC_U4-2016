@@ -15,7 +15,7 @@ public class DaoFactory {
 	private String password;
 	private String url;
 	private String driver;
-//	private static Logger log = Logger.getLogger(DaoFactory.class.getName());
+
 
 	private DaoFactory() throws Exception {
 		try {
@@ -58,57 +58,13 @@ public class DaoFactory {
 			return new PostgreCatalogDAO();
 		}
 	}
-//
-//	public GoodsDao getGoodsDao() {
-//		if (type.equalsIgnoreCase("postgres")) {
-//			return new PostgreSqlGoodsDao();
-//		} else {
-//			return new PostgreSqlGoodsDao();
-//		}
-//	}
-//
-//	public OrderDao getOrderDao() {
-//		if (type.equalsIgnoreCase("postgres")) {
-//			return new PostgreSqlOrderDao();
-//		} else {
-//			return new PostgreSqlOrderDao();
-//		}
-//	}
-//
-//	public CustomerDao getCustomerDao() {
-//		if (type.equalsIgnoreCase("postgres")) {
-//			return new PostgreSqlCustomerDao();
-//		} else {
-//			return new PostgreSqlCustomerDao();
-//		}
-//	}
-//
-//	public OrderLineDao getOrderLineDao() {
-//		if (type.equalsIgnoreCase("postgres")) {
-//			return new PostgreSqlOrderLineDao();
-//		} else {
-//			return new PostgreSqlOrderLineDao();
-//		}
-//	}
 
-	private void loadProperties() throws Exception {
-		//Properties properties = new Properties();
-//		try {
-		//	properties.load(DaoFactory.class.getResourceAsStream("/db.properties"));
-//			type = properties.getProperty("type");
-//			user = properties.getProperty("user");
-//			password = properties.getProperty("password");
-//			url = properties.getProperty("url");
-//			driver = properties.getProperty("driver");
+    private void loadProperties() throws Exception {
 
-            type = "postgres";
-            user = "user1";
-            password = "123";
-            url = "jdbc:postgresql://localhost:5432/onlinestore";
-            driver = "org.postgresql.Driver";
-
-//		} catch (IOException e) {
-//			throw new Exception("Can't read file", e);
-//		}
+        type = "postgres";
+        user = "user1";
+        password = "123";
+        url = "jdbc:postgresql://localhost:5432/onlinestore";
+        driver = "org.postgresql.Driver";
 	}
 }

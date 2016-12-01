@@ -6,6 +6,8 @@ import myStore.DAO.postgre.PostgreCatalogDAO;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/cat")
 public class Categories {
@@ -13,7 +15,7 @@ public class Categories {
     @Produces("text/plain")
     public String getClichedMessage() throws Exception {
         PostgreCatalogDAO pcd = new PostgreCatalogDAO();
-        storeCatalog c = pcd.read();
-        return c.toString();
+        List<storeCatalog> alCat = pcd.getAll();
+        return pcd.getAll().toString();
     }
 }
