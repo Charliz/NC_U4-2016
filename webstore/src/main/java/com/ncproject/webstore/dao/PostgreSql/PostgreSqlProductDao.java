@@ -1,5 +1,7 @@
-package com.ncproject.webstore.dao;
+package com.ncproject.webstore.dao.PostgreSql;
 
+import com.ncproject.webstore.dao.DbExceptions;
+import com.ncproject.webstore.dao.ProductDao;
 import com.ncproject.webstore.entity.Product;
 
 import javax.sql.DataSource;
@@ -8,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostgreSqlProductDao implements ProductDao{
+public class PostgreSqlProductDao implements ProductDao {
 
     private DataSource dataSource;
 

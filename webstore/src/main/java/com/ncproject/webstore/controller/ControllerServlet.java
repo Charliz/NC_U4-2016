@@ -1,6 +1,6 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.PostgreSqlProductDao;
+import com.ncproject.webstore.dao.PostgreSql.PostgreSqlProductDao;
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
