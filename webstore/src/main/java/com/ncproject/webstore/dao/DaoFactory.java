@@ -14,17 +14,14 @@ public class DaoFactory {
 	private DataSource dataSource;
 
 	private static DaoFactory daoFactory;
-	/*private String user = "postgres";
-	private String password = "0130";
-	private String url = "jdbc:postgresql://localhost:5432/onlinestore";*/
 
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		daoFactory = getInstance();
 		CustomerDao customerDao = daoFactory.getCustomerDao();
 		//Customer customer = customerDao.create("Login", "Password");
 		Customer customer = customerDao.read("Login");
 		//customerDao.update("Login", "Password3");
-	}
+	}*/
 
 	public static DaoFactory getInstance() {
 		if (null == daoFactory) {
@@ -35,7 +32,6 @@ public class DaoFactory {
 
 	public Connection getConnection() {
 		try {
-			//return DriverManager.getConnection(url, user, password);
 			return  dataSource.getConnection();
 		} catch (SQLException e) {
 			System.out.println("Connection exception.");
