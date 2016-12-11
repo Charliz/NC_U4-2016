@@ -12,34 +12,32 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	private DaoFactory daoFactory = DaoFactory.getInstance();
 
 	@Override
-	public Customer create(String login, String password){
-		String sql = "insert into registered_customers values (DEFAULT,?,?,123);";
+	public void create(Customer customer){
+		String sql = "insert into customer values (default, ?, ?, ?, ?, ?, ?);";
 
-		Customer customer = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
 		try {
 			connection = daoFactory.getConnection();
 			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			preparedStatement.setString(1, login);
-			preparedStatement.setString(2, password);
+			preparedStatement.setString(1, customer.getName());
+			preparedStatement.setString(2, customer.getAddress());
+			preparedStatement.setString(3, customer.getLogin());
+			preparedStatement.setString(4, customer.getPassword());
+			preparedStatement.setString(5, customer.getEmail());
+			preparedStatement.setString(6, customer.getPayment());
 			preparedStatement.execute();
-			resultSet = preparedStatement.getGeneratedKeys();
-			resultSet.next();
-			customer = parseResultSet(resultSet);
 		} catch (SQLException e) {
+			System.out.println("Customer insert exception");
 		} finally {
-			JdbcUtils.closeQuietly(resultSet);
 			JdbcUtils.closeQuietly(preparedStatement);
 			JdbcUtils.closeQuietly(connection);
 		}
-		return customer;
 	}
 
 	@Override
 	public Customer read(String login){
-		String sql = "select * from registered_customers where username = ?;";
+		String sql = "select * from customer where login = ?;";
 
 		Customer customer = null;
 		Connection connection = null;
@@ -54,6 +52,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 				customer = parseResultSet(resultSet);
 			}
 		} catch (SQLException e) {
+			System.out.println("Customer select exception");
 		} finally {
 			JdbcUtils.closeQuietly(resultSet);
 			JdbcUtils.closeQuietly(preparedStatement);
@@ -63,35 +62,35 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	}
 
 	@Override
-	public void update(String login, String password){
+	public void update(Customer customer){
 
-		String sql = "update registered_customers set password = ? where username = ?";
-		//Customer customer = null;
+		String sql = "update customer set name = ?, address = ?, login = ?, password = ?, email = ?, payment = ? where id = 4;";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
 			connection = daoFactory.getConnection();
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, password);
-			preparedStatement.setString(2, login);
+			preparedStatement.setString(1, customer.getName());
+			preparedStatement.setString(2, customer.getAddress());
+			preparedStatement.setString(3, customer.getLogin());
+			preparedStatement.setString(4, customer.getPassword());
+			preparedStatement.setString(5, customer.getEmail());
+			preparedStatement.setString(6, customer.getPayment());
 			preparedStatement.execute();
 			resultSet = preparedStatement.getGeneratedKeys();
 			resultSet.next();
-			//customer = parseResultSet(resultSet);
 		} catch (SQLException e) {
-			e.getStackTrace();
-			System.out.println("Query exception");
+			System.out.println("Customer update exception");
 		} finally {
 			JdbcUtils.closeQuietly(resultSet);
 			JdbcUtils.closeQuietly(preparedStatement);
 			JdbcUtils.closeQuietly(connection);
 		}
-		//return customer;
 	}
 
 	private Customer parseResultSet(ResultSet resultSet) throws SQLException {
-		Customer customer = new Customer(resultSet.getString("username"), resultSet.getString("password"));
+		Customer customer = new Customer(resultSet.getString("login"), resultSet.getString("password"), resultSet.getString("email"), resultSet.getString("name"), resultSet.getString("address"), resultSet.getString("payment"));
 		customer.setId(resultSet.getInt("id"));
 		return customer;
 	}

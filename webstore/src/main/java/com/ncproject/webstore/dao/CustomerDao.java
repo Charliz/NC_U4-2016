@@ -4,10 +4,10 @@ import com.ncproject.webstore.entity.Customer;
 
 public interface CustomerDao {
 
-	Customer create(String login, String password);
+	void create(Customer customer);
 
 	Customer read(String login);
 
-	void update(String login, String password);
+	void update(Customer customer);
 
 }
