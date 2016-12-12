@@ -1,4 +1,4 @@
-package com.ncproject.webstore.dao.PostgreSql;
+package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.DbExceptions;
 import com.ncproject.webstore.dao.ProductDao;
