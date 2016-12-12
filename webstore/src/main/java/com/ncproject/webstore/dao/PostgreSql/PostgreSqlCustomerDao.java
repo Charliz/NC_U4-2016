@@ -1,4 +1,4 @@
-package com.ncproject.webstore.dao.PostgreSql;
+package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.DaoFactory;
