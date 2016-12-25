@@ -11,9 +11,9 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Welcome back</h1>
+    <h1 align="center">Hello</h1>
     <form>
-        <table>
+        <table align="center">
             <tr><td><input type="text" name="login"></td></tr>
             <tr><td><input type="password" name="password"></td></tr>
             <tr><td><input type="submit" value="Log In"></td></tr>

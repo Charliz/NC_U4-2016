@@ -3,6 +3,7 @@ package com.ncproject.webstore.dao;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -30,6 +31,7 @@ public class DaoFactory {
 		return daoFactory;
 	}
 
+	@PostConstruct
 	public Connection getConnection() {
 		try {
 			return  dataSource.getConnection();
@@ -40,6 +42,6 @@ public class DaoFactory {
 	}
 
 	public CustomerDao getCustomerDao() {
-		return (CustomerDao) new PostgreSqlCustomerDao();
+		return (CustomerDao) new PostgreSqlCustomerDao(dataSource);
 	}
 }

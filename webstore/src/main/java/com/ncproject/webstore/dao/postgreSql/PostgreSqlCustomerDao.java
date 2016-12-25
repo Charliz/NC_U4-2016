@@ -5,11 +5,17 @@ import com.ncproject.webstore.dao.DaoFactory;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 
 public class PostgreSqlCustomerDao implements CustomerDao {
-	private DaoFactory daoFactory = DaoFactory.getInstance();
+	private DaoFactory daoFactory = null;
+	private DataSource dataSource = null;
+
+	public PostgreSqlCustomerDao(DataSource dataSource){
+		this.dataSource = dataSource;
+	}
 
 	@Override
 	public void create(Customer customer){
@@ -18,7 +24,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = daoFactory.getConnection();
+			connection = dataSource.getConnection();
 			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, customer.getName());
 			preparedStatement.setString(2, customer.getAddress());
@@ -44,7 +50,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = daoFactory.getConnection();
+			connection = dataSource.getConnection();
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, login);
 			resultSet = preparedStatement.executeQuery();
@@ -69,7 +75,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = daoFactory.getConnection();
+			connection = dataSource.getConnection();
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, customer.getName());
 			preparedStatement.setString(2, customer.getAddress());
