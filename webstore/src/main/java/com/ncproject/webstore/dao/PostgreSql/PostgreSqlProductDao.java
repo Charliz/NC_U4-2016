@@ -1,5 +1,7 @@
-package com.ncproject.webstore.dao;
+package com.ncproject.webstore.dao.PostgreSql;
 
+import com.ncproject.webstore.dao.DbExceptions;
+import com.ncproject.webstore.dao.ProductDao;
 import com.ncproject.webstore.entity.Product;
 
 import javax.sql.DataSource;
@@ -8,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostgreSqlProductDao implements ProductDao{
+public class PostgreSqlProductDao implements ProductDao {
 
     private DataSource dataSource;
 
@@ -47,27 +49,24 @@ public class PostgreSqlProductDao implements ProductDao{
         }
     }
 
-    public void insertProduct(Product newProduct) throws Exception {
+    public void createProduct(Product newProduct) throws Exception {
         Connection myConnection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             // get a connection
             myConnection = dataSource.getConnection();
-
-            String sql = "INSERT INTO products (prod_id, category, description, prod_name, price, brand) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO products (description, prod_name, price, brand) "
+                    + "VALUES (?, ?, ?, ?)";
 
             // prepare statement
             preparedStatement = myConnection.prepareStatement(sql);
 
             // set parameters
-            preparedStatement.setInt(1, newProduct.getProd_id());
-            preparedStatement.setInt(2, newProduct.getCategory());
-            preparedStatement.setString(3, newProduct.getDescription());
-            preparedStatement.setString(4, newProduct.getProductName());
-            preparedStatement.setBigDecimal(5, newProduct.getPrice());
-            preparedStatement.setString(6, newProduct.getBrand());
+            preparedStatement.setString(1, newProduct.getDescription());
+            preparedStatement.setString(2, newProduct.getProductName());
+            preparedStatement.setBigDecimal(3, newProduct.getPrice());
+            preparedStatement.setString(4, newProduct.getBrand());
 
             // execute SQL
             preparedStatement.executeUpdate();
@@ -127,17 +126,16 @@ public class PostgreSqlProductDao implements ProductDao{
         try {
             myConnection = dataSource.getConnection();
             String sql = "UPDATE products "
-                    + "SET category=?, description=?, prod_name=?, price=?, brand=? "
+                    + "SET description=?, prod_name=?, price=?, brand=? "
                     + "WHERE prod_id=?";
 
             preparedStatement = myConnection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, theProduct.getCategory());
-            preparedStatement.setString(2, theProduct.getDescription());
-            preparedStatement.setString(3, theProduct.getProductName());
-            preparedStatement.setBigDecimal(4, theProduct.getPrice());
-            preparedStatement.setString(5, theProduct.getBrand());
-            preparedStatement.setInt(6, theProduct.getProd_id());
+            preparedStatement.setString(1, theProduct.getDescription());
+            preparedStatement.setString(2, theProduct.getProductName());
+            preparedStatement.setBigDecimal(3, theProduct.getPrice());
+            preparedStatement.setString(4, theProduct.getBrand());
+            preparedStatement.setInt(5, theProduct.getProd_id());
 
             preparedStatement.execute();
 
@@ -177,15 +175,13 @@ public class PostgreSqlProductDao implements ProductDao{
 
     // helper method
     private Product resultSetToProduct(ResultSet myRs) throws SQLException {
-
         int id = myRs.getInt("prod_id");
-        int category = myRs.getInt("category");
         String description = myRs.getString("description");
         String prod_name = myRs.getString("prod_name");
         BigDecimal price = myRs.getBigDecimal("price");
         String brand = myRs.getString("brand");
 
-        Product tempProduct = new Product(id, category, description, prod_name, price, brand);
+        Product tempProduct = new Product(id, description, prod_name, price, brand);
         return tempProduct;
     }
 

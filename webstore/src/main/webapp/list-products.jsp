@@ -6,22 +6,22 @@
 <html>
 <head>
     <title>Online Shop App</title>
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/css/mycss.css' />">
+    <link type="text/css" rel="stylesheet" href="<c:url value='/css/mycss.css' />">
 </head>
 
 <body>
 <h2>Products</h2>
 
+<form class="form-style">
+
 <input type="button" value="Add Product"
        onclick="window.location.href='add-product-form.jsp'"
 /> <br><br>
 
-<table class ="table" prod_id = "myTable">
+<table class ="table" id = "myTable">
 
     <thead class = table-header>
     <tr>
-        <th>ID</th>
-        <th>Category</th>
         <th>Description</th>
         <th>Product Name</th>
         <th>Price</th>
@@ -46,8 +46,6 @@
         </c:url>
 
         <tr>
-            <td> ${tempProduct.prod_id} </td>
-            <td> ${tempProduct.category} </td>
             <td> ${tempProduct.description} </td>
             <td> ${tempProduct.productName} </td>
             <td> ${tempProduct.price} </td>
@@ -60,5 +58,6 @@
         </tr>
     </c:forEach>
 </table>
+</form>
 </body>
 </html>

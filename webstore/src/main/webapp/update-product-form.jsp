@@ -14,17 +14,6 @@
 
     <table>
         <tbody>
-        <tr>
-            <td><label>Category:</label></td>
-            <td>
-                <select name="category" value="${THE_PRODUCT.category}">
-                <option value = "${THE_PRODUCT.category}">${THE_PRODUCT.category}</option>
-                <option value = "1">1 - TV</option>
-                <option value = "2">2 - Computers</option>
-                <option value = "3">3 - Cell phones</option>
-                </select>
-            </td>
-        </tr>
 
         <tr>
             <td><label>Description:</label></td>

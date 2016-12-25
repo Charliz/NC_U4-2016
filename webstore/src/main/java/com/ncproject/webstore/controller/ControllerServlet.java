@@ -1,6 +1,6 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.PostgreSqlProductDao;
+import com.ncproject.webstore.dao.PostgreSql.PostgreSqlProductDao;
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
@@ -50,13 +50,13 @@ public class ControllerServlet extends HttpServlet {
                     listProducts(request, response);
                     break;
                 case "ADD":
-                    addProduct(request, response);
+                    addOrUpdateProduct(request, response);
                     break;
                 case "LOAD":
                     loadProductToForm(request, response);
                     break;
                 case "UPDATE":
-                    updateProduct(request, response);
+                    addOrUpdateProduct(request, response);
                     break;
                 case "DELETE":
                     deleteProduct(request, response);
@@ -82,36 +82,32 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void addProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // read product from the form
+    private void addOrUpdateProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String idString = request.getParameter("productId");
-        String category = request.getParameter("category");
+
+        // read product info from the form
         String description = request.getParameter("description");
         String productName = request.getParameter("productName");
         String price = request.getParameter("price");
         BigDecimal priceBigDecimal = new BigDecimal(price);
         String brand = request.getParameter("brand");
+        Product theProduct;
 
         try {
             int id = Integer.parseInt(idString.trim());
-            int numCategory = Integer.parseInt(category);
-
-            if(idString != null && category != null) {
-
+            if (idString != null && id > 0) {
                 // create a new product object
-                Product theProduct = new Product(id, numCategory, description, productName, priceBigDecimal, brand);
-
-                // add the product to the database
-                postgreSqlProductDao.insertProduct(theProduct);
+                theProduct = new Product(id, description, productName, priceBigDecimal, brand);
+                postgreSqlProductDao.updateProduct(theProduct);
             }
         }
-        catch(NumberFormatException nfe) {
-            nfe.printStackTrace();
+        catch(NumberFormatException | NullPointerException nex) {
+            theProduct = new Product(description, productName, priceBigDecimal, brand);
+            postgreSqlProductDao.createProduct(theProduct);
         }
 
         // send back to the main page (Product list)
         listProducts(request, response);
-
     }
 
     private void loadProductToForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -128,38 +124,6 @@ public class ControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void updateProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // read product info from the form
-        String idString = request.getParameter("productId");
-        String category = request.getParameter("category");
-        String description = request.getParameter("description");
-        String productName = request.getParameter("productName");
-        String price = request.getParameter("price");
-        BigDecimal priceBigDecimal = new BigDecimal(price);
-        String brand = request.getParameter("brand");
-
-        try {
-            int id = Integer.parseInt(idString.trim());
-            int numCategory = Integer.parseInt(category);
-
-            if(idString != null && category != null) {
-
-                // create a new product object
-                Product theProduct = new Product(id, numCategory, description, productName, priceBigDecimal, brand);
-
-                // add the product to the database
-                postgreSqlProductDao.updateProduct(theProduct);
-            }
-        }
-        catch(NumberFormatException nfe) {
-            nfe.printStackTrace();
-        }
-
-        // send back to the main page (Product list)
-        listProducts(request, response);
-
-    }
-
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // read product id parameter from the "Delete" link
         String idString = request.getParameter("productId");
@@ -171,8 +135,5 @@ public class ControllerServlet extends HttpServlet {
         listProducts(request, response);
 
     }
-
-
-
 
 }
