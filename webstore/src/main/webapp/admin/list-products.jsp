@@ -14,8 +14,17 @@
 
 <form class="form-style">
 
+    <div>
+        <label>Product Name:<input type="text" name ="productName"/></label> <input type="submit" name="command" value="Search_Name">
+    </div>
+    <br>
+    <br>
+</form>
+
+<form class="form-style">
+
 <input type="button" value="Add Product"
-       onclick="window.location.href='add-product-form.jsp'"
+       onclick="window.location.href='admin/add-product-form.jsp'"
 /> <br><br>
 
 <table class ="table" id = "myTable">

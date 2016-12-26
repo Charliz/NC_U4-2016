@@ -146,6 +146,33 @@ public class PostgreSqlProductDao implements ProductDao {
 
     }
 
+    public List<Product> searchProducts(String productName) throws Exception {
+        List<Product> productList = new ArrayList();
+
+        Connection myConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            myConnection = dataSource.getConnection();
+            String ename = "%" + productName + "%";
+            preparedStatement = myConnection.prepareStatement("SELECT * FROM products WHERE LOWER(prod_name) like LOWER(?)");
+            preparedStatement.setString(1, ename);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Product tempProduct = resultSetToProduct(resultSet);
+                productList.add(tempProduct);
+            }
+            return productList;
+        }
+        finally {
+            DbExceptions.close(resultSet);
+            DbExceptions.close(preparedStatement);
+            DbExceptions.close(myConnection);
+        }
+
+    }
+
     public void deleteProduct(String idString) throws Exception {
 
         Connection myConnection = null;

@@ -61,6 +61,9 @@ public class ControllerServlet extends HttpServlet {
                 case "DELETE":
                     deleteProduct(request, response);
                     break;
+                case "Search_Name":
+                    searchByName(request, response);
+                    break;
                 default:
                     listProducts(request, response);
             }
@@ -78,7 +81,7 @@ public class ControllerServlet extends HttpServlet {
         request.setAttribute("PRODUCT_LIST", products);
 
         // send to JSP page (view)
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/list-products.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/list-products.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -120,8 +123,23 @@ public class ControllerServlet extends HttpServlet {
         request.setAttribute("THE_PRODUCT", theProduct);
 
         // send to JSP page: update-product-form.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/update-product-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/update-product-form.jsp");
         dispatcher.forward(request, response);
+    }
+
+    private void searchByName(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String nameString = request.getParameter("productName");
+
+        if (nameString != null && nameString.trim().length() > 0) {
+
+            List<Product> namedProducts = postgreSqlProductDao.searchProducts(nameString);
+            request.setAttribute("PRODUCTS", namedProducts);
+
+            // send to JSP page (view)
+            RequestDispatcher dispatcher = request.getRequestDispatcher("admin/search-by-name.jsp");
+            dispatcher.forward(request, response);
+
+        }
     }
 
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
