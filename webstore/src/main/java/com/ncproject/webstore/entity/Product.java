@@ -5,15 +5,13 @@ import java.math.BigDecimal;
 public class Product {
 
     private int prod_id;
-    private int category;
     private String description;
     private String productName;
     private BigDecimal price;
     private String brand;
 
-    public Product(int id, int category, String description, String productName, BigDecimal price, String brand) {
+    public Product(int id, String description, String productName, BigDecimal price, String brand) {
         this.prod_id = id;
-        this.category = category;
         this.description = description;
         this.productName = productName;
         this.price = price;
@@ -21,8 +19,7 @@ public class Product {
 
     }
 
-    public Product(int category, String description, String productName, BigDecimal price, String brand) {
-        this.category = category;
+    public Product(String description, String productName, BigDecimal price, String brand) {
         this.description = description;
         this.productName = productName;
         this.price = price;
@@ -35,14 +32,6 @@ public class Product {
 
     public void setProd_id(int prod_id) {
         this.prod_id = prod_id;
-    }
-
-    public int getCategory() {
-        return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
     }
 
     public String getDescription() {
@@ -81,7 +70,6 @@ public class Product {
     public String toString() {
         return "com.ncproject.webstore.entity.Product{" +
                 "prod_id=" + prod_id +
-                ", category=" + category +
                 ", description='" + description + '\'' +
                 ", productName='" + productName + '\'' +
                 ", price=" + price +
