@@ -12,6 +12,8 @@
 <body>
 <h2>Products</h2>
 
+<a href="customer/customer-page.jsp">Customer Login</a>
+
 <form class="form-style">
 
     <div>

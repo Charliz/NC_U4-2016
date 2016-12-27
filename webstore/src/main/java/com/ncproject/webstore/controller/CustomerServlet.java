@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Created by admin on 11.12.2016.
  */
-@WebServlet("/Customer")
+@WebServlet("/customer")
 public class CustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresNC")
     private DataSource dataSource;
