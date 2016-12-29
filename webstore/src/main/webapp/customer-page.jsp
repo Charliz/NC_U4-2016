@@ -12,5 +12,10 @@
 </head>
 <body>
     <h1 align="center">Welcome back</h1>
+    <form action="/webstore/editUser" method="post">
+        <table align="center">
+            <tr><td><input type="submit" value="Registration"></td></tr>
+        </table>
+    </form>
 </body>
 </html>
