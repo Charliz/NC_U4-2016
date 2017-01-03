@@ -17,13 +17,18 @@ import java.io.IOException;
 /**
  * Created by admin on 11.12.2016.
  */
-@WebServlet("/Customer")
+@WebServlet("/customer")
 public class CustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresNC")
     private DataSource dataSource;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(req.getParameter("registr") != null){
+            getServletContext().getRequestDispatcher("/registration-customer.jsp").forward(req, resp);
+            return;
+        }
+
         if (null == req.getParameter("login") || null == req.getParameter("password")
                 || req.getParameter("login").isEmpty()
                 || req.getParameter("password").isEmpty()) {

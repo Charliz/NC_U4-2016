@@ -14,9 +14,18 @@
     <h1 align="center">Hello</h1>
     <form>
         <table align="center">
-            <tr><td><input type="text" name="login"></td></tr>
-            <tr><td><input type="password" name="password"></td></tr>
-            <tr><td><input type="submit" value="Log In"></td></tr>
+            <tr>
+                <td align="right">Login:</td>
+                <td><input type="text" name="login"></td>
+            </tr>
+            <tr>
+                <td align="right">Password:</td>
+                <td><input type="password" name="password"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Registration" name="registr"></td>
+                <td><input type="submit" value="Log In"></td>
+            </tr>
         </table>
     </form>
 </body>
