@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 
@@ -48,6 +49,9 @@ public class RegistrationServlet extends HttpServlet {
             e.printStackTrace();
             return;
         }
+
+        HttpSession session = req.getSession();
+        session.setAttribute("myUser", customer);
 
         getServletContext().getRequestDispatcher("/customer-page.jsp").forward(req, resp);
     }
