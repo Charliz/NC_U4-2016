@@ -12,6 +12,7 @@
 </head>
 <body>
     <h1 align="center">Enter the data</h1>
+
     <form action="/webstore/registration" method="post">
         <table align="center">
             <tr>

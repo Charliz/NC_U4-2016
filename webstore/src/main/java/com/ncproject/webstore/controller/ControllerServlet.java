@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-@WebServlet("/ControllerServlet")
+@WebServlet("admin/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -81,7 +81,7 @@ public class ControllerServlet extends HttpServlet {
         request.setAttribute("PRODUCT_LIST", products);
 
         // send to JSP page (view)
-        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/list-products.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/list-products.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -99,12 +99,13 @@ public class ControllerServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(idString.trim());
             if (idString != null && id > 0) {
-                // create a new product object
+
                 theProduct = new Product(id, description, productName, priceBigDecimal, brand);
                 postgreSqlProductDao.updateProduct(theProduct);
             }
         }
         catch(NumberFormatException | NullPointerException nex) {
+            // create a new product object
             theProduct = new Product(description, productName, priceBigDecimal, brand);
             postgreSqlProductDao.createProduct(theProduct);
         }
@@ -123,7 +124,7 @@ public class ControllerServlet extends HttpServlet {
         request.setAttribute("THE_PRODUCT", theProduct);
 
         // send to JSP page: update-product-form.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/update-product-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/update-product-form.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -136,7 +137,7 @@ public class ControllerServlet extends HttpServlet {
             request.setAttribute("PRODUCTS", namedProducts);
 
             // send to JSP page (view)
-            RequestDispatcher dispatcher = request.getRequestDispatcher("admin/search-by-name.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/search-by-name.jsp");
             dispatcher.forward(request, response);
 
         }

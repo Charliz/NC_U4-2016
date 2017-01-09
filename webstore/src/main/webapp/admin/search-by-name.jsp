@@ -12,19 +12,21 @@
 
         <thead class = table-header>
         <tr>
-            <th>Description</th>
-            <th>Product Name</th>
-            <th>Price</th>
             <th>Brand</th>
+            <th>Product Name</th>
+            <th>Description</th>
+            <th>Price</th>
         </tr>
         </thead>
 
     <c:forEach var="tempProduct" items="${PRODUCTS}">
         <tr class="table-odd-row">
-            <td> ${tempProduct.description} </td>
-            <td> ${tempProduct.productName} </td>
-            <td> ${tempProduct.price} </td>
             <td> ${tempProduct.brand} </td>
+            <td> ${tempProduct.productName} </td>
+            <td> <div style="width: 270px; height: 40px; text-align:center; padding: 14px; overflow: auto;">
+                    ${tempProduct.description} </div></td>
+            <td> ${tempProduct.price} </td>
+
         </tr>
     </c:forEach>
     </table>

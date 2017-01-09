@@ -4,16 +4,22 @@
 
 <html>
 <head>
-    <title>Login Error</title>
+    <title>Admin Realm</title>
 </head>
 
 
 <body>
 <p>
-    Sorry, you made an Error.
+    Where would you like to go?
     <br>
     <br>
-    Please try again: <a href="${root}/adminIndex.jsp" />Homepage</a>
+    Please choose:
+    <br>
+    <br>
+    <a href="${root}/admin/ControllerServlet"> View Catalog </a>
+    <br>
+    <br>
+    <a href="${root}/admin/add-product-form.jsp"/> Add Products </a>
 </p>
 </body>
 </html>
