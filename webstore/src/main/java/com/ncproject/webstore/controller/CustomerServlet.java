@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 
@@ -47,6 +48,9 @@ public class CustomerServlet extends HttpServlet {
             e.printStackTrace();
             return;
         }
+
+        HttpSession session = req.getSession();
+        session.setAttribute("myUser", customer);
 
         if(password.equals(customer.getPassword())) {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/customer-page.jsp");

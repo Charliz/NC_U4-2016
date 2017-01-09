@@ -70,7 +70,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	@Override
 	public void update(Customer customer){
 
-		String sql = "update customer set name = ?, address = ?, login = ?, password = ?, email = ?, payment = ? where id = 4;";
+		String sql = "update customer set name = ?, address = ?, login = ?, password = ?, email = ?, payment = ? where id = ?;";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -83,11 +83,13 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 			preparedStatement.setString(4, customer.getPassword());
 			preparedStatement.setString(5, customer.getEmail());
 			preparedStatement.setString(6, customer.getPayment());
+			preparedStatement.setInt(7, customer.getId());
 			preparedStatement.execute();
 			resultSet = preparedStatement.getGeneratedKeys();
 			resultSet.next();
 		} catch (SQLException e) {
 			System.out.println("Customer update exception");
+			e.printStackTrace();
 		} finally {
 			JdbcUtils.closeQuietly(resultSet);
 			JdbcUtils.closeQuietly(preparedStatement);

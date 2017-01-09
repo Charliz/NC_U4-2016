@@ -10,48 +10,50 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 
 /**
- * Created by Черный on 28.12.2016.
+ * Created by Черный on 29.12.2016.
  */
-@WebServlet("/registration")
-public class RegistrationServlet extends HttpServlet {
+@WebServlet("/editUser")
+public class EditUserServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresNC")
     private DataSource dataSource;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        getServletContext().getRequestDispatcher("/edit-user.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
-        String password = req.getParameter("password");
-        String confirmPassword = req.getParameter("confirm password");
         String email = req.getParameter("email");
         String name = req.getParameter("name");
         String address = req.getParameter("address");
-        String payment = req.getParameter("payment");
 
-        if (null == login || null == password || null == email || null == name || null == address
-                || login.isEmpty() || password.isEmpty() || email.isEmpty()
-                || name.isEmpty() || address.isEmpty() || payment.isEmpty()
-                || !password.equals(confirmPassword)) {
-            getServletContext().getRequestDispatcher("/registration-customer.jsp").forward(req, resp);
+        if (null == login || null == email || null == name || null == address
+                || login.isEmpty() || email.isEmpty()
+                || name.isEmpty() || address.isEmpty()){
+            getServletContext().getRequestDispatcher("/edit-user.jsp").forward(req, resp);
             return;
         }
 
-        Customer customer = new Customer(login, password, email, name, address, payment);
+        Customer customer = (Customer) req.getSession().getAttribute("myUser");
+
+        if(login != customer.getLogin()) customer.setLogin(login);
+        if(email != customer.getEmail()) customer.setEmail(email);
+        if(name != customer.getName()) customer.setName(name);
+        if(address != customer.getAddress()) customer.setAddress(address);
 
         try {
             CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
-            customerDao.create(customer);
+            customerDao.update(customer);
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
-
-        HttpSession session = req.getSession();
-        session.setAttribute("myUser", customer);
 
         getServletContext().getRequestDispatcher("/customer-page.jsp").forward(req, resp);
     }
