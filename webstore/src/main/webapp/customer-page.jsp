@@ -37,5 +37,6 @@
             <tr><td><input type="submit" value="Edit user"></td></tr>
         </table>
     </form>
+    <a role="button" href="/webstore/mts" class="btn btn-default">To shop!</a>
 </body>
 </html>
