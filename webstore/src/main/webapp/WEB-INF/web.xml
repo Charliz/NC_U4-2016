@@ -6,7 +6,7 @@
 
 
     <welcome-file-list>
-        <welcome-file>adminIndex.jsp</welcome-file>
+        <welcome-file>/customer</welcome-file>
     </welcome-file-list>
 
 
