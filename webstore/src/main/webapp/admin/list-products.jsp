@@ -22,8 +22,7 @@
     <div>
         <label>Product Name:<input type="text" name ="productName"/></label> <input type="submit" name="command" value="Search_Name">
     </div>
-    <br>
-    <br>
+
 </form>
 
 <form class="form-style" >

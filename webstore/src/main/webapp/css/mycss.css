@@ -6,14 +6,18 @@
     border-bottom:1px solid gray;
     font-family: arial, sans-serif;;
     width: 90%;
-
 }
+
+
 h1 {
-    font-size: 2.5em;
+    font-size: 2.9em;
     text-align: left;
     font-weight: bold;
 }
-
+.table-header {
+    background-color: #4CAF50;
+    color: white;
+}
 
 .form-style{
     max-width: 90vw;
@@ -26,7 +30,7 @@ h1 {
 
 
 .table-odd-row {
-    background-color: #f4f7f8;
+    background-color: #4CAF50;
     border-top:1px solid gray;
     text-align:center;
     padding: 15px;
