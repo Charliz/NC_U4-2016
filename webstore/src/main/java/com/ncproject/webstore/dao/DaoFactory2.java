@@ -1,10 +1,11 @@
 package com.ncproject.webstore.dao;
 
 
+import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 
 
 public class DaoFactory2 {
@@ -62,9 +63,9 @@ public class DaoFactory2 {
     private void loadProperties() throws Exception {
 
         type = "postgres";
-        user = "user1";
-        password = "123";
-        url = "jdbc:postgresql://localhost:5432/osnc";
+        user = "postgres";
+        password = "1234";
+        url = "jdbc:postgresql://localhost:5432/onlinestore";
         driver = "org.postgresql.Driver";
 	}
 }
