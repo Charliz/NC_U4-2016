@@ -35,6 +35,7 @@
 <%--</div>--%>
 <div class="panel panel-primary">
   <div class="panel-heading">
+    <h4><a role="button" href="customer-page.jsp" class="btn btn-default btn-block">My profile</a></h4>
     <h3 class="panel-title">SHOPPING CART <a role="button" href="/webstore/cart" class="btn btn-default btn-block">View cart</a></h3>
   </div>
 

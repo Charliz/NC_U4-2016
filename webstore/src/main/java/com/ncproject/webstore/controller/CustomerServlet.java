@@ -53,7 +53,8 @@ public class CustomerServlet extends HttpServlet {
         session.setAttribute("myUser", customer);
 
         if(password.equals(customer.getPassword())) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/customer-page.jsp");
+            //RequestDispatcher dispatcher = req.getRequestDispatcher("/customer-page.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/mts");
             dispatcher.forward(req, resp);
         } else {
             getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
