@@ -47,7 +47,7 @@
     <a href="${root}/admin/ControllerServlet">Back to Product List</a>
 </p>
 <p>
-<a href="${root}/adminLogout">Logout</a>
+    <b><a href="${root}/adminLogout">Logout</a></b>
 </p>
 </body>
 </html>

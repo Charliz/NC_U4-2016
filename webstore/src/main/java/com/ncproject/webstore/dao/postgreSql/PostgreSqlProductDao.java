@@ -30,7 +30,7 @@ public class PostgreSqlProductDao implements ProductDao {
         try {
             // get a connection
             myConnection = dataSource.getConnection();
-            String sql = "SELECT * FROM products ORDER BY prod_id\n" +
+            String sql = "SELECT * FROM products ORDER BY id\n" +
                     "ASC";
             myStatement = myConnection.createStatement();
             resultSet = myStatement.executeQuery(sql);
@@ -56,7 +56,7 @@ public class PostgreSqlProductDao implements ProductDao {
         try {
             // get a connection
             myConnection = dataSource.getConnection();
-            String sql = "INSERT INTO products (description, prod_name, price, brand) "
+            String sql = "INSERT INTO products (description, name, price, brand) "
                     + "VALUES (?, ?, ?, ?)";
 
             // prepare statement
@@ -88,7 +88,7 @@ public class PostgreSqlProductDao implements ProductDao {
             int prodId = Integer.parseInt(idString);
             myConnection = dataSource.getConnection();
 
-            String sql = "SELECT * FROM products where prod_id = ?";
+            String sql = "SELECT * FROM products where id = ?";
 
             // create prepared statement
             preparedStatement = myConnection.prepareStatement(sql);
@@ -126,8 +126,8 @@ public class PostgreSqlProductDao implements ProductDao {
         try {
             myConnection = dataSource.getConnection();
             String sql = "UPDATE products "
-                    + "SET description=?, prod_name=?, price=?, brand=? "
-                    + "WHERE prod_id=?";
+                    + "SET description=?, name=?, price=?, brand=? "
+                    + "WHERE id=?";
 
             preparedStatement = myConnection.prepareStatement(sql);
 
@@ -156,7 +156,7 @@ public class PostgreSqlProductDao implements ProductDao {
         try {
             myConnection = dataSource.getConnection();
             String ename = "%" + productName + "%";
-            preparedStatement = myConnection.prepareStatement("SELECT * FROM products WHERE LOWER(prod_name) like LOWER(?)");
+            preparedStatement = myConnection.prepareStatement("SELECT * FROM products WHERE LOWER(name) like LOWER(?)");
             preparedStatement.setString(1, ename);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -185,7 +185,7 @@ public class PostgreSqlProductDao implements ProductDao {
             // get a connection to the DB
             myConnection = dataSource.getConnection();
 
-            String sql = "DELETE FROM products WHERE prod_id=?";
+            String sql = "DELETE FROM products WHERE id=?";
 
             preparedStatement = myConnection.prepareStatement(sql);
             preparedStatement.setInt(1, prodId);
@@ -202,9 +202,9 @@ public class PostgreSqlProductDao implements ProductDao {
 
     // helper method
     private Product resultSetToProduct(ResultSet myRs) throws SQLException {
-        int id = myRs.getInt("prod_id");
+        int id = myRs.getInt("id");
         String description = myRs.getString("description");
-        String prod_name = myRs.getString("prod_name");
+        String prod_name = myRs.getString("name");
         BigDecimal price = myRs.getBigDecimal("price");
         String brand = myRs.getString("brand");
 

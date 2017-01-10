@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td><label>Description:</label></td>
-            <td><textarea name="description" value="${THE_PRODUCT.description}"></textarea></td>
+            <td><input type="text" name="description" value="${THE_PRODUCT.description}"/></td>
         </tr>
         <br>
         <tr>
@@ -47,6 +47,10 @@
 
 <p>
     <a href="ControllerServlet">Back to Product List</a>
+</p>
+
+<p>
+    <b><a href="${root}/adminLogout">Logout</a></b>
 </p>
 
 </body>

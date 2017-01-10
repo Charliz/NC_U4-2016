@@ -13,7 +13,9 @@
 <body>
 <h2>Products</h2>
 
-<a href="customer/customer-page.jsp">Customer Login</a>
+<p>
+    <b><a href="${root}/adminLogout">Logout</a></b>
+</p>
 
 <form class="form-style" >
 

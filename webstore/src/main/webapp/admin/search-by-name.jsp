@@ -6,6 +6,13 @@
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/mycss.css' />">
 </head>
 <body>
+<p>
+    <a href="ControllerServlet">Back to Products List</a>
+</p>
+
+<p>
+    <b><a href="${root}/adminLogout">Logout</a></b>
+</p>
 <form action="ControllerServlet" method="GET" class="form-style" name = "form1">
 
     <table class ="table">
@@ -31,8 +38,6 @@
     </c:forEach>
     </table>
 </form>
-<p>
-    <a href="ControllerServlet">Back to Products List</a>
-</p>
+
 </body>
 </html>

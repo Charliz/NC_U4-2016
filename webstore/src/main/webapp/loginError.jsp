@@ -10,7 +10,7 @@
 
 <body>
 <p>
-    Sorry, you made an Error.
+    Sorry, you entered incorrect Username or Password.
     <br>
     <br>
     Please try again: <a href="${root}/adminIndex.jsp" />Homepage</a>
