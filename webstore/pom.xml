@@ -33,7 +33,12 @@
       <version>1.2</version>
     </dependency>
 
-
+    <!-- https://mvnrepository.com/artifact/de.rtner/PBKDF2 -->
+    <dependency>
+      <groupId>de.rtner</groupId>
+      <artifactId>PBKDF2</artifactId>
+      <version>1.1.2</version>
+    </dependency>
 
   </dependencies>
 
