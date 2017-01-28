@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 
+import static com.ncproject.webstore.utils.EncryptionUtil.hash;
+
 /**
  * Created by Черный on 28.12.2016.
  */
@@ -40,7 +42,9 @@ public class RegistrationServlet extends HttpServlet {
             return;
         }
 
-        Customer customer = new Customer(login, password, email, name, address, payment);
+        String hashedPassword = hash(password, null);
+
+        Customer customer = new Customer(login, hashedPassword, email, name, address, payment);
 
         try {
             CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
@@ -55,4 +59,5 @@ public class RegistrationServlet extends HttpServlet {
 
         getServletContext().getRequestDispatcher("/customer-page.jsp").forward(req, resp);
     }
+
 }
