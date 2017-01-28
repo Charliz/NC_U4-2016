@@ -19,7 +19,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 
 	@Override
 	public void create(Customer customer){
-		String sql = "insert into customer values (default, ?, ?, ?, ?, ?, ?);";
+		String sql = "insert into users values (default, ?, ?, ?, ?, ?, ?);";
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -34,6 +34,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 			preparedStatement.setString(6, customer.getPayment());
 			preparedStatement.execute();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Customer insert exception");
 		} finally {
 			JdbcUtils.closeQuietly(preparedStatement);
@@ -43,7 +44,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 
 	@Override
 	public Customer read(String login){
-		String sql = "select * from customer where login = ?;";
+		String sql = "select * from users where login = ?;";
 
 		Customer customer = null;
 		Connection connection = null;
@@ -70,7 +71,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	@Override
 	public void update(Customer customer){
 
-		String sql = "update customer set name = ?, address = ?, login = ?, password = ?, email = ?, payment = ? where id = ?;";
+		String sql = "update users set name = ?, address = ?, login = ?, password = ?, email = ?, payment = ? where id = ?;";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
