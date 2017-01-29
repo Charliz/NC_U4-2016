@@ -9,8 +9,17 @@
 <html>
 <head>
     <title>Customer login error</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <br><br>
+    </div>
+</div>
+
 <p>
     You make a mistake when entering data.
     <br>
