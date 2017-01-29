@@ -27,12 +27,14 @@ public class CustomerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(req.getParameter("registr") != null){
             getServletContext().getRequestDispatcher("/registration-customer.jsp").forward(req, resp);
+            return;
         }
 
         if (null == req.getParameter("login") || null == req.getParameter("password")
                 || req.getParameter("login").isEmpty()
                 || req.getParameter("password").isEmpty()) {
             getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
+            return;
         }
 
         String login = req.getParameter("login");
@@ -43,11 +45,12 @@ public class CustomerServlet extends HttpServlet {
             CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
             customer = customerDao.read(login);
         } catch (Exception e) {
-            System.out.println("no such login");
         }
 
         if(customer == null) {
+            System.out.println("no such login");
             getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
+            return;
         }
 
         HttpSession session = req.getSession();
