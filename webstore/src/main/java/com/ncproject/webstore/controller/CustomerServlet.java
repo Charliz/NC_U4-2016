@@ -27,14 +27,12 @@ public class CustomerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(req.getParameter("registr") != null){
             getServletContext().getRequestDispatcher("/registration-customer.jsp").forward(req, resp);
-            return;
         }
 
         if (null == req.getParameter("login") || null == req.getParameter("password")
                 || req.getParameter("login").isEmpty()
                 || req.getParameter("password").isEmpty()) {
             getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
-            return;
         }
 
         String login = req.getParameter("login");
@@ -45,8 +43,11 @@ public class CustomerServlet extends HttpServlet {
             CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
             customer = customerDao.read(login);
         } catch (Exception e) {
-            e.printStackTrace();
-            return;
+            System.out.println("no such login");
+        }
+
+        if(customer == null) {
+            getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
         }
 
         HttpSession session = req.getSession();
@@ -57,7 +58,7 @@ public class CustomerServlet extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/mts");
             dispatcher.forward(req, resp);
         } else {
-            getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
         }
     }
 }
