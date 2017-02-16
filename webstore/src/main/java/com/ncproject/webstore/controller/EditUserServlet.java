@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 @WebServlet("/editUser")
 public class EditUserServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresNC")
+    @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
     @Override

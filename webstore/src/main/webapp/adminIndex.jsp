@@ -16,7 +16,7 @@
     Please choose:
     <br>
     <br>
-    <a href="${root}/admin/ControllerServlet"> View Catalog </a>
+    <a href="${root}/admin/listProducts"> View Catalog </a>
     <br>
     <br>
     <a href="${root}/admin/add-product-form.jsp"/> Add Products </a>

@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @WebServlet("/customer")
 public class CustomerServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresNC")
+    @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
     @Override

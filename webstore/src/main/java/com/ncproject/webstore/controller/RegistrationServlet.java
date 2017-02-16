@@ -21,7 +21,7 @@ import static com.ncproject.webstore.utils.EncryptionUtil.hash;
  */
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresNC")
+    @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
     @Override

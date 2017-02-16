@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h2>Hello, Admin! Please, Login</h2>
+<h2>Hello!! Please, Login</h2>
 
 <form action="j_security_check" method=post >
     <strong>Username: </strong>

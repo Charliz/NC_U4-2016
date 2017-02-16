@@ -17,15 +17,15 @@
     <b><a href="${root}/adminLogout">Logout</a></b>
 </p>
 
-<form class="form-style" >
+<form class="form-style" action="${root}/admin/searchProducts">
 
     <div>
-        <label>Product Name:<input type="text" name ="productName"/></label> <input type="submit" name="command" value="Search_Name">
+        <label>Product Name:<input type="text" name ="productName" required/></label> <input type="submit" value="Search">
     </div>
 
 </form>
 
-<form class="form-style" >
+<form class="form-style" action="${root}/admin/listProducts" method = "get">
 
     <input type="button" value="Add Product"
            onclick="window.location.href='/webstore/admin/add-product-form.jsp'"
@@ -47,14 +47,12 @@
         <c:forEach var="tempProduct" items="${PRODUCT_LIST}">
 
             <!-- set up a link for each product -->
-            <c:url var ="updateLink" value="ControllerServlet">
-                <c:param name="command" value="LOAD" />
+            <c:url var ="updateLink" value="/admin/loadProductToForm">
                 <c:param name="productId" value="${tempProduct.prod_id}"/>
             </c:url>
 
             <!-- set up a link to delete a product -->
-            <c:url var = "deleteLink" value="ControllerServlet">
-                <c:param name="command" value="DELETE" />
+            <c:url var = "deleteLink" value="/admin/deleteProduct">
                 <c:param name="productId" value="${tempProduct.prod_id}"/>
             </c:url>
 
