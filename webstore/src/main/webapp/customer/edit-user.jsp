@@ -9,8 +9,17 @@
 <html>
 <head>
     <title>Edit user</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <br><br>
+    </div>
+</div>
+
 <h1 align="center">Edit data</h1>
 <form action="/webstore/editUser">
     <table align="center">
@@ -48,7 +57,7 @@
         </tr>--%>
         <tr>
             <td></td>
-            <td><input type="submit" value="Change"></td>
+            <td><input type="submit" value="Change" class="btn btn-default btn-block"></td>
         </tr>
     </table>
 </form>

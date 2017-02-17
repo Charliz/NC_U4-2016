@@ -45,7 +45,11 @@ public class CustomerServlet extends HttpServlet {
             CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
             customer = customerDao.read(login);
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+
+        if(customer == null) {
+            System.out.println("no such login");
+            getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
             return;
         }
 
@@ -57,7 +61,7 @@ public class CustomerServlet extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/mts");
             dispatcher.forward(req, resp);
         } else {
-            getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
         }
     }
 }

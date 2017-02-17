@@ -34,6 +34,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 			preparedStatement.setString(6, customer.getPayment());
 			preparedStatement.execute();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Customer insert exception");
 		} finally {
 			JdbcUtils.closeQuietly(preparedStatement);

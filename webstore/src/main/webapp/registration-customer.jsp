@@ -9,8 +9,17 @@
 <html>
 <head>
     <title>Registration</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <br><br>
+        </div>
+    </div>
+
     <h1 align="center">Enter the data</h1>
 
     <form action="/webstore/registration" method="post">
@@ -48,7 +57,7 @@
             </select></td></tr>
             <tr>
                 <td></td>
-                <td><input type="submit" value="Registration"></td>
+                <td><input type="submit" value="Registration" class="btn btn-default btn-block"></td>
             </tr>
         </table>
     </form>
