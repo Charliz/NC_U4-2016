@@ -64,7 +64,7 @@ public class DaoFactory2 {
 
         type = "postgres";
         user = "postgres";
-        password = "1234";
+        password = "admin";
         url = "jdbc:postgresql://localhost:5432/onlinestore";
         driver = "org.postgresql.Driver";
 	}

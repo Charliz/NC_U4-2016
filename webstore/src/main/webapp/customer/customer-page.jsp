@@ -13,7 +13,7 @@
     <title>Customer page</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="panel panel-primary">
@@ -46,7 +46,14 @@
                 <td><%=((Customer)request.getSession().getAttribute("myUser")).getPayment()%></td>
             </tr>
             <tr><td><input type="submit" value="Edit user" class="btn btn-default btn-block"></td></tr>
+            <br>
+            <td><a role="button" href="${root}/customer/mts" class="btn btn-default btn-block">Back to the Web Shop</a></td>
+            <br>
+            <tr><td><b><a href="${root}/logout">Logout</a></b></td></tr>
         </table>
+
+
+
     </form>
     <%--<a role="button" href="/webstore/mts" class="btn btn-default">To shop!</a>--%>
 </body>

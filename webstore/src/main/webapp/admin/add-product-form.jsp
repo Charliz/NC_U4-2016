@@ -58,7 +58,8 @@
     <a href="${root}/admin/listProducts">Back to Product List</a>
 </p>
 <p>
-    <b><a href="${root}/adminLogout">Logout</a></b>
+    <br>
+    <b><a href="${root}/logout">Logout</a></b>
 </p>
 </body>
 </html>

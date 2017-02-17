@@ -18,50 +18,30 @@ import java.io.IOException;
 /**
  * Created by admin on 11.12.2016.
  */
-@WebServlet("/customer")
+@WebServlet(urlPatterns = {"/customer/customerPage/"
+
+        })
 public class CustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("registr") != null){
-            getServletContext().getRequestDispatcher("/registration-customer.jsp").forward(req, resp);
-            return;
-        }
 
-        if (null == req.getParameter("login") || null == req.getParameter("password")
-                || req.getParameter("login").isEmpty()
-                || req.getParameter("password").isEmpty()) {
-            getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
-            return;
-        }
+        Customer customer = (Customer) req.getSession(true).getAttribute("login");
 
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-        Customer customer = null;
+            try {
+                CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
+                customer = customerDao.read(req.getRemoteUser());
+            } catch (Exception e) {
+            }
 
-        try {
-            CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
-            customer = customerDao.read(login);
-        } catch (Exception e) {
-        }
-
-        if(customer == null) {
-            System.out.println("no such login");
-            getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
-            return;
-        }
 
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
 
-        if(password.equals(customer.getPassword())) {
-            //RequestDispatcher dispatcher = req.getRequestDispatcher("/customer-page.jsp");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/mts");
-            dispatcher.forward(req, resp);
-        } else {
-            getServletContext().getRequestDispatcher("/customerLoginError.jsp").forward(req, resp);
-        }
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/customer/customer-page.jsp");
+        dispatcher.forward(req, resp);
+
     }
 }
