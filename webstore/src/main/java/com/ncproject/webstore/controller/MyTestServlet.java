@@ -27,58 +27,6 @@ public class MyTestServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
 
-//        HttpURLConnection httpURLConnection;
-//        URL url = new URL("http://localhost:8080/testMaven/restsrv/catalog");
-//        httpURLConnection = (HttpURLConnection) url.openConnection();
-//
-//        PostgreCartDAO pCartDao = new PostgreCartDAO();
-//
-//        String string = "";
-//        string = request.getParameter("command");
-////        if (string == "ADD")
-//            try {
-//                pCartDao.AddToCart("7");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        System.out.println("INTO IF!!!");
-//
-//
-//
-//
-//        List<storeCatalog> alCat = null;
-//        PostgreCatalogDAO pcd = new PostgreCatalogDAO();
-//        try {
-//            alCat = pcd.getAll();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        String s = alCat.toString();
-//
-//        List<Cart> getCart = null;
-//        String sum_in_cart = "";
-//
-//        try {
-//            getCart = pCartDao.readById(1);
-//            sum_in_cart = pCartDao.getCartSumById(3);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        for(Cart c : getCart) {
-////            c.
-//        }
-//
-//
-//        RequestDispatcher rd = null;
-//        rd = request.getRequestDispatcher("/p2.jsp");
-//        request.setAttribute("cata", alCat);
-//        request.setAttribute("cart", getCart);
-//        request.setAttribute("cart_sum", sum_in_cart);
-////        PrintWriter pw = response.getWriter();
-////        pw.println("<H1>Hello, world!" + s +  "</H1>");
-//        rd.forward(request, response);
-
         try {
             // read the hidden "command" parameter
             String theCommand = request.getParameter("command");
@@ -135,9 +83,6 @@ public class MyTestServlet extends HttpServlet {
         pCartDao.AddToCart(request.getParameter("id"));
 
         listProducts(request, response);
-//        RequestDispatcher rd = null;
-//        rd = request.getRequestDispatcher("/p2.jsp");
-//        rd.forward(request, response);
     }
 
     private void getCart() {
