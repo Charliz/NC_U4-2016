@@ -26,6 +26,10 @@ public class Product {
         this.brand = brand;
     }
 
+    public Product() {
+
+    }
+
     public int getProd_id() {
         return prod_id;
     }

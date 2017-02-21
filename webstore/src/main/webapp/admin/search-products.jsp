@@ -39,26 +39,17 @@
         <br><br>
     </div>
 </div>
-<a role="button" href="${root}/logout" class="btn btn-default btn-block">Logout</a>
+<p>
+    <a role="button" href="${root}/admin/listProducts" class="btn btn-default btn-block">Back to Products List</a>
+</p>
 
-<br><br>
+<p>
+    <br>
+    <a role="button" href="${root}/logout" class="btn btn-default btn-block">Logout</a>
+</p>
+<form class="form-style" name = "form1">
 
-<form class="form-style" action="${root}/admin/searchProducts">
-
-    <div>
-        <label>Product Name:<input type="text" name ="productName" required/></label> <input type="submit" value="Search">
-    </div>
-
-</form>
-<br>
-
-<form class="form-style" action="${root}/admin/listProducts" method = "get">
-
-    <input type="button" value="Add Product"
-           onclick="window.location.href='/webstore/admin/add-product-form.jsp'"
-    /> <br><br>
-
-    <table class ="table" id = "myTable">
+    <table class ="table">
 
         <thead class = table-header>
         <tr>
@@ -66,39 +57,28 @@
             <th>Product Name</th>
             <th>Description</th>
             <th>Price</th>
-            <th>Action</th>
         </tr>
         </thead>
 
-        <%--- the attribute "PRODUCT_LIST" comes from the "request" object ---%>
-        <c:forEach var="tempProduct" items="${PRODUCT_LIST}">
+<c:choose>
+    <c:when test="${not empty PRODUCTS}">
+    <c:forEach var="tempProduct" items="${PRODUCTS}">
+        <tr class="table-odd-row">
+            <td> ${tempProduct.brand} </td>
+            <td> ${tempProduct.productName} </td>
+            <td> <div style="width: 270px; height: 40px; text-align:center; padding: 14px; overflow: auto;">
+                    ${tempProduct.description} </div></td>
+            <td> ${tempProduct.price} </td>
+        </tr>
+    </c:forEach>
+    </c:when>
+    <c:otherwise>
+        <p><b> No PRODUCTS found !!</b></p>
+    </c:otherwise>
+</c:choose>
 
-            <!-- set up a link for each product -->
-            <c:url var ="updateLink" value="/admin/loadProductToForm">
-                <c:param name="productId" value="${tempProduct.prod_id}"/>
-            </c:url>
-
-            <!-- set up a link to delete a product -->
-            <c:url var = "deleteLink" value="/admin/deleteProduct">
-                <c:param name="productId" value="${tempProduct.prod_id}"/>
-            </c:url>
-
-            <tr class = table-odd-row>
-                <td> ${tempProduct.brand} </td>
-                <td> ${tempProduct.productName} </td>
-                <td><div style="width: 270px; height: 40px; text-align:center; padding: 14px; overflow: auto;">
-                        ${tempProduct.description} </div>
-                </td>
-                <td> ${tempProduct.price} </td>
-
-                <td>
-                    <a href="${updateLink}">Update</a><br>
-
-                    <a href="${deleteLink}" onclick="if (!(confirm('Are you sure you want to delete entry?'))) return false">Delete</a><br>
-                </td>
-            </tr>
-        </c:forEach>
     </table>
 </form>
+
 </body>
 </html>

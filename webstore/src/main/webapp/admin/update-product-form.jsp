@@ -10,30 +10,42 @@
 
 <h3>Update Product</h3>
 
-<form action="${root}/admin/ControllerServlet" method="GET">
+<form action="${root}/admin/updateProduct" method="post" onsubmit="return validate();">
 
-    <input type="hidden" name="command" value="UPDATE" />
-    <input type="hidden" name="productId" value="${THE_PRODUCT.prod_id}" />
+    <input type="hidden" name="productId" value="${THE_PRODUCT.prod_id}"/>
+
+    <script type="text/javascript">
+        function validate()
+        {
+            var price = document.getElementById("price").value;
+            var valid = true;
+                if(isNaN(price)){
+                    alert("Please Enter a number!!");
+                    valid = false;
+                }
+            return valid;
+        };
+    </script>
 
     <table>
         <tbody>
 
         <tr>
             <td><label>Brand:</label></td>
-            <td><input type="text" name="brand" value="${THE_PRODUCT.brand}"/></td>
+            <td><input type="text" name="brand" value="${THE_PRODUCT.brand}" required/></td>
         </tr>
         <tr>
             <td><label>Product Name:</label></td>
-            <td><input type="text" name="productName" value="${THE_PRODUCT.productName}"/></td>
+            <td><input type="text" name="productName" value="${THE_PRODUCT.productName}" required/></td>
         </tr>
 
         <tr>
             <td><label>Price:</label></td>
-            <td><input type="text" name="price" value="${THE_PRODUCT.price}"/></td>
+            <td><input type="text" name="price" value="${THE_PRODUCT.price}" id="price" required/></td>
         </tr>
         <tr>
             <td><label>Description:</label></td>
-            <td><input type="text" name="description" value="${THE_PRODUCT.description}"/></td>
+            <td><input type="text" name="description" value="${THE_PRODUCT.description}" required/></td>
         </tr>
         <br>
         <tr>
@@ -46,11 +58,12 @@
 </form>
 
 <p>
-    <a href="ControllerServlet">Back to Product List</a>
+    <a href="${root}/admin/listProducts">Back to Product List</a>
 </p>
 
 <p>
-    <b><a href="${root}/adminLogout">Logout</a></b>
+    <br>
+    <b><a href="${root}/logout">Logout</a></b>
 </p>
 
 </body>

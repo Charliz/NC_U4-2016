@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="root" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,7 +65,7 @@
     <c:set var="sum" value="${cart_sum}"></c:set>
     <c:out value="${sum}"></c:out>
     <div class="row">
-      <div class="col-md-6"><a role="button" href="/webstore/mts" class="btn btn-default">Back to shop</a></div>
+      <div class="col-md-6"><a role="button" href="${root}/customer/mts" class="btn btn-default">Back to shop</a></div>
       <c:url var = "createOrder" value="/myorders">
         <c:param name="command" value="CORD" />
         <c:param name="customer_id" value="${3}"/>
@@ -73,5 +74,7 @@
     </div>
   </div>
 </div>
+<br>
+<b><a href="${root}/logout">Logout</a></b>
 </body>
 </html>

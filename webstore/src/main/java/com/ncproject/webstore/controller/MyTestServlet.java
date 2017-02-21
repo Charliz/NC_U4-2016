@@ -1,24 +1,34 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.POJO.Cart;
 import com.ncproject.webstore.dao.POJO.storeCatalog;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
+import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
+import com.ncproject.webstore.entity.Customer;
 
+import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
 
 /**
  * Created by book on 28.12.2016.
  */
-@WebServlet("/mts")
+@WebServlet(urlPatterns = {"/customer/mts"
+})
 public class MyTestServlet extends HttpServlet {
+    @Resource(lookup = "java:/PostgresXADS")
+    private DataSource dataSource;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -26,6 +36,21 @@ public class MyTestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
 
+        Customer customer = null;
+
+        try {
+            CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
+            customer = customerDao.read(request.getRemoteUser());
+        } catch (Exception e) {
+        }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("myUser", customer);
+
+        /*HttpSession session = request.getSession();
+        session.setAttribute("myUser", customer);*/
+
+        //String userPath = request.getServletPath();
 
         try {
             // read the hidden "command" parameter
@@ -73,7 +98,7 @@ public class MyTestServlet extends HttpServlet {
         request.setAttribute("cart", getCart);
         request.setAttribute("cart_sum", sum_in_cart);
         // send to JSP page (view)
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/p2.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/customer/p2.jsp");
         dispatcher.forward(request, response);
     }
 

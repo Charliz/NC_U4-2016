@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="root" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,7 @@
   <title>BootstrapTemplate</title>
 
   <!-- Bootstrap -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="${root}/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,7 +25,7 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="js/bootstrap.min.js"></script>
+<script src="${root}/js/bootstrap.min.js"></script>
 <%--<div class="panel panel-primary">--%>
   <%--&lt;%&ndash;<div class="panel panel-default">&ndash;%&gt;--%>
     <%--<div class="panel-title">--%>
@@ -35,7 +36,7 @@
 <%--</div>--%>
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <h4><a role="button" href="customer-page.jsp" class="btn btn-default btn-block">My profile</a></h4>
+    <h4><a role="button" href="${root}/customer/customer-page.jsp" class="btn btn-default btn-block">My profile</a></h4>
     <h3 class="panel-title">SHOPPING CART <a role="button" href="/webstore/cart" class="btn btn-default btn-block">View cart</a></h3>
   </div>
 
@@ -56,21 +57,22 @@
       </thead>
         <%--<tr>--%>
       <c:forEach var="tempProduct" items="${cata}">
-            <c:url var = "addToCart" value="/mts">
+            <c:url var = "addToCart" value="/customer/mts">
               <c:param name="command" value="ADD" />
               <c:param name="id" value="${tempProduct.id}"/>
             </c:url>
         <tr>
-          <td> ${tempProduct.name} </td>
+            <td><b> ${tempProduct.name} </b> </td>
           <td> ${tempProduct.description} </td>
           <td> ${tempProduct.price} </td>
           <td><a role="button" href="${addToCart}" class="btn btn-default btn-block">add to cart</a></td>
         </tr>
       </c:forEach>
         <%--</tr>--%>
-
-
+        <br>
+        <b><a href="${root}/logout">Logout</a></b>
     </table>
+
   </div>
 </div>
 </body>

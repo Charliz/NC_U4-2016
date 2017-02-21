@@ -1,5 +1,6 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.ProductDao;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlProductDao;
 import com.ncproject.webstore.entity.Product;
 
@@ -15,15 +16,23 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-@WebServlet("admin/ControllerServlet")
+@WebServlet(urlPatterns = {"/admin/",
+        "/admin/searchProducts",
+        "/admin/listProducts",
+        "/admin/loadProductToForm",
+        "/admin/createProduct",
+        "/admin/updateProduct",
+        "/admin/deleteProduct",
+        })
+
 public class ControllerServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
-    private PostgreSqlProductDao postgreSqlProductDao;
+    private ProductDao postgreSqlProductDao;
 
-    @Resource(lookup = "java:/PostgresNC")
+    @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
-
 
     @Override
     public void init() throws ServletException {
@@ -35,123 +44,94 @@ public class ControllerServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            // read the hidden "command" parameter
-            String theCommand = request.getParameter("command");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-            if (theCommand == null) {
-                theCommand = "PRODUCT_LIST";
-            }
+        String userPath = request.getServletPath();
+        List<Product> products;
 
-            // route to the appropriate method
-            switch (theCommand) {
-                case "PRODUCT_LIST":
-                    listProducts(request, response);
-                    break;
-                case "ADD":
-                    addOrUpdateProduct(request, response);
-                    break;
-                case "LOAD":
-                    loadProductToForm(request, response);
-                    break;
-                case "UPDATE":
-                    addOrUpdateProduct(request, response);
-                    break;
-                case "DELETE":
-                    deleteProduct(request, response);
-                    break;
-                case "Search_Name":
-                    searchByName(request, response);
-                    break;
-                default:
-                    listProducts(request, response);
-            }
+        if (userPath.equals("/admin/listProducts")) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            // get products from the PostgreSqlProductDao
+            products = postgreSqlProductDao.getAllProducts();
+
+            // add products to the request
+            request.setAttribute("PRODUCT_LIST", products);
+
+            userPath = "/list-products";
+
+        } else if (userPath.equals("/admin/searchProducts")) {
+                String nameString = request.getParameter("productName");
+
+                if (nameString != null && !nameString.trim().isEmpty()) {
+                    products = postgreSqlProductDao.searchProducts(nameString);
+                    request.setAttribute("PRODUCTS", products);
+
+                }
+                userPath = "/search-products";
+                //response.sendRedirect("/webstore/admin/listProducts");
+
+
+        } else if (userPath.equals("/admin/loadProductToForm")) {
+            // read product id parameter from the "Update" link
+            String idString = request.getParameter("productId");
+            int id = Integer.parseInt(idString);
+
+            Product theProduct = postgreSqlProductDao.getProductById(id);
+
+            // place product object in the request attribute so the JSP can use it to pre-populate the form
+            request.setAttribute("THE_PRODUCT", theProduct);
+
+            userPath = "/update-product-form";
+
+        } else if (userPath.equals("/admin/deleteProduct")) {
+            // read product id parameter from the "Delete" link
+            String idString = request.getParameter("productId");
+            int id = Integer.parseInt(idString);
+
+            // delete product from the DB
+            postgreSqlProductDao.deleteProduct(id);
+            response.sendRedirect("/webstore/admin/listProducts");
+
         }
+            // use RequestDispatcher to forward request internally
+            String url = "/admin" + userPath + ".jsp";
+            try {
+                request.getRequestDispatcher(url).forward(request, response);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
     }
 
-    private void listProducts(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // get products from the PostgreSqlProductDao
-        List<Product> products = postgreSqlProductDao.getAllProducts();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String userPath = request.getServletPath();
 
-        // add products to the request
-        request.setAttribute("PRODUCT_LIST", products);
+        if (userPath.equals("/admin/updateProduct")) {
+            Product theProduct = new Product();
+            theProduct.setProd_id(Integer.parseInt(request.getParameter("productId")));
+            theProduct.setDescription(request.getParameter("description"));
+            theProduct.setProductName(request.getParameter("productName"));
+            theProduct.setPrice(new BigDecimal(request.getParameter("price")));
+            theProduct.setBrand(request.getParameter("brand"));
 
-        // send to JSP page (view)
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/list-products.jsp");
-        dispatcher.forward(request, response);
-    }
+            postgreSqlProductDao.updateProduct(theProduct);
 
-    private void addOrUpdateProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String idString = request.getParameter("productId");
+            response.sendRedirect("/webstore/admin/listProducts");
 
-        // read product info from the form
-        String description = request.getParameter("description");
-        String productName = request.getParameter("productName");
-        String price = request.getParameter("price");
-        BigDecimal priceBigDecimal = new BigDecimal(price);
-        String brand = request.getParameter("brand");
-        Product theProduct;
+        } else if (userPath.equals("/admin/createProduct")) {
+            Product theProduct = new Product();
+            theProduct.setDescription(request.getParameter("description"));
+            theProduct.setProductName(request.getParameter("productName"));
+            theProduct.setPrice(new BigDecimal(request.getParameter("price")));
+            theProduct.setBrand(request.getParameter("brand"));
 
-        try {
-            int id = Integer.parseInt(idString.trim());
-            if (idString != null && id > 0) {
-
-                theProduct = new Product(id, description, productName, priceBigDecimal, brand);
-                postgreSqlProductDao.updateProduct(theProduct);
-            }
-        }
-        catch(NumberFormatException | NullPointerException nex) {
-            // create a new product object
-            theProduct = new Product(description, productName, priceBigDecimal, brand);
             postgreSqlProductDao.createProduct(theProduct);
+
+            response.sendRedirect("/webstore/admin/listProducts");
         }
-
-        // send back to the main page (Product list)
-        listProducts(request, response);
-    }
-
-    private void loadProductToForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // read product id parameter from the "Update" link
-        String idString = request.getParameter("productId");
-
-        Product theProduct = postgreSqlProductDao.getProductById(idString);
-
-        // place product object in the request attribute so the JSP can use it to pre-populate the form
-        request.setAttribute("THE_PRODUCT", theProduct);
-
-        // send to JSP page: update-product-form.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/update-product-form.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void searchByName(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String nameString = request.getParameter("productName");
-
-        if (nameString != null && nameString.trim().length() > 0) {
-
-            List<Product> namedProducts = postgreSqlProductDao.searchProducts(nameString);
-            request.setAttribute("PRODUCTS", namedProducts);
-
-            // send to JSP page (view)
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/search-by-name.jsp");
-            dispatcher.forward(request, response);
-
-        }
-    }
-
-    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // read product id parameter from the "Delete" link
-        String idString = request.getParameter("productId");
-
-        // delete product from the DB
-        postgreSqlProductDao.deleteProduct(idString);
-
-        // send back to the main page (Product list)
-        listProducts(request, response);
 
     }
 

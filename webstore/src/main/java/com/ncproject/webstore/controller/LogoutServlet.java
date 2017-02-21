@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/adminLogout")
+@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession session= req.getSession();
         session.invalidate();
-        RequestDispatcher rd = req.getRequestDispatcher("/adminIndex.jsp"); //The url where go after logout
+        RequestDispatcher rd = req.getRequestDispatcher("/userIndex.jsp"); //The url where go after logout
         rd.forward(req,res);
     }
 }

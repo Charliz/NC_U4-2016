@@ -36,11 +36,35 @@
 <%--</div>--%>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h4><a role="button" href="${root}/admin/listProducts" class="btn btn-default btn-block">View Catalog </a></h4>
-        <h4><a role="button" href="${root}/admin/add-product-form.jsp" class="btn btn-default btn-block">Add Products </a></h4>
+        <br><br>
     </div>
 </div>
-<a role="button" href="${root}/logout" class="btn btn-default btn-block">Logout</a>
+
+<h2 align="center">Hello! Please, Login</h2>
+
+<form action="j_security_check" method=post >
+    <table align="center">
+        <tr>
+            <td align="right"><strong>Login:</strong></td>
+            <td><input type="text" name="j_username"></td>
+        </tr>
+
+        <tr>
+            <td align="right"><strong>Password:</strong></td>
+            <td><input type="password" name="j_password"></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Login" class="btn btn-default btn-block"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="reset" value="Reset!" class="btn btn-default btn-block"></td>
+        </tr>
+
+    </table>
+</form>
 
 </body>
 </html>

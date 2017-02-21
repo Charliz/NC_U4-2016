@@ -16,14 +16,14 @@ import java.io.IOException;
 /**
  * Created by Черный on 29.12.2016.
  */
-@WebServlet("/editUser")
+@WebServlet("/customer/editUser")
 public class EditUserServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresNC")
+    @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher("/edit-user.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/customer/edit-user.jsp").forward(req, resp);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class EditUserServlet extends HttpServlet {
         if (null == login || null == email || null == name || null == address
                 || login.isEmpty() || email.isEmpty()
                 || name.isEmpty() || address.isEmpty()){
-            getServletContext().getRequestDispatcher("/edit-user.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/customer/edit-user.jsp").forward(req, resp);
             return;
         }
 
@@ -55,6 +55,6 @@ public class EditUserServlet extends HttpServlet {
             return;
         }
 
-        getServletContext().getRequestDispatcher("/customer-page.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/customer/customer-page.jsp").forward(req, resp);
     }
 }

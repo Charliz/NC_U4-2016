@@ -5,15 +5,22 @@
 <html>
 <head>
     <title>Login Error</title>
+    <!-- Bootstrap -->
+    <link href="${root}/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 
 <body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <br><br>
+    </div>
+</div>
 <p>
     Sorry, you entered incorrect Username or Password.
     <br>
     <br>
-    Please try again: <a href="${root}/adminIndex.jsp" />Homepage</a>
+    Please try again: <a href="${root}/userIndex.jsp" />Homepage</a>
 </p>
 </body>
 </html>

@@ -10,33 +10,44 @@
 
 <h3>Add Product</h3>
 
-<form action="${root}/admin/ControllerServlet" method="GET">
+<form action="${root}/admin/createProduct" method="post" onsubmit="return validate();">
 
-    <input type="hidden" name="command" value="ADD" />
+    <script type="text/javascript">
+        function validate()
+        {
+            var price = document.getElementById("price").value;
+            var valid = true;
+            if(isNaN(price)){
+                alert("Please Enter a number for the Price!!");
+                valid = false;
+            }
+            return valid;
+        };
+    </script>
 
     <table>
         <tbody>
 
         <tr>
             <td><label>Brand:</label></td>
-            <td><input type="text" name="brand" /></td>
+            <td><input type="text" name="brand" required/></td>
         </tr>
         <tr>
             <td><label>Product Name:</label></td>
-            <td><input type="text" name="productName" /></td>
+            <td><input type="text" name="productName" required/></td>
         </tr>
         <tr>
             <td><label>Price:</label></td>
-            <td><input type="text" name="price" /></td>
+            <td><input type="text" name="price" id="price" required/></td>
         </tr>
         <tr>
             <td><label>Description:</label></td>
-            <td><input type="text" name="description" /></td>
+            <td><input type="text" name="description" required/></td>
         </tr>
         <br>
         <tr>
             <td><label></label></td>
-            <td><input type="submit" value="Save" class="save" /></td>
+            <td><input type="submit" value="Save" class="save"/></td>
         </tr>
 
         </tbody>
@@ -44,10 +55,11 @@
 </form>
 
 <p>
-    <a href="${root}/admin/ControllerServlet">Back to Product List</a>
+    <a href="${root}/admin/listProducts">Back to Product List</a>
 </p>
 <p>
-    <b><a href="${root}/adminLogout">Logout</a></b>
+    <br>
+    <b><a href="${root}/logout">Logout</a></b>
 </p>
 </body>
 </html>

@@ -21,7 +21,7 @@ import static com.ncproject.webstore.utils.EncryptionUtil.hash;
  */
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresNC")
+    @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
     @Override
@@ -57,7 +57,7 @@ public class RegistrationServlet extends HttpServlet {
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
 
-        getServletContext().getRequestDispatcher("/customer-page.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/customer/customer-page.jsp").forward(req, resp);
     }
 
 }
