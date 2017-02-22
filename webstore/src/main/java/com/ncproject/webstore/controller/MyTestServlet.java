@@ -23,8 +23,7 @@ import java.util.List;
 /**
  * Created by book on 28.12.2016.
  */
-@WebServlet(urlPatterns = {"/customer/mts"
-})
+//@WebServlet(urlPatterns = {"/customer/mts"})
 public class MyTestServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
@@ -90,8 +89,11 @@ public class MyTestServlet extends HttpServlet {
 
         alCat = pcd.getAll();
 
-        getCart = pCartDao.readById(1);
-        sum_in_cart = pCartDao.getCartSumById(3);
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("myUser");
+
+        getCart = pCartDao.readById(customer.getId());
+        sum_in_cart = pCartDao.getCartSumById(customer.getId());
 
         String s = alCat.toString();
         request.setAttribute("cata", alCat);
@@ -104,8 +106,10 @@ public class MyTestServlet extends HttpServlet {
 
 
     private void AddToCart(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("myUser");
         PostgreCartDAO pCartDao = new PostgreCartDAO();
-        pCartDao.AddToCart(request.getParameter("id"));
+        pCartDao.addToCart(customer.getId(), Integer.parseInt(request.getParameter("id")));
 
         listProducts(request, response);
     }

@@ -2,6 +2,7 @@ package com.ncproject.webstore.ejb;
 
 import com.ncproject.webstore.dao.POJO.Cart;
 import com.ncproject.webstore.entity.Customer;
+import com.ncproject.webstore.entity.Product;
 
 import javax.ejb.Remote;
 import java.util.ArrayList;
@@ -12,4 +13,10 @@ import java.util.ArrayList;
 @Remote
 public interface CartBeanInterface {
     public ArrayList<Cart> getCart(Customer customer);
+
+    void AddToCart(Customer customer, Product product);
+
+    String getCartSumById(Customer customer);
+
+    void DelFromCart(Cart cart);
 }

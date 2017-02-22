@@ -43,12 +43,13 @@ public class DaoFactory2 {
 		return daoFactory;
 	}
 
-	public Connection getConnection() throws Exception {
+	public Connection getConnection(){
 //		log.trace("Driver manager get connection");
 		try {
 			return DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
-			throw new Exception("No connection to DB", e);
+			System.out.println("No connection to DB");
+			return null;
 		}
 	}
 
@@ -60,7 +61,7 @@ public class DaoFactory2 {
 		}
 	}
 
-    private void loadProperties() throws Exception {
+    private void loadProperties(){
 
         type = "postgres";
         user = "postgres";

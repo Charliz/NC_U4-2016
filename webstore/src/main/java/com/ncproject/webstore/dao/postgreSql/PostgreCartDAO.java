@@ -4,6 +4,7 @@ import com.ncproject.webstore.dao.CartDAO;
 import com.ncproject.webstore.dao.DaoFactory2;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.POJO.Cart;
+import com.ncproject.webstore.entity.Customer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,11 +15,11 @@ import java.util.List;
 
 
 public class PostgreCartDAO implements CartDAO{
-
     private DaoFactory2 daoFactory = DaoFactory2.getInstance();
 
-    public List<Cart> readById(int id) throws Exception {
-        String sql = "select * from cart where customer_id=?;";
+    public List<Cart> readById(int id){
+
+        String sql = "select * from cart where customer_id = ?;";
 
         List<Cart> cart = new ArrayList<Cart>();
         Cart myCart = null;
@@ -26,7 +27,6 @@ public class PostgreCartDAO implements CartDAO{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-
             connection = daoFactory.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
@@ -37,7 +37,7 @@ public class PostgreCartDAO implements CartDAO{
                 cart.add(myCart);
             }
         } catch (SQLException e) {
-            throw new Exception("Cannot read cart", e);
+            System.out.println("Cannot read cart");
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
@@ -52,40 +52,30 @@ public class PostgreCartDAO implements CartDAO{
         return cart;
     }
 
-    public void AddToCart(String id) throws Exception {
+    public void addToCart(int customer_id, int product_id) {
 
         String sql = "insert into cart (customer_id, product_id, count) values (?, ?, ?);";
-        System.out.println("Start insert");
-        Double d = .0;
-        int idInt = Integer.parseInt(id);
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-
             connection = daoFactory.getConnection();
-
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, 3);
-            preparedStatement.setInt(2, idInt);
+            preparedStatement.setInt(1, customer_id);
+            preparedStatement.setInt(2, product_id);
             preparedStatement.setInt(3, 1);
             preparedStatement.execute();
-//            if (resultSet.next()) {
-//                d = resultSet.getDouble("sum");
-//            }
         } catch (SQLException e) {
-            throw new Exception("Cannot insert into cart", e);
+            System.out.println("Cannot insert into cart");
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
             JdbcUtils.closeQuietly(connection);
         }
-
-        System.out.println("insert into cart successfull");
     }
 
-    public String getCartSumById(int id) throws Exception {
+    public String getCartSumById(int id){
 
         String sql = "select SUM (summary) as sum from cart_sum where cart_id in (select id from cart where customer_id = ?);";
 
@@ -94,7 +84,6 @@ public class PostgreCartDAO implements CartDAO{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-
             connection = daoFactory.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
@@ -104,7 +93,7 @@ public class PostgreCartDAO implements CartDAO{
                 d = resultSet.getDouble("sum");
             }
         } catch (SQLException e) {
-            throw new Exception("Cannot read cart sum", e);
+            System.out.println("Cannot read cart sum");
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
@@ -119,16 +108,16 @@ public class PostgreCartDAO implements CartDAO{
         return d.toString();
     }
 
-    public void DelFromCart(int id) throws Exception {
+    public void delFromCart(int id){
+
         String sql = "delete from cart where id = ?;";
+
         System.out.println("Start delete");
-//        int idInt = Integer.parseInt(id);
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-
             connection = daoFactory.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
@@ -137,14 +126,12 @@ public class PostgreCartDAO implements CartDAO{
             preparedStatement.execute();
 
         } catch (SQLException e) {
-            throw new Exception("Cannot insert into cart", e);
+            System.out.println("Cannot insert into cart");
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
             JdbcUtils.closeQuietly(connection);
         }
-
-        System.out.println("insert into cart successfull");
     }
 
 

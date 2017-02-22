@@ -36,7 +36,7 @@ public class MyCartServlet extends HttpServlet {
 //        string = request.getParameter("command");
 ////        if (string == "ADD")
 //            try {
-//                pCartDao.AddToCart("7");
+//                pCartDao.addToCart("7");
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
@@ -130,7 +130,7 @@ public class MyCartServlet extends HttpServlet {
 
     private void DelFromCart(HttpServletRequest request, HttpServletResponse response) throws Exception {
         PostgreCartDAO pCartDao = new PostgreCartDAO();
-        pCartDao.DelFromCart(Integer.parseInt(request.getParameter("id")));
+        pCartDao.delFromCart(Integer.parseInt(request.getParameter("id")));
 
         listProducts(request, response);
 //        RequestDispatcher rd = null;

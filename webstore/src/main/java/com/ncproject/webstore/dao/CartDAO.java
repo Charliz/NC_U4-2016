@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public interface CartDAO {
-    List<Cart> readById(int id) throws Exception;
-    void AddToCart(String id) throws Exception;
-    String getCartSumById(int id) throws Exception;
-    void DelFromCart(int id) throws Exception;
+    List<Cart> readById(int id);
+    void addToCart(int customer_id, int product_id);
+    String getCartSumById(int id);
+    void delFromCart(int id);
 }

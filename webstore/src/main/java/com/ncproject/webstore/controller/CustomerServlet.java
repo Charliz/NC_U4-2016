@@ -18,9 +18,7 @@ import java.io.IOException;
 /**
  * Created by admin on 11.12.2016.
  */
-@WebServlet(urlPatterns = {"/customer/customerPage/"
-
-        })
+@WebServlet(urlPatterns = {"/customer/customerPage/"})
 public class CustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
