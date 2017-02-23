@@ -37,7 +37,8 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h4><a role="button" href="${root}/customer/customer-page.jsp" class="btn btn-default btn-block">My profile</a></h4>
-    <h3 class="panel-title">SHOPPING CART <a role="button" href="/webstore/cart" class="btn btn-default btn-block">View cart</a></h3>
+    <h4><a role="button" href="/webstore/cart" class="btn btn-default btn-block">My cart</a></h4>
+    <h4><a role="button" href="/webstore/myorders" class="btn btn-default btn-block">My orders</a></h4>
   </div>
 
   <div class="panel-body">sum of all items is <c:out value="${cart_sum}"></c:out></div>

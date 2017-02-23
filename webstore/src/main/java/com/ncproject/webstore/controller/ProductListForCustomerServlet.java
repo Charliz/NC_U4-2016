@@ -35,8 +35,9 @@ public class ProductListForCustomerServlet extends HttpServlet {
         // read the hidden "command" parameter
         String theCommand = req.getParameter("command");
 
-        if(theCommand == "ADD"){
+        if("ADD".equals(theCommand)){
             AddToCart(req, resp);
+            listProducts(req, resp);
         }else {
             listProducts(req, resp);
         }
@@ -82,13 +83,6 @@ public class ProductListForCustomerServlet extends HttpServlet {
         CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
         Customer customer = customerDao.read(req.getRemoteUser());
         CartDAO cartDao = new PostgreCartDAO();
-        System.out.println("start +++++++++++++++");
         cartDao.addToCart(customer.getId(), Integer.parseInt(req.getParameter("id")));
-
-        listProducts(req, resp);
-    }
-
-    private void getCart() {
-
     }
 }
