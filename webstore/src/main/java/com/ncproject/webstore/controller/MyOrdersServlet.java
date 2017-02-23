@@ -33,7 +33,6 @@ public class MyOrdersServlet extends HttpServlet {
 
         if("CORD".equals(theCommand)){
             createOrder(req, resp);
-            newOrder(req, resp);
         }else {
             listOrders(req, resp);
         }
@@ -99,12 +98,21 @@ public class MyOrdersServlet extends HttpServlet {
     private void createOrder(HttpServletRequest req, HttpServletResponse resp){
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
+        CartDAO cartDAO = new PostgreCartDAO();
 
-        OrdersDAO pOrdersDAO = new PostgreOrdersDAO();
-        try {
-            pOrdersDAO.createOrder(customer.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Double.parseDouble(cartDAO.getCartSumById(customer.getId())) > 0) {
+            OrdersDAO ordersDAO = new PostgreOrdersDAO();
+            try {
+                ordersDAO.createOrder(customer.getId());
+            } catch (Exception e) {}
+            newOrder(req, resp);
+        }else {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/cart.jsp");
+            try {
+                dispatcher.forward(req, resp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

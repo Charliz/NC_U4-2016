@@ -1,7 +1,6 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CustomerDao;
-import com.ncproject.webstore.dao.DaoFactory;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.entity.Customer;
 
@@ -10,7 +9,6 @@ import java.sql.*;
 
 
 public class PostgreSqlCustomerDao implements CustomerDao {
-	private DaoFactory daoFactory = null;
 	private DataSource dataSource = null;
 
 	public PostgreSqlCustomerDao(DataSource dataSource){

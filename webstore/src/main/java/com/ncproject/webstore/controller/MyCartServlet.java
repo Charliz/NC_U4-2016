@@ -1,5 +1,7 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.CartDAO;
+import com.ncproject.webstore.dao.CatalogDAO;
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
@@ -22,48 +24,38 @@ import java.util.List;
  */
 @WebServlet("/cart")
 public class MyCartServlet extends HttpServlet {
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         // read the hidden "command" parameter
         String theCommand = req.getParameter("command");
 
         if("DEL".equals(theCommand)){
             DelFromCart(req, resp);
-        }else if("CREATE_ORDER".equals(theCommand)){
-            createOrder(req, resp);
+            listProducts(req, resp);
         }else {
             listProducts(req, resp);
         }
-
-
     }
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp){
-
         List<CartWithNames> alCat = null;
-        PostgreCatalogDAO pcd = new PostgreCatalogDAO();
-        PostgreCartDAO pCartDao = new PostgreCartDAO();
-        String sum_in_cart = "";
+        CatalogDAO catalogDAO = new PostgreCatalogDAO();
+        CartDAO cartDAO = new PostgreCartDAO();
+        String sumInCart = "";
 
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
         try {
-            alCat = pcd.getByCustomerId(customer.getId());
+            alCat = catalogDAO.getByCustomerId(customer.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        sum_in_cart = pCartDao.getCartSumById(customer.getId());
+        sumInCart = cartDAO.getCartSumById(customer.getId());
 
         String s = alCat.toString();
         req.setAttribute("cata", alCat);
-        req.setAttribute("cart_sum", sum_in_cart);
+        req.setAttribute("cart_sum", sumInCart);
 
         // send to JSP page (view)
         RequestDispatcher dispatcher = req.getRequestDispatcher("/cart.jsp");
@@ -76,13 +68,8 @@ public class MyCartServlet extends HttpServlet {
         }
     }
 
-    private void DelFromCart(HttpServletRequest request, HttpServletResponse response){
-        PostgreCartDAO pCartDao = new PostgreCartDAO();
-        pCartDao.delFromCart(Integer.parseInt(request.getParameter("id")));
-
-        listProducts(request, response);
-    }
-
-    public void createOrder(HttpServletRequest req, HttpServletResponse resp){
+    private void DelFromCart(HttpServletRequest req, HttpServletResponse resp){
+        CartDAO pCartDao = new PostgreCartDAO();
+        pCartDao.delFromCart(Integer.parseInt(req.getParameter("id")));
     }
 }

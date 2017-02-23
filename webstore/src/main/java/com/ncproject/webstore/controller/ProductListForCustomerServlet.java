@@ -42,7 +42,7 @@ public class ProductListForCustomerServlet extends HttpServlet {
         String theCommand = req.getParameter("command");
 
         if("ADD".equals(theCommand)){
-            AddToCart(req, resp);
+            addToCart(req, resp);
             listProducts(req, resp);
         }else {
             listProducts(req, resp);
@@ -50,7 +50,6 @@ public class ProductListForCustomerServlet extends HttpServlet {
     }
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) {
-
         List<storeCatalog> allCatalog = null;
         CatalogDAO catalogDAO = new PostgreCatalogDAO();
         CartDAO cartDao = new PostgreCartDAO();
@@ -85,7 +84,7 @@ public class ProductListForCustomerServlet extends HttpServlet {
         }
     }
 
-    private void AddToCart(HttpServletRequest req, HttpServletResponse resp) {
+    private void addToCart(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
         CartDAO cartDao = new PostgreCartDAO();

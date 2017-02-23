@@ -17,7 +17,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
     private DaoFactory2 daoFactory = DaoFactory2.getInstance();
 
     @Override
-    public List<Orders> readById(int id) throws Exception {
+    public List<Orders> readById(int id){
 
         String sql = "select * from orders where customer_id=?;";
 
@@ -38,7 +38,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
                 lOrders.add(orders);
             }
         } catch (SQLException e) {
-            throw new Exception("Cannot read orders", e);
+            System.out.println("Cannot read orders");
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
@@ -54,7 +54,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
     }
 
     @Override
-    public void createOrder(int customer_id) throws Exception {
+    public void createOrder(int customer_id){
 
         String sql = "insert into orders(customer_id, data, product_list, total, status) " +
                 "values(?, now(), ?, (select sum(summary) from cart_sum where cart_id in " +
@@ -95,7 +95,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
 //                d = resultSet.getDouble("sum");
 //            }
         } catch (SQLException e) {
-            throw new Exception("Cannot insert into orders", e);
+            System.out.println("Cannot insert into orders");
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
