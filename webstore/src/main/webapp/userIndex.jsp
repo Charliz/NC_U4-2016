@@ -30,15 +30,11 @@
 <h1 align="center">Hello</h1>
 <form>
     <table align="center">
-
         <tr>
             <a href="${root}/customer/mts">Enter the Web Shop</a>
-
             <br>
             <br>
-
             <a href="${root}/registration-customer.jsp">Register</a>
-
         </tr>
     </table>
 </form>

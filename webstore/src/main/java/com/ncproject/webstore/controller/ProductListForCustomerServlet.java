@@ -32,6 +32,12 @@ public class ProductListForCustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //Add our customer to session
+        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
+        Customer customer = customerDao.read(req.getRemoteUser());
+        HttpSession session = req.getSession();
+        session.setAttribute("myUser", customer);
+
         // read the hidden "command" parameter
         String theCommand = req.getParameter("command");
 
@@ -59,8 +65,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
-        Customer customer = customerDao.read(req.getRemoteUser());
+        HttpSession session = req.getSession();
+        Customer customer = (Customer) session.getAttribute("myUser");
 
         carts = cartDao.readById(customer.getId());
         sumInCart = cartDao.getCartSumById(customer.getId());
@@ -80,8 +86,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
     }
 
     private void AddToCart(HttpServletRequest req, HttpServletResponse resp) {
-        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
-        Customer customer = customerDao.read(req.getRemoteUser());
+        HttpSession session = req.getSession();
+        Customer customer = (Customer) session.getAttribute("myUser");
         CartDAO cartDao = new PostgreCartDAO();
         cartDao.addToCart(customer.getId(), Integer.parseInt(req.getParameter("id")));
     }
