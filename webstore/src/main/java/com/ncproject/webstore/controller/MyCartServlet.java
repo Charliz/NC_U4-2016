@@ -2,11 +2,9 @@ package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.dao.CartDAO;
 import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
-import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.servlet.RequestDispatcher;
@@ -29,7 +27,7 @@ public class MyCartServlet extends HttpServlet {
         String theCommand = req.getParameter("command");
 
         if("DEL".equals(theCommand)){
-            DelFromCart(req, resp);
+            delFromCart(req, resp);
             listProducts(req, resp);
         }else {
             listProducts(req, resp);
@@ -68,8 +66,8 @@ public class MyCartServlet extends HttpServlet {
         }
     }
 
-    private void DelFromCart(HttpServletRequest req, HttpServletResponse resp){
-        CartDAO pCartDao = new PostgreCartDAO();
-        pCartDao.delFromCart(Integer.parseInt(req.getParameter("id")));
+    private void delFromCart(HttpServletRequest req, HttpServletResponse resp){
+        CartDAO cartDAO = new PostgreCartDAO();
+        cartDAO.delFromCart(Integer.parseInt(req.getParameter("id")));
     }
 }
