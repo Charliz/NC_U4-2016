@@ -1,13 +1,10 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.entity.Customer;
 
-import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
 
