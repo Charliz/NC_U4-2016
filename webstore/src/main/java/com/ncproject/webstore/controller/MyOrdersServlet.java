@@ -1,12 +1,13 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CartDAO;
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.Orders;
-import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
+import com.ncproject.webstore.ejb.CartBeanInterface;
+import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,9 +24,10 @@ import java.util.List;
  */
 @WebServlet("/myorders")
 public class MyOrdersServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
+    @EJB
+    private CartBeanInterface cartBean;
+    @EJB
+    private OrderBeanInterface orderBean;
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // read the hidden "command" parameter
@@ -40,18 +42,11 @@ public class MyOrdersServlet extends HttpServlet {
 
     private void listOrders(HttpServletRequest req, HttpServletResponse resp){
         List<Orders> orders = null;
-        OrdersDAO ordersDAO = new PostgreOrdersDAO();
-        CartDAO cartDAO = new PostgreCartDAO();
-
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        try {
-            orders = ordersDAO.readById(customer.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String sumInCart = cartDAO.getCartSumById(customer.getId());
+        orders = orderBean.readById(customer);
+        String sumInCart = cartBean.getCartSumById(customer);
 
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
@@ -67,21 +62,18 @@ public class MyOrdersServlet extends HttpServlet {
 
     private void newOrder(HttpServletRequest req, HttpServletResponse resp){
         List<Orders> orders = null;
-        OrdersDAO ordersDAO = new PostgreOrdersDAO();
-        CartDAO pCartDao = new PostgreCartDAO();
-
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
         try {
-            orders = ordersDAO.readById(customer.getId());
+            orders = orderBean.readById(customer);
             List<Orders> orders1 = new ArrayList<Orders>();
             orders1.add(orders.get(orders.size()-1));
             orders = orders1;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String sumInCart = pCartDao.getCartSumById(customer.getId());
+        String sumInCart = cartBean.getCartSumById(customer);
 
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
@@ -98,13 +90,9 @@ public class MyOrdersServlet extends HttpServlet {
     private void createOrder(HttpServletRequest req, HttpServletResponse resp){
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
-        CartDAO cartDAO = new PostgreCartDAO();
 
-        if (Double.parseDouble(cartDAO.getCartSumById(customer.getId())) > 0) {
-            OrdersDAO ordersDAO = new PostgreOrdersDAO();
-            try {
-                ordersDAO.createOrder(customer.getId());
-            } catch (Exception e) {}
+        if (Double.parseDouble(cartBean.getCartSumById(customer)) > 0) {
+            orderBean.createOrder(customer);
             newOrder(req, resp);
         }else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/cart.jsp");

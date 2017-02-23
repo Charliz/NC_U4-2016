@@ -1,16 +1,16 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CartDAO;
 import com.ncproject.webstore.dao.CatalogDAO;
 import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.POJO.Cart;
 import com.ncproject.webstore.dao.POJO.storeCatalog;
-import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
+import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,6 +29,8 @@ import java.util.List;
 public class ProductListForCustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
+    @EJB
+    private CartBeanInterface cartBean;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -52,7 +54,6 @@ public class ProductListForCustomerServlet extends HttpServlet {
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) {
         List<storeCatalog> allCatalog = null;
         CatalogDAO catalogDAO = new PostgreCatalogDAO();
-        CartDAO cartDao = new PostgreCartDAO();
 
         List<Cart> carts = null;
         String sumInCart = "";
@@ -67,8 +68,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        carts = cartDao.readById(customer.getId());
-        sumInCart = cartDao.getCartSumById(customer.getId());
+        carts = cartBean.getCart(customer);
+        sumInCart = cartBean.getCartSumById(customer);
 
         String s = allCatalog.toString();
         req.setAttribute("cata", allCatalog);
@@ -87,7 +88,6 @@ public class ProductListForCustomerServlet extends HttpServlet {
     private void addToCart(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
-        CartDAO cartDao = new PostgreCartDAO();
-        cartDao.addToCart(customer.getId(), Integer.parseInt(req.getParameter("id")));
+        cartBean.addToCart(customer, req.getParameter("id"));
     }
 }

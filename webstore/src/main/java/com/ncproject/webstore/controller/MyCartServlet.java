@@ -5,8 +5,11 @@ import com.ncproject.webstore.dao.CatalogDAO;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
+import com.ncproject.webstore.ejb.CartBeanInterface;
+import com.ncproject.webstore.ejb.beans.CartBean;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +25,9 @@ import java.util.List;
  */
 @WebServlet("/cart")
 public class MyCartServlet extends HttpServlet {
+    @EJB
+    private CartBeanInterface cartBean;
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // read the hidden "command" parameter
         String theCommand = req.getParameter("command");
@@ -37,7 +43,6 @@ public class MyCartServlet extends HttpServlet {
     private void listProducts(HttpServletRequest req, HttpServletResponse resp){
         List<CartWithNames> alCat = null;
         CatalogDAO catalogDAO = new PostgreCatalogDAO();
-        CartDAO cartDAO = new PostgreCartDAO();
         String sumInCart = "";
 
         HttpSession session = req.getSession();
@@ -49,7 +54,7 @@ public class MyCartServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        sumInCart = cartDAO.getCartSumById(customer.getId());
+        sumInCart = cartBean.getCartSumById(customer);
 
         String s = alCat.toString();
         req.setAttribute("cata", alCat);
@@ -67,7 +72,6 @@ public class MyCartServlet extends HttpServlet {
     }
 
     private void delFromCart(HttpServletRequest req, HttpServletResponse resp){
-        CartDAO cartDAO = new PostgreCartDAO();
-        cartDAO.delFromCart(Integer.parseInt(req.getParameter("id")));
+        cartBean.delFromCart(Integer.parseInt(req.getParameter("id")));
     }
 }

@@ -2,21 +2,20 @@ package com.ncproject.webstore.ejb;
 
 import com.ncproject.webstore.dao.POJO.Cart;
 import com.ncproject.webstore.entity.Customer;
-import com.ncproject.webstore.entity.Product;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import java.util.ArrayList;
 
 /**
  * Created by Черный on 21.02.2017.
  */
-@Remote
+@Local
 public interface CartBeanInterface {
     public ArrayList<Cart> getCart(Customer customer);
 
-    void AddToCart(Customer customer, Product product);
+    void addToCart(Customer customer, String product_id);
 
     String getCartSumById(Customer customer);
 
-    void DelFromCart(Cart cart);
+    void delFromCart(int di);
 }
