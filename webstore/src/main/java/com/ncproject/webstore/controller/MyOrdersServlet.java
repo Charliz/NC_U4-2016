@@ -1,8 +1,6 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.Orders;
-import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
 import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
