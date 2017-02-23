@@ -23,6 +23,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+
 		try {
 			connection = dataSource.getConnection();
 			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -36,6 +37,30 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Customer insert exception");
+		} finally {
+			JdbcUtils.closeQuietly(preparedStatement);
+			JdbcUtils.closeQuietly(connection);
+		}
+	}
+
+	@Override
+	public void setRole(Customer customer, String role) {
+
+		String sql = "INSERT INTO user_roles (user_id, role_id) VALUES(?,(SELECT id FROM roles WHERE role = ?))";
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		try {
+			connection = dataSource.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setInt(1, customer.getId());
+			preparedStatement.setString(2, role);
+			preparedStatement.execute();
+        } catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Role insert exception");
 		} finally {
 			JdbcUtils.closeQuietly(preparedStatement);
 			JdbcUtils.closeQuietly(connection);

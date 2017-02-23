@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
@@ -26,8 +26,20 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/customer/mts"
 })
 public class MyTestServlet extends HttpServlet {
+
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
+    private CustomerDao customerDao;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            customerDao = new PostgreSqlCustomerDao(dataSource);
+        } catch (Exception exc) {
+            throw new ServletException(exc);
+        }
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -36,19 +48,14 @@ public class MyTestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
 
-        Customer customer = null;
+        Customer customer;
+        String username = request.getRemoteUser();
 
-        try {
-            CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
-            customer = customerDao.read(request.getRemoteUser());
-        } catch (Exception e) {
+        if (username != null && request.getSession().getAttribute("myUser") == null) {
+            // First-time login. You can do your thing here.
+            customer = customerDao.read(username);
+            request.getSession().setAttribute("myUser", customer);
         }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("myUser", customer);
-
-        /*HttpSession session = request.getSession();
-        session.setAttribute("myUser", customer);*/
 
         //String userPath = request.getServletPath();
 

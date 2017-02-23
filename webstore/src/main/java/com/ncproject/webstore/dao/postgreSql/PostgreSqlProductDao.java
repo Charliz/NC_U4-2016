@@ -42,6 +42,7 @@ public class PostgreSqlProductDao implements ProductDao {
     public void createProduct(Product theProduct) {
         String sql = "INSERT INTO products (description, name, price, brand) "
                 + "VALUES (?, ?, ?, ?)";
+        //
         jdbcTemplate.update(sql, theProduct.getDescription(), theProduct.getProductName(),
                 theProduct.getPrice(), theProduct.getBrand());
     }

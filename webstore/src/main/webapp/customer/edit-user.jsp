@@ -13,7 +13,7 @@
     <title>Edit user</title>
 
     <!-- Bootstrap -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${root}/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="panel panel-primary">
