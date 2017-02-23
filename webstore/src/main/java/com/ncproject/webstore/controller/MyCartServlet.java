@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
@@ -23,8 +24,6 @@ import java.util.List;
  */
 @WebServlet("/cart")
 public class MyCartServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresXADS")
-    private DataSource dataSource;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -53,12 +52,8 @@ public class MyCartServlet extends HttpServlet {
         PostgreCartDAO pCartDao = new PostgreCartDAO();
         String sum_in_cart = "";
 
-        Customer customer = null;
-        try {
-            CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
-            customer = customerDao.read(req.getRemoteUser());
-        } catch (Exception e) {
-        }
+        HttpSession session = req.getSession();
+        Customer customer = (Customer) session.getAttribute("myUser");
 
         try {
             alCat = pcd.getByCustomerId(customer.getId());
