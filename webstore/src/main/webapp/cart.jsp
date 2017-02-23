@@ -1,3 +1,4 @@
+<%@ page import="com.ncproject.webstore.entity.Customer" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
@@ -26,6 +27,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h4 align="right"><%=((Customer)request.getSession().getAttribute("myUser")).getLogin()%></h4>
+    <h4 align="right"><a href="${root}/logout">Logout</a></h4>
+    <br><br>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
@@ -68,13 +77,10 @@
       <div class="col-md-6"><a role="button" href="${root}/customer/mts" class="btn btn-default">Back to shop</a></div>
       <c:url var = "createOrder" value="/myorders">
         <c:param name="command" value="CORD" />
-        <c:param name="customer_id" value="${3}"/>
       </c:url>
       <div class="col-md-6"><a role="button" href="${createOrder}" class="btn btn-default">Create order</a></div>
     </div>
   </div>
 </div>
-<br>
-<b><a href="${root}/logout">Logout</a></b>
 </body>
 </html>

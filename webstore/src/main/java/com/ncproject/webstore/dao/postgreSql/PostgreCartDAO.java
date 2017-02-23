@@ -104,7 +104,6 @@ public class PostgreCartDAO implements CartDAO{
         } else {
             System.out.println("Cart sum found");
         }
-        System.out.println("Returning cart sum = " + d.toString());
         return d.toString();
     }
 
