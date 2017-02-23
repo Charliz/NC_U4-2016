@@ -68,7 +68,7 @@
       <div class="col-md-6"><a role="button" href="${root}/customer/mts" class="btn btn-default">Back to shop</a></div>
       <c:url var = "createOrder" value="/myorders">
         <c:param name="command" value="CORD" />
-        //<c:param name="customer_id" value="${3}"/>
+        <c:param name="customer_id" value="${3}"/>
       </c:url>
       <div class="col-md-6"><a role="button" href="${createOrder}" class="btn btn-default">Create order</a></div>
     </div>

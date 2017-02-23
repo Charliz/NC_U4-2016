@@ -1,8 +1,10 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
+import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.servlet.RequestDispatcher;
@@ -33,7 +35,7 @@ public class MyCartServlet extends HttpServlet {
         if("DEL".equals(theCommand)){
             DelFromCart(req, resp);
         }else if("CREATE_ORDER".equals(theCommand)){
-            CreateOrder(req, resp);
+            createOrder(req, resp);
         }else {
             listProducts(req, resp);
         }
@@ -81,7 +83,6 @@ public class MyCartServlet extends HttpServlet {
         listProducts(request, response);
     }
 
-    public void CreateOrder(HttpServletRequest request, HttpServletResponse response){
-
+    public void createOrder(HttpServletRequest req, HttpServletResponse resp){
     }
 }

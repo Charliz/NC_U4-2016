@@ -1,5 +1,6 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.Orders;
 import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
@@ -66,11 +67,11 @@ public class MyOrdersServlet extends HttpServlet {
         }
     }
 
-    private void createOrder(HttpServletRequest request, HttpServletResponse response){
-        HttpSession session = request.getSession();
+    private void createOrder(HttpServletRequest req, HttpServletResponse resp){
+        HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        PostgreOrdersDAO pOrdersDAO = new PostgreOrdersDAO();
+        OrdersDAO pOrdersDAO = new PostgreOrdersDAO();
         try {
             pOrdersDAO.createOrder(customer.getId());
         } catch (Exception e) {
