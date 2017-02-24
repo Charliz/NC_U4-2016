@@ -72,9 +72,13 @@ public class PostgreOrdersDAO implements OrdersDAO {
         PreparedStatement preparedStatement2 = null;
         ResultSet resultSet = null;
         ResultSet rs2 = null;
+
+        Savepoint save1 = null;
         try {
 
             connection = daoFactory.getConnection();
+            connection.setAutoCommit(false);
+            save1 = connection.setSavepoint();
 
             preparedStatement2 = connection.prepareStatement(sql2);
             preparedStatement2.setInt(1, customer_id);
@@ -94,8 +98,15 @@ public class PostgreOrdersDAO implements OrdersDAO {
 //            if (resultSet.next()) {
 //                d = resultSet.getDouble("sum");
 //            }
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback(save1);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             System.out.println("Cannot insert into orders");
+            e.printStackTrace();
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
