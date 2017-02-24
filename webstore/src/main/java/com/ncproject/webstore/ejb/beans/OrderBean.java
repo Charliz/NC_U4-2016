@@ -14,9 +14,10 @@ import java.util.List;
  */
 @Stateful
 public class OrderBean implements OrderBeanInterface {
+    OrdersDAO ordersDAO = new PostgreOrdersDAO();
+
     @Override
     public List<Orders> readById(Customer customer) {
-        OrdersDAO ordersDAO = new PostgreOrdersDAO();
         try {
             return ordersDAO.readById(customer.getId());
         } catch (Exception e) {
@@ -27,7 +28,6 @@ public class OrderBean implements OrderBeanInterface {
 
     @Override
     public void createOrder(Customer customer) {
-        OrdersDAO ordersDAO = new PostgreOrdersDAO();
         try {
             ordersDAO.createOrder(customer.getId());
         } catch (Exception e) {

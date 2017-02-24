@@ -14,9 +14,10 @@ import java.util.ArrayList;
  */
 @Stateful
 public class CartBean implements CartBeanInterface {
+    CartDAO cartDAO = new PostgreCartDAO();
+
     @Override
     public ArrayList<Cart> getCart(Customer customer) {
-        CartDAO cartDAO = new PostgreCartDAO();
         ArrayList<Cart> cart = null;
         try {
             cartDAO.readById(customer.getId());
@@ -28,7 +29,6 @@ public class CartBean implements CartBeanInterface {
     }
 
     public void addToCart(Customer customer, String product_id){
-        CartDAO cartDAO = new PostgreCartDAO();
         try{
             cartDAO.addToCart(customer.getId(), Integer.parseInt(product_id));
         }catch (Exception e){
@@ -37,13 +37,11 @@ public class CartBean implements CartBeanInterface {
     }
 
     public String getCartSumById(Customer customer){
-        CartDAO cartDAO = new PostgreCartDAO();
         String sum = cartDAO.getCartSumById(customer.getId());
         return sum;
     }
 
     public void delFromCart(int id){
-        CartDAO cartDAO = new PostgreCartDAO();
         cartDAO.delFromCart(id);
     }
 }

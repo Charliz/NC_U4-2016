@@ -18,11 +18,17 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	@Override
 	public void create(Customer customer){
 		String sql = "insert into users values (default, ?, ?, ?, ?, ?, ?);";
+		String sql1 = "insert into user_roles values ((select id from users where email = ?), 3);"; //insert always customer role
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		PreparedStatement preparedStatement1 = null;
+		Savepoint save1 = null;
 		try {
 			connection = dataSource.getConnection();
+			connection.setAutoCommit(false);
+			save1 = connection.setSavepoint();
+
 			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, customer.getName());
 			preparedStatement.setString(2, customer.getAddress());
@@ -31,8 +37,18 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 			preparedStatement.setString(5, customer.getEmail());
 			preparedStatement.setString(6, customer.getPayment());
 			preparedStatement.execute();
+
+			preparedStatement1 = connection.prepareStatement(sql1, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement1.setString(1, customer.getEmail());
+			preparedStatement1.execute();
+			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			try {
+				connection.rollback(save1);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			System.out.println("Customer insert exception");
 		} finally {
 			JdbcUtils.closeQuietly(preparedStatement);
