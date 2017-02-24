@@ -7,11 +7,15 @@ import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
 import java.util.ArrayList;
+
+import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 
 /**
  * Created by Черный on 21.02.2017.
  */
+@TransactionAttribute(REQUIRES_NEW)
 @Stateful
 public class CartBean implements CartBeanInterface {
     CartDAO cartDAO = new PostgreCartDAO();
