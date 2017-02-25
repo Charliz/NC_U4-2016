@@ -62,14 +62,19 @@ public class PostgreOrdersDAO implements OrdersDAO {
 
         String sql2 = "select p.name, p.id from products p, cart c " +
                 "where c.customer_id = ? and c.product_id = p.id;";
-        System.out.println("Start insert into orders");
+
+        String sql3 = "update products set quantity = (select quantity from products where id = ?) -1 where id = ?;";
+
+        System.out.println("Start create order");
         Double d = .0;
 //        int idInt = Integer.parseInt(customer_id);
         Array myArray = null;
         ArrayList<String> myList = new ArrayList<String>();
+        ArrayList<Integer> myListId = new ArrayList<Integer>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatement2 = null;
+        PreparedStatement preparedStatement3 = null;
         ResultSet resultSet = null;
         ResultSet rs2 = null;
 
@@ -84,6 +89,10 @@ public class PostgreOrdersDAO implements OrdersDAO {
             preparedStatement2.setInt(1, customer_id);
             rs2 = preparedStatement2.executeQuery();
             while (rs2.next()) {
+                preparedStatement3 = connection.prepareStatement(sql3);
+                preparedStatement3.setInt(1, rs2.getInt("id"));
+                preparedStatement3.setInt(2, rs2.getInt("id"));
+                preparedStatement3.execute();
 
                 myList.add(rs2.getString("name"));
             }
@@ -113,7 +122,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
             JdbcUtils.closeQuietly(connection);
         }
 
-        System.out.println("insert into orders successfull");
+        System.out.println("Create order successfull");
     }
 
     private Orders parseResultSet(ResultSet resultSet) throws SQLException {
