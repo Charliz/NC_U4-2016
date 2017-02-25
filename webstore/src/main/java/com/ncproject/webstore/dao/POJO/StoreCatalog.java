@@ -5,18 +5,20 @@ import org.json.simple.JSONObject;
 /**
  * Created by One on 01.12.2016.
  */
-public class storeCatalog {
+public class StoreCatalog {
     private int id;
     private String name;
     private String description;
     private String price;
+    private int quantity;
 
-    public storeCatalog(int id, String name, String description, String price) {
+    public StoreCatalog(int id, String name, String description, String price, int quantity) {
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.quantity = quantity;
     }
 
     public int getId() {
@@ -49,6 +51,14 @@ public class storeCatalog {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Override

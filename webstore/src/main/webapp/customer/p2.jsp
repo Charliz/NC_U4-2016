@@ -56,6 +56,7 @@
           <td>name</td>
           <td>description</td>
           <td>price</td>
+          <td>quantity</td>
           <td></td>
         </tr>
       </thead>
@@ -69,6 +70,7 @@
             <td><b> ${tempProduct.name} </b> </td>
           <td> ${tempProduct.description} </td>
           <td> ${tempProduct.price} </td>
+          <td> ${tempProduct.quantity} </td>
           <td><a role="button" href="${addToCart}" class="btn btn-default btn-block">add to cart</a></td>
         </tr>
       </c:forEach>

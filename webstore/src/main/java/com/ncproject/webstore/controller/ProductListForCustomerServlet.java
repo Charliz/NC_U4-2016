@@ -3,7 +3,7 @@ package com.ncproject.webstore.controller;
 import com.ncproject.webstore.dao.CatalogDAO;
 import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.POJO.Cart;
-import com.ncproject.webstore.dao.POJO.storeCatalog;
+import com.ncproject.webstore.dao.POJO.StoreCatalog;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.ejb.CartBeanInterface;
@@ -52,7 +52,7 @@ public class ProductListForCustomerServlet extends HttpServlet {
     }
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) {
-        List<storeCatalog> allCatalog = null;
+        List<StoreCatalog> allCatalog = null;
         CatalogDAO catalogDAO = new PostgreCatalogDAO();
 
         List<Cart> carts = null;
