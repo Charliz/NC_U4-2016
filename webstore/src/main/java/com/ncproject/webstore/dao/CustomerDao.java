@@ -10,6 +10,4 @@ public interface CustomerDao {
 
 	void update(Customer customer);
 
-	void setRole(Customer customer, String role);
-
 }

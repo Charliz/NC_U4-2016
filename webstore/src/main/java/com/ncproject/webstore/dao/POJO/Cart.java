@@ -1,10 +1,9 @@
 package com.ncproject.webstore.dao.POJO;
 
 
-
+import java.util.ArrayList;
 
 public class Cart {
-
     private int id;
     private int customer_id;
     private int product_id;

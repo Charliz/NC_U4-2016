@@ -1,3 +1,4 @@
+<%@ page import="com.ncproject.webstore.entity.Customer" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
@@ -36,8 +37,11 @@
 <%--</div>--%>
 <div class="panel panel-primary">
   <div class="panel-heading">
+    <h4 align="right"><%=((Customer)request.getSession().getAttribute("myUser")).getLogin()%></h4>
+    <h4 align="right"><a href="${root}/logout">Logout</a></h4>
     <h4><a role="button" href="${root}/customer/customer-page.jsp" class="btn btn-default btn-block">My profile</a></h4>
-    <h3 class="panel-title">SHOPPING CART <a role="button" href="/webstore/cart" class="btn btn-default btn-block">View cart</a></h3>
+    <h4><a role="button" href="/webstore/cart" class="btn btn-default btn-block">My cart</a></h4>
+    <h4><a role="button" href="/webstore/myorders" class="btn btn-default btn-block">My orders</a></h4>
   </div>
 
   <div class="panel-body">sum of all items is <c:out value="${cart_sum}"></c:out></div>
@@ -52,6 +56,7 @@
           <td>name</td>
           <td>description</td>
           <td>price</td>
+          <td>quantity</td>
           <td></td>
         </tr>
       </thead>
@@ -65,12 +70,12 @@
             <td><b> ${tempProduct.name} </b> </td>
           <td> ${tempProduct.description} </td>
           <td> ${tempProduct.price} </td>
+          <td> ${tempProduct.quantity} </td>
           <td><a role="button" href="${addToCart}" class="btn btn-default btn-block">add to cart</a></td>
         </tr>
       </c:forEach>
         <%--</tr>--%>
         <br>
-        <b><a href="${root}/logout">Logout</a></b>
     </table>
 
   </div>

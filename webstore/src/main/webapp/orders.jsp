@@ -9,7 +9,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>BootstrapTemplate</title>
+  <title>Order page</title>
 
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -38,49 +38,47 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
+    <%--<h1>Order</h1>--%>
+    <%--<div class="form-group">--%>
+    <%--<label for="comment">Comment:</label>--%>
+    <%--<textarea class="form-control" rows="5" id="comment"></textarea>--%>
+    <%--</div>--%>
 
     <table class="table table-hover">
       <thead>
       <tr>
-        <td>name</td>
-        <td>count</td>
-        <td>price summary</td>
-        <td></td>
+        <td>Date</td>
+        <td>Status</td>
+        <td>List of products</td>
+        <td>Sum</td>
       </tr>
       </thead>
       <%--<tr>--%>
-      <c:forEach var="tempProduct" items="${cata}">
-        <c:url var = "DelFromCart" value="/cart">
-          <c:param name="command" value="DEL" />
-          <c:param name="id" value="${tempProduct.id}"/>
-        </c:url>
+      <c:forEach var="tempProduct" items="${ords}">
+        <%--<c:url var = "DelFromCart" value="/cart">--%>
+        <%--<c:param name="command" value="DEL" />--%>
+        <%--<c:param name="id" value="${tempProduct.id}"/>--%>
+        <%--</c:url>--%>
         <tr>
-          <td> ${tempProduct.name} </td>
-          <td> ${tempProduct.count} </td>
-          <td> ${tempProduct.summary} </td>
-          <td><a role="button" href="${DelFromCart}" class="btn btn-default btn-block">remove</a></td>
+          <td> ${tempProduct.data} </td>
+          <td> ${tempProduct.status} </td>
+          <td> ${tempProduct.product_list} </td>
+          <td> ${tempProduct.total} </td>
+            <%--<td><a role="button" href="${DelFromCart}" class="btn btn-default btn-block">remove</a></td>--%>
         </tr>
 
       </c:forEach>
       <tr>
 
-        <h1>Shopping cart</h1>
+        <h1>My orders list</h1>
       </tr>
       <%--</tr>--%>
 
 
     </table>
-    <strong>Sum of elements </strong>
-    <c:set var="sum" value="${cart_sum}"></c:set>
-    <c:out value="${sum}"></c:out>
-    <div class="row">
-      <div class="col-md-6"><a role="button" href="${root}/customer/mts" class="btn btn-default">Back to shop</a></div>
-      <c:url var = "createOrder" value="/myorders">
-        <c:param name="command" value="CORD" />
-      </c:url>
-      <div class="col-md-6"><a role="button" href="${createOrder}" class="btn btn-default">Create order</a></div>
-    </div>
+    <a role="button" href="${root}/customer/mts" class="btn btn-default">Back to shop</a>
   </div>
 </div>
+
 </body>
 </html>

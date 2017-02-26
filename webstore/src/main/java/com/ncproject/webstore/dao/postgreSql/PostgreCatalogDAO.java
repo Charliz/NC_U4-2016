@@ -1,11 +1,11 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.DaoFactory2;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
-import com.ncproject.webstore.dao.POJO.storeCatalog;
+import com.ncproject.webstore.dao.POJO.StoreCatalog;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,26 +15,29 @@ import java.util.List;
 
 
 public class PostgreCatalogDAO implements CatalogDAO{
-    private DaoFactory2 daoFactory = DaoFactory2.getInstance();
-//
-//
-    public storeCatalog read() throws Exception {
+    private DataSource dataSource = null;
+
+    public PostgreCatalogDAO(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+
+    public StoreCatalog read() throws Exception {
         //return only 1st line from base
         String sql = "select * from cart;";
 
-        storeCatalog storeCatalog = null;
+        StoreCatalog StoreCatalog = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                storeCatalog = parseResultSet(resultSet);
+                StoreCatalog = parseResultSet(resultSet);
             }
         } catch (SQLException e) {
             throw new Exception("Cannot read user", e);
@@ -43,34 +46,34 @@ public class PostgreCatalogDAO implements CatalogDAO{
             JdbcUtils.closeQuietly(preparedStatement);
             JdbcUtils.closeQuietly(connection);
         }
-        if (null == storeCatalog) {
+        if (null == StoreCatalog) {
             System.out.println("Catalog not found");
         } else {
             System.out.println("Catalog found");
         }
         System.out.println("Returning catalog");
-        return storeCatalog;
+        return StoreCatalog;
     }
 
-    public List<storeCatalog> getAll() throws Exception{
+    public List<StoreCatalog> getAll() throws Exception{
 
         String sql = "select * from products;";
-        List<storeCatalog> sc = new ArrayList<storeCatalog>();
-        storeCatalog storeCatalog = null;
+        List<StoreCatalog> sc = new ArrayList<StoreCatalog>();
+        StoreCatalog StoreCatalog = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
 
-                storeCatalog = parseResultSet(resultSet);
-                sc.add(storeCatalog);
+                StoreCatalog = parseResultSet(resultSet);
+                sc.add(StoreCatalog);
             }
         } catch (SQLException e) {
             throw new Exception("Cannot read user", e);
@@ -79,7 +82,7 @@ public class PostgreCatalogDAO implements CatalogDAO{
             JdbcUtils.closeQuietly(preparedStatement);
             JdbcUtils.closeQuietly(connection);
         }
-        if (null == storeCatalog) {
+        if (null == StoreCatalog) {
             System.out.println("Catalog not found");
         } else {
             System.out.println("Catalog found");
@@ -100,7 +103,7 @@ public class PostgreCatalogDAO implements CatalogDAO{
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -127,14 +130,14 @@ public class PostgreCatalogDAO implements CatalogDAO{
         return sc;
     }
 
-    private storeCatalog parseResultSet(ResultSet resultSet) throws SQLException {
+    private StoreCatalog parseResultSet(ResultSet resultSet) throws SQLException {
 
-        storeCatalog storeCatalog = new storeCatalog(resultSet.getInt("id"), resultSet.getString("name"),
-                resultSet.getString("description"), resultSet.getString("price"));
+        StoreCatalog StoreCatalog = new StoreCatalog(resultSet.getInt("id"), resultSet.getString("name"),
+                resultSet.getString("description"), resultSet.getString("price"), resultSet.getInt("quantity"));
 //        catalog.setCreditCardInfo(resultSet.getString("credit_card"));
 //        catalog.setAddress(resultSet.getString("address"));
 //        catalog.setPhone(resultSet.getString("phone"));
 //        catalog.setId(resultSet.getInt("id"));
-        return storeCatalog;
+        return StoreCatalog;
     }
 }
