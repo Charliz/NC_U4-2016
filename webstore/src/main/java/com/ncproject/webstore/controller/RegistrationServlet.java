@@ -23,17 +23,6 @@ import static com.ncproject.webstore.utils.EncryptionUtil.hash;
 public class RegistrationServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
-    private CustomerDao customerDao;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            customerDao = new PostgreSqlCustomerDao(dataSource);
-        } catch (Exception exc) {
-            throw new ServletException(exc);
-        }
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,15 +45,17 @@ public class RegistrationServlet extends HttpServlet {
         String hashedPassword = hash(password, null);
 
         Customer customer = new Customer(login, hashedPassword, email, name, address, payment);
-        customerDao.create(customer);
 
-        Customer newCustomer = customerDao.read(login);
-        customerDao.setRole(newCustomer, "CUSTOMER");
-
-        //System.out.println(newCustomer.getId());
+        try {
+            CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
+            customerDao.create(customer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
         HttpSession session = req.getSession();
-        session.setAttribute("myUser", newCustomer);
+        session.setAttribute("myUser", customer);
 
         getServletContext().getRequestDispatcher("/customer/customer-page.jsp").forward(req, resp);
     }
