@@ -5,6 +5,7 @@ import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.List;
  */
 @WebServlet("/myorders")
 public class MyOrdersServlet extends HttpServlet {
+    @Resource(lookup = "java:/PostgresXADS")
+    private DataSource dataSource;
     @EJB
     private CartBeanInterface cartBean;
     @EJB
@@ -43,8 +47,8 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        orders = orderBean.readById(customer);
-        String sumInCart = cartBean.getCartSumById(customer);
+        orders = orderBean.readById(customer, dataSource);
+        String sumInCart = cartBean.getCartSumById(customer, dataSource);
 
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
@@ -64,14 +68,14 @@ public class MyOrdersServlet extends HttpServlet {
         Customer customer = (Customer) session.getAttribute("myUser");
 
         try {
-            orders = orderBean.readById(customer);
+            orders = orderBean.readById(customer, dataSource);
             List<Orders> orders1 = new ArrayList<Orders>();
             orders1.add(orders.get(orders.size()-1));
             orders = orders1;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String sumInCart = cartBean.getCartSumById(customer);
+        String sumInCart = cartBean.getCartSumById(customer, dataSource);
 
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
@@ -89,8 +93,8 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        if (Double.parseDouble(cartBean.getCartSumById(customer)) > 0) {
-            orderBean.createOrder(customer);
+        if (Double.parseDouble(cartBean.getCartSumById(customer, dataSource)) > 0) {
+            orderBean.createOrder(customer, dataSource);
             newOrder(req, resp);
         }else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/cart.jsp");

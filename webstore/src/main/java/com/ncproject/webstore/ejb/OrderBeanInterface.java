@@ -4,6 +4,7 @@ import com.ncproject.webstore.dao.POJO.Orders;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Local;
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -11,6 +12,6 @@ import java.util.List;
  */
 @Local
 public interface OrderBeanInterface {
-    List<Orders> readById(Customer customer);
-    void createOrder(Customer customer);
+    List<Orders> readById(Customer customer, DataSource dataSource);
+    void createOrder(Customer customer, DataSource dataSource);
 }

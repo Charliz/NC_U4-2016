@@ -7,16 +7,21 @@ import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.sql.DataSource;
 import java.util.ArrayList;
+
+import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 
 /**
  * Created by Черный on 21.02.2017.
  */
+@TransactionAttribute(REQUIRES_NEW)
 @Stateful
 public class CartBean implements CartBeanInterface {
     @Override
-    public ArrayList<Cart> getCart(Customer customer) {
-        CartDAO cartDAO = new PostgreCartDAO();
+    public ArrayList<Cart> getCart(Customer customer, DataSource dataSource) {
+        CartDAO cartDAO = new PostgreCartDAO(dataSource);
         ArrayList<Cart> cart = null;
         try {
             cartDAO.readById(customer.getId());
@@ -27,8 +32,8 @@ public class CartBean implements CartBeanInterface {
         return cart;
     }
 
-    public void addToCart(Customer customer, String product_id){
-        CartDAO cartDAO = new PostgreCartDAO();
+    public void addToCart(Customer customer, String product_id, DataSource dataSource){
+        CartDAO cartDAO = new PostgreCartDAO(dataSource);
         try{
             cartDAO.addToCart(customer.getId(), Integer.parseInt(product_id));
         }catch (Exception e){
@@ -36,14 +41,14 @@ public class CartBean implements CartBeanInterface {
         }
     }
 
-    public String getCartSumById(Customer customer){
-        CartDAO cartDAO = new PostgreCartDAO();
+    public String getCartSumById(Customer customer, DataSource dataSource){
+        CartDAO cartDAO = new PostgreCartDAO(dataSource);
         String sum = cartDAO.getCartSumById(customer.getId());
         return sum;
     }
 
-    public void delFromCart(int id){
-        CartDAO cartDAO = new PostgreCartDAO();
+    public void delFromCart(int id, DataSource dataSource){
+        CartDAO cartDAO = new PostgreCartDAO(dataSource);
         cartDAO.delFromCart(id);
     }
 }

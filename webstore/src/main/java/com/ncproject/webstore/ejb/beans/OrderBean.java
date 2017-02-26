@@ -7,6 +7,7 @@ import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Stateful;
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -15,8 +16,8 @@ import java.util.List;
 @Stateful
 public class OrderBean implements OrderBeanInterface {
     @Override
-    public List<Orders> readById(Customer customer) {
-        OrdersDAO ordersDAO = new PostgreOrdersDAO();
+    public List<Orders> readById(Customer customer, DataSource dataSource) {
+        OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
         try {
             return ordersDAO.readById(customer.getId());
         } catch (Exception e) {
@@ -26,8 +27,8 @@ public class OrderBean implements OrderBeanInterface {
     }
 
     @Override
-    public void createOrder(Customer customer) {
-        OrdersDAO ordersDAO = new PostgreOrdersDAO();
+    public void createOrder(Customer customer, DataSource dataSource) {
+        OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
         try {
             ordersDAO.createOrder(customer.getId());
         } catch (Exception e) {

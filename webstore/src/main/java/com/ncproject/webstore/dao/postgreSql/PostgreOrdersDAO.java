@@ -1,10 +1,10 @@
 package com.ncproject.webstore.dao.postgreSql;
 
-import com.ncproject.webstore.dao.DaoFactory2;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.Orders;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,11 @@ import java.util.List;
  */
 public class PostgreOrdersDAO implements OrdersDAO {
 
-    private DaoFactory2 daoFactory = DaoFactory2.getInstance();
+    private DataSource dataSource = null;
+
+    public PostgreOrdersDAO(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
 
     @Override
     public List<Orders> readById(int id){
@@ -28,7 +32,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -62,24 +66,37 @@ public class PostgreOrdersDAO implements OrdersDAO {
 
         String sql2 = "select p.name, p.id from products p, cart c " +
                 "where c.customer_id = ? and c.product_id = p.id;";
-        System.out.println("Start insert into orders");
+
+        String sql3 = "update products set quantity = (select quantity from products where id = ?) -1 where id = ?;";
+
+        System.out.println("Start create order");
         Double d = .0;
 //        int idInt = Integer.parseInt(customer_id);
         Array myArray = null;
         ArrayList<String> myList = new ArrayList<String>();
+        ArrayList<Integer> myListId = new ArrayList<Integer>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatement2 = null;
+        PreparedStatement preparedStatement3 = null;
         ResultSet resultSet = null;
         ResultSet rs2 = null;
+
+        Savepoint save1 = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
+            //connection.setAutoCommit(false);
+            save1 = connection.setSavepoint();
 
             preparedStatement2 = connection.prepareStatement(sql2);
             preparedStatement2.setInt(1, customer_id);
             rs2 = preparedStatement2.executeQuery();
             while (rs2.next()) {
+                preparedStatement3 = connection.prepareStatement(sql3);
+                preparedStatement3.setInt(1, rs2.getInt("id"));
+                preparedStatement3.setInt(2, rs2.getInt("id"));
+                preparedStatement3.execute();
 
                 myList.add(rs2.getString("name"));
             }
@@ -94,15 +111,22 @@ public class PostgreOrdersDAO implements OrdersDAO {
 //            if (resultSet.next()) {
 //                d = resultSet.getDouble("sum");
 //            }
+            //connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback(save1);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             System.out.println("Cannot insert into orders");
+            e.printStackTrace();
         } finally {
             JdbcUtils.closeQuietly(resultSet);
             JdbcUtils.closeQuietly(preparedStatement);
             JdbcUtils.closeQuietly(connection);
         }
 
-        System.out.println("insert into orders successfull");
+        System.out.println("Create order successfull");
     }
 
     private Orders parseResultSet(ResultSet resultSet) throws SQLException {
