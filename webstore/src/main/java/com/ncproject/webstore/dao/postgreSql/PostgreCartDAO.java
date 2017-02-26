@@ -1,11 +1,10 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CartDAO;
-import com.ncproject.webstore.dao.DaoFactory2;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.POJO.Cart;
-import com.ncproject.webstore.entity.Customer;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +14,11 @@ import java.util.List;
 
 
 public class PostgreCartDAO implements CartDAO{
-    private DaoFactory2 daoFactory = DaoFactory2.getInstance();
+    private DataSource dataSource = null;
+
+    public PostgreCartDAO(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
 
     public List<Cart> readById(int id){
 
@@ -27,7 +30,7 @@ public class PostgreCartDAO implements CartDAO{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -60,7 +63,7 @@ public class PostgreCartDAO implements CartDAO{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, customer_id);
             preparedStatement.setInt(2, product_id);
@@ -84,7 +87,7 @@ public class PostgreCartDAO implements CartDAO{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -117,7 +120,7 @@ public class PostgreCartDAO implements CartDAO{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
 

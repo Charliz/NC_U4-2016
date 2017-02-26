@@ -9,6 +9,7 @@ import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.ejb.beans.CartBean;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,6 +27,8 @@ import java.util.List;
  */
 @WebServlet("/cart")
 public class MyCartServlet extends HttpServlet {
+    @Resource(lookup = "java:/PostgresXADS")
+    private DataSource dataSource;
     @EJB
     private CartBeanInterface cartBean;
 
@@ -42,7 +46,7 @@ public class MyCartServlet extends HttpServlet {
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp){
         List<CartWithNames> alCat = null;
-        CatalogDAO catalogDAO = new PostgreCatalogDAO();
+        CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
         String sumInCart = "";
 
         HttpSession session = req.getSession();
@@ -54,9 +58,8 @@ public class MyCartServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        sumInCart = cartBean.getCartSumById(customer);
+        sumInCart = cartBean.getCartSumById(customer, dataSource);
 
-        String s = alCat.toString();
         req.setAttribute("cata", alCat);
         req.setAttribute("cart_sum", sumInCart);
 
@@ -72,6 +75,6 @@ public class MyCartServlet extends HttpServlet {
     }
 
     private void delFromCart(HttpServletRequest req, HttpServletResponse resp){
-        cartBean.delFromCart(Integer.parseInt(req.getParameter("id")));
+        cartBean.delFromCart(Integer.parseInt(req.getParameter("id")), dataSource);
     }
 }

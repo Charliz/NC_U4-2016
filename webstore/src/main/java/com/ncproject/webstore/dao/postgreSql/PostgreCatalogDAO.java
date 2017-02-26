@@ -1,11 +1,11 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.DaoFactory2;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
 import com.ncproject.webstore.dao.POJO.StoreCatalog;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +15,12 @@ import java.util.List;
 
 
 public class PostgreCatalogDAO implements CatalogDAO{
-    private DaoFactory2 daoFactory = DaoFactory2.getInstance();
-//
-//
+    private DataSource dataSource = null;
+
+    public PostgreCatalogDAO(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+
     public StoreCatalog read() throws Exception {
         //return only 1st line from base
         String sql = "select * from cart;";
@@ -28,7 +31,7 @@ public class PostgreCatalogDAO implements CatalogDAO{
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
 
@@ -62,7 +65,7 @@ public class PostgreCatalogDAO implements CatalogDAO{
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
 
@@ -100,7 +103,7 @@ public class PostgreCatalogDAO implements CatalogDAO{
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);

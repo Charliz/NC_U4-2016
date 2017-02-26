@@ -1,10 +1,10 @@
 package com.ncproject.webstore.dao.postgreSql;
 
-import com.ncproject.webstore.dao.DaoFactory2;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.Orders;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,11 @@ import java.util.List;
  */
 public class PostgreOrdersDAO implements OrdersDAO {
 
-    private DaoFactory2 daoFactory = DaoFactory2.getInstance();
+    private DataSource dataSource = null;
+
+    public PostgreOrdersDAO(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
 
     @Override
     public List<Orders> readById(int id){
@@ -28,7 +32,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
         ResultSet resultSet = null;
         try {
 
-            connection = daoFactory.getConnection();
+            connection = dataSource.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -81,8 +85,8 @@ public class PostgreOrdersDAO implements OrdersDAO {
         Savepoint save1 = null;
         try {
 
-            connection = daoFactory.getConnection();
-            connection.setAutoCommit(false);
+            connection = dataSource.getConnection();
+            //connection.setAutoCommit(false);
             save1 = connection.setSavepoint();
 
             preparedStatement2 = connection.prepareStatement(sql2);
@@ -107,7 +111,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
 //            if (resultSet.next()) {
 //                d = resultSet.getDouble("sum");
 //            }
-            connection.commit();
+            //connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback(save1);

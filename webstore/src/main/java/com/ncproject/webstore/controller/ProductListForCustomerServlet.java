@@ -53,7 +53,7 @@ public class ProductListForCustomerServlet extends HttpServlet {
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) {
         List<StoreCatalog> allCatalog = null;
-        CatalogDAO catalogDAO = new PostgreCatalogDAO();
+        CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
 
         List<Cart> carts = null;
         String sumInCart = "";
@@ -68,8 +68,13 @@ public class ProductListForCustomerServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        carts = cartBean.getCart(customer);
-        sumInCart = cartBean.getCartSumById(customer);
+        carts = cartBean.getCart(customer, dataSource);
+        sumInCart = cartBean.getCartSumById(customer, dataSource);
+
+        //If out of stock, it is not displayed in the store
+        for(int i = allCatalog.size()-1; i>=0; i--){
+            if(allCatalog.get(i).getQuantity() == 0) allCatalog.remove(i);
+        }
 
         String s = allCatalog.toString();
         req.setAttribute("cata", allCatalog);
@@ -88,6 +93,6 @@ public class ProductListForCustomerServlet extends HttpServlet {
     private void addToCart(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
-        cartBean.addToCart(customer, req.getParameter("id"));
+        cartBean.addToCart(customer, req.getParameter("id"), dataSource);
     }
 }
