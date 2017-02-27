@@ -38,6 +38,7 @@
     <div class="panel-heading">
         <h4><a role="button" href="${root}/admin/listProducts" class="btn btn-default btn-block">View Catalog </a></h4>
         <h4><a role="button" href="${root}/admin/add-product-form.jsp" class="btn btn-default btn-block">Add Products </a></h4>
+        <h4><a role="button" href="${root}/admin/customerManager" class="btn btn-default btn-block">Customer manager </a></h4>
     </div>
 </div>
 <a role="button" href="${root}/logout" class="btn btn-default btn-block">Logout</a>

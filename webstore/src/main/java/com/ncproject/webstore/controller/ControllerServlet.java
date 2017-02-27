@@ -1,7 +1,10 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.ProductDao;
+import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlProductDao;
+import com.ncproject.webstore.entity.Customer;
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
@@ -23,6 +26,8 @@ import java.util.List;
         "/admin/createProduct",
         "/admin/updateProduct",
         "/admin/deleteProduct",
+        "/admin/customerManager",
+        "/admin/deleteCustomer"
         })
 
 public class ControllerServlet extends HttpServlet {
@@ -30,15 +35,19 @@ public class ControllerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private ProductDao postgreSqlProductDao;
+    private CustomerDao pscd;
 
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
+
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
             postgreSqlProductDao = new PostgreSqlProductDao(dataSource);
+            pscd = new PostgreSqlCustomerDao(dataSource);
+//            pscd.setDataSource(dataSource);
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
@@ -48,8 +57,10 @@ public class ControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+
         String userPath = request.getServletPath();
         List<Product> products;
+        List<Customer> customers;
 
         if (userPath.equals("/admin/listProducts")) {
 
@@ -95,13 +106,33 @@ public class ControllerServlet extends HttpServlet {
             response.sendRedirect("/webstore/admin/listProducts");
 
         }
-            // use RequestDispatcher to forward request internally
-            String url = "/admin" + userPath + ".jsp";
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+
+        //here my task =====================================================
+        else if (userPath.equals("/admin/customerManager")) {
+            customers = pscd.getAll();
+
+            // add products to the request
+            request.setAttribute("users", customers);
+            userPath = "/customer-manager";
+        }
+        else if (userPath.equals("/admin/deleteCustomer")) {
+            String idEmail = request.getParameter("custEmail");
+//            Customer customerToDel = pscd.getByEmail(idEmail);
+            pscd.delete(idEmail);
+
+            customers = pscd.getAll();
+            request.setAttribute("users", customers);
+            userPath = "/customer-manager";
+        }
+
+
+        // use RequestDispatcher to forward request internally
+        String url = "/admin" + userPath + ".jsp";
+        try {
+            request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override

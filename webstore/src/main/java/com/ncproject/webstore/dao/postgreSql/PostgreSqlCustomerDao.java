@@ -3,16 +3,26 @@ package com.ncproject.webstore.dao.postgreSql;
 import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.entity.Customer;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 
 
 public class PostgreSqlCustomerDao implements CustomerDao {
 	private DataSource dataSource = null;
 
+	private JdbcTemplate jdbcTemplate;
+
 	public PostgreSqlCustomerDao(DataSource dataSource){
 		this.dataSource = dataSource;
+		setDataSource();
+	}
+
+	@Override
+	public void setDataSource() {
+		this.jdbcTemplate = new JdbcTemplate((DataSource) dataSource);
 	}
 
 	@Override
@@ -110,6 +120,20 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 			JdbcUtils.closeQuietly(preparedStatement);
 			JdbcUtils.closeQuietly(connection);
 		}
+	}
+
+	@Override
+	public List<Customer> getAll() {
+		String sql = "select * from users";
+
+		return jdbcTemplate.query(sql, ROW_MAPPER_CUST);
+	}
+
+	@Override
+	public void delete(String email) {
+		String sql = "delete from users where email = ?;";
+		jdbcTemplate.update(sql, email);
+		System.out.println("delete from users successfull");
 	}
 
 	private Customer parseResultSet(ResultSet resultSet) throws SQLException {
