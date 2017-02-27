@@ -1,7 +1,13 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.dao.CustomerDao;
+import com.ncproject.webstore.dao.OrdersDAO;
+import com.ncproject.webstore.dao.POJO.Orders;
 import com.ncproject.webstore.dao.ProductDao;
+import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
+import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlProductDao;
+import com.ncproject.webstore.entity.Customer;
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
@@ -23,6 +29,8 @@ import java.util.List;
         "/admin/createProduct",
         "/admin/updateProduct",
         "/admin/deleteProduct",
+        "/admin/listOrders",
+        "/admin/loadEmailForm",
         })
 
 public class ControllerServlet extends HttpServlet {
@@ -30,6 +38,8 @@ public class ControllerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private ProductDao postgreSqlProductDao;
+    private OrdersDAO postgreOrdersDAO;
+    private CustomerDao postgreSqlCustomerDao;
 
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
@@ -39,6 +49,8 @@ public class ControllerServlet extends HttpServlet {
         super.init();
         try {
             postgreSqlProductDao = new PostgreSqlProductDao(dataSource);
+            postgreOrdersDAO = new PostgreOrdersDAO(dataSource);
+            postgreSqlCustomerDao = new PostgreSqlCustomerDao(dataSource);
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
@@ -50,6 +62,8 @@ public class ControllerServlet extends HttpServlet {
 
         String userPath = request.getServletPath();
         List<Product> products;
+        List<Orders> orders;
+        Customer customer;
 
         if (userPath.equals("/admin/listProducts")) {
 
@@ -67,11 +81,9 @@ public class ControllerServlet extends HttpServlet {
                 if (nameString != null && !nameString.trim().isEmpty()) {
                     products = postgreSqlProductDao.searchProducts(nameString);
                     request.setAttribute("PRODUCTS", products);
-
                 }
                 userPath = "/search-products";
                 //response.sendRedirect("/webstore/admin/listProducts");
-
 
         } else if (userPath.equals("/admin/loadProductToForm")) {
             // read product id parameter from the "Update" link
@@ -94,6 +106,23 @@ public class ControllerServlet extends HttpServlet {
             postgreSqlProductDao.deleteProduct(id);
             response.sendRedirect("/webstore/admin/listProducts");
 
+        } else if (userPath.equals("/admin/listOrders")) {
+            orders = postgreOrdersDAO.getAllOrders();
+
+            // add orders to the request
+            request.setAttribute("ORDERS_LIST", orders);
+
+            userPath = "/list-orders";
+        } else if (userPath.equals("/admin/loadEmailForm")) {
+            // read customer id parameter from the "Update" link
+            String idString = request.getParameter("customerId");
+            int id = Integer.parseInt(idString);
+
+            customer = postgreSqlCustomerDao.readById(id);
+            request.setAttribute("THE_CUSTOMER", customer);
+
+            userPath = "/status-update";
+
         }
             // use RequestDispatcher to forward request internally
             String url = "/admin" + userPath + ".jsp";
@@ -115,6 +144,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setDescription(request.getParameter("description"));
             theProduct.setProductName(request.getParameter("productName"));
             theProduct.setPrice(new BigDecimal(request.getParameter("price")));
+            theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
             theProduct.setBrand(request.getParameter("brand"));
 
             postgreSqlProductDao.updateProduct(theProduct);
@@ -127,6 +157,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setProductName(request.getParameter("productName"));
             theProduct.setPrice(new BigDecimal(request.getParameter("price")));
             theProduct.setBrand(request.getParameter("brand"));
+            theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
 
             postgreSqlProductDao.createProduct(theProduct);
 

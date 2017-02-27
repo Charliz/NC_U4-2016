@@ -40,20 +40,19 @@ public class PostgreSqlProductDao implements ProductDao {
 
     @Override
     public void createProduct(Product theProduct) {
-        String sql = "INSERT INTO products (description, name, price, brand) "
-                + "VALUES (?, ?, ?, ?)";
-        //
+        String sql = "INSERT INTO products (description, name, price, quantity, brand) "
+                + "VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, theProduct.getDescription(), theProduct.getProductName(),
-                theProduct.getPrice(), theProduct.getBrand());
+                theProduct.getPrice(), theProduct.getQuantity(), theProduct.getBrand());
     }
 
     @Override
     public void updateProduct(Product theProduct) {
         String sql = "UPDATE products "
-                + "SET description=?, name=?, price=?, brand=? "
+                + "SET description=?, name=?, price=?, quantity=?, brand=? "
                 + "WHERE id=?";
         jdbcTemplate.update(sql, new Object[] {theProduct.getDescription(), theProduct.getProductName(),
-                theProduct.getPrice(), theProduct.getBrand(), theProduct.getProd_id()});
+                theProduct.getPrice(), theProduct.getQuantity(), theProduct.getBrand(), theProduct.getProd_id()});
     }
 
     @Override

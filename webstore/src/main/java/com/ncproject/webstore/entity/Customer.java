@@ -1,5 +1,9 @@
 package com.ncproject.webstore.entity;
 
+import com.ncproject.webstore.dao.POJO.Orders;
+
+import java.util.Set;
+
 public class Customer {
 	private int id;
 	private String login;

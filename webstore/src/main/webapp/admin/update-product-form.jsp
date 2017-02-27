@@ -18,8 +18,9 @@
         function validate()
         {
             var price = document.getElementById("price").value;
+            var quantity = document.getElementById("quantity").value;
             var valid = true;
-                if(isNaN(price)){
+                if(isNaN(price) || isNaN(quantity)){
                     alert("Please Enter a number!!");
                     valid = false;
                 }
@@ -31,21 +32,25 @@
         <tbody>
 
         <tr>
-            <td><label>Brand:</label></td>
+            <td><label><b>Brand:</b></label></td>
             <td><input type="text" name="brand" value="${THE_PRODUCT.brand}" required/></td>
         </tr>
         <tr>
-            <td><label>Product Name:</label></td>
+            <td><label><b>Product Name:</b></label></td>
             <td><input type="text" name="productName" value="${THE_PRODUCT.productName}" required/></td>
         </tr>
 
         <tr>
-            <td><label>Price:</label></td>
+            <td><label><b>Price:</b></label></td>
             <td><input type="text" name="price" value="${THE_PRODUCT.price}" id="price" required/></td>
         </tr>
         <tr>
-            <td><label>Description:</label></td>
+            <td><label><b>Description:</b></label></td>
             <td><input type="text" name="description" value="${THE_PRODUCT.description}" required/></td>
+        </tr>
+        <tr>
+            <td><label><b>Quantity:</b></label></td>
+            <td><input type="text" name="quantity" value="${THE_PRODUCT.quantity}" id="quantity" required/></td>
         </tr>
         <br>
         <tr>

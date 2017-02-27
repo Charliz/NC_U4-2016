@@ -83,6 +83,32 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	}
 
 	@Override
+	public Customer readById(int id){
+		String sql = "select * from users where id = ?;";
+
+		Customer customer = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = dataSource.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				customer = parseResultSet(resultSet);
+			}
+		} catch (SQLException e) {
+			System.out.println("Customer select exception");
+		} finally {
+			JdbcUtils.closeQuietly(resultSet);
+			JdbcUtils.closeQuietly(preparedStatement);
+			JdbcUtils.closeQuietly(connection);
+		}
+		return customer;
+	}
+
+	@Override
 	public void update(Customer customer){
 
 		String sql = "update users set name = ?, address = ?, login = ?, password = ?, email = ?, payment = ? where id = ?;";

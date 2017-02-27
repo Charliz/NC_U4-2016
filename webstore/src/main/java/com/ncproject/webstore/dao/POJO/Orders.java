@@ -1,5 +1,7 @@
 package com.ncproject.webstore.dao.POJO;
 
+import com.ncproject.webstore.entity.Customer;
+
 import java.sql.Array;
 import java.sql.Timestamp;
 
@@ -13,7 +15,10 @@ public class Orders {
     private String status;
     private Array product_list;
     private double total;
+    private Customer customer;
 
+    public Orders() {
+    }
     public Orders(int id, int customer_id, Timestamp data, String status, Array product_list, double total) {
         this.id = id;
         this.customer_id = customer_id;
@@ -23,6 +28,13 @@ public class Orders {
         this.total = total;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
     public int getId() {
         return id;
     }

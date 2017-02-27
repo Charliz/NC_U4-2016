@@ -9,6 +9,7 @@ public class Product {
     private String productName;
     private BigDecimal price;
     private String brand;
+    private int quantity;
 
     public Product(int id, String description, String productName, BigDecimal price, String brand) {
         this.prod_id = id;
@@ -62,6 +63,14 @@ public class Product {
         this.price = price;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public String getBrand() {
         return brand;
     }
@@ -72,11 +81,13 @@ public class Product {
 
     @Override
     public String toString() {
-        return "com.ncproject.webstore.entity.Product{" +
+        return "Product{" +
                 "prod_id=" + prod_id +
                 ", description='" + description + '\'' +
                 ", productName='" + productName + '\'' +
                 ", price=" + price +
+                ", brand='" + brand + '\'' +
+                ", quantity=" + quantity +
                 '}';
     }
 }
