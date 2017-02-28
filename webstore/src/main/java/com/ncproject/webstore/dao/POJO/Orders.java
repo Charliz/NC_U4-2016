@@ -15,7 +15,6 @@ public class Orders {
     private String status;
     private Array product_list;
     private double total;
-    private Customer customer;
 
     public Orders() {
     }
@@ -28,13 +27,6 @@ public class Orders {
         this.total = total;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
     public int getId() {
         return id;
     }
