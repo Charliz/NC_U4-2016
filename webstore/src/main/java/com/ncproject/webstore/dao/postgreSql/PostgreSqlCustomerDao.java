@@ -32,7 +32,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		PreparedStatement preparedStatement1 = null;
+//		PreparedStatement preparedStatement1 = null;
 		Savepoint save1 = null;
 		try {
 			connection = dataSource.getConnection();
@@ -48,7 +48,7 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 			preparedStatement.setString(6, customer.getPayment());
 			preparedStatement.execute();
 
-			preparedStatement1 = connection.prepareStatement(sql1, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement preparedStatement1 = connection.prepareStatement(sql1, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement1.setString(1, customer.getEmail());
 			preparedStatement1.execute();
 			connection.commit();
