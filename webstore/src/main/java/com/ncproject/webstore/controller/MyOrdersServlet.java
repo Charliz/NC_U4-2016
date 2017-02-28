@@ -41,7 +41,6 @@ public class MyOrdersServlet extends HttpServlet {
             listOrders(req, resp);
         }
     }
-     // ghkugloujip; jkjkll;
 
     private void listOrders(HttpServletRequest req, HttpServletResponse resp){
         List<Orders> orders = null;
