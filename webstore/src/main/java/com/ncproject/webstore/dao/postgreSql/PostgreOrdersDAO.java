@@ -1,6 +1,5 @@
 package com.ncproject.webstore.dao.postgreSql;
 
-import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.dao.POJO.Orders;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -54,6 +53,11 @@ public class PostgreOrdersDAO implements OrdersDAO {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql2, new Object[] {customer_id});
         for (Map row : rows) {
             myList.add((String) row.get("name"));
+
+            jdbcTemplate.update(sql3, preparedStatement -> {
+                preparedStatement.setInt(1, Integer.parseInt(row.get("id").toString()));
+                preparedStatement.setInt(2, Integer.parseInt(row.get("id").toString()));
+            });
         }
         Object[] myobjArray = myList.toArray();
         Connection connection = dataSource.getConnection();
@@ -67,6 +71,8 @@ public class PostgreOrdersDAO implements OrdersDAO {
             preparedStatement.setInt(i++, customer_id);
             preparedStatement.setString(i++, "not ready");
         });
+
+
 
         System.out.println("insert into orders successfull");
     }
