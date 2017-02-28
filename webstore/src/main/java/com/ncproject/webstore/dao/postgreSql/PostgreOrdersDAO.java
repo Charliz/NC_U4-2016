@@ -54,10 +54,8 @@ public class PostgreOrdersDAO implements OrdersDAO {
         for (Map row : rows) {
             myList.add((String) row.get("name"));
 
-            jdbcTemplate.update(sql3, preparedStatement -> {
-                preparedStatement.setInt(1, Integer.parseInt(row.get("id").toString()));
-                preparedStatement.setInt(2, Integer.parseInt(row.get("id").toString()));
-            });
+            Integer product_id = Integer.parseInt(row.get("id").toString());
+            jdbcTemplate.update(sql3, product_id, product_id);
         }
         Object[] myobjArray = myList.toArray();
         Connection connection = dataSource.getConnection();
@@ -71,8 +69,6 @@ public class PostgreOrdersDAO implements OrdersDAO {
             preparedStatement.setInt(i++, customer_id);
             preparedStatement.setString(i++, "not ready");
         });
-
-
 
         System.out.println("insert into orders successfull");
     }
