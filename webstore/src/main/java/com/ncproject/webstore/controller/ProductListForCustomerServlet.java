@@ -1,12 +1,10 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.POJO.Cart;
 import com.ncproject.webstore.dao.POJO.StoreCatalog;
-import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.ejb.CartBeanInterface;
+import com.ncproject.webstore.ejb.CatalogBeanInterface;
+import com.ncproject.webstore.ejb.CustomerBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
@@ -31,12 +29,15 @@ public class ProductListForCustomerServlet extends HttpServlet {
     private DataSource dataSource;
     @EJB
     private CartBeanInterface cartBean;
+    @EJB
+    private CustomerBeanInterface customerBean;
+    @EJB
+    private CatalogBeanInterface catalogBean;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Add our customer to session
-        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
-        Customer customer = customerDao.read(req.getRemoteUser());
+        Customer customer = customerBean.read(req.getRemoteUser(), dataSource);
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
 
@@ -53,13 +54,12 @@ public class ProductListForCustomerServlet extends HttpServlet {
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) {
         List<StoreCatalog> allCatalog = null;
-        CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
 
         List<Cart> carts = null;
         String sumInCart = "";
 
         try {
-            allCatalog = catalogDAO.getAll();
+            allCatalog = catalogBean.getAll(dataSource);
         } catch (Exception e) {
             System.out.println("Product list exception");
             e.printStackTrace();

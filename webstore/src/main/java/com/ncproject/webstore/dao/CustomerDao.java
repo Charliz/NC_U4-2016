@@ -3,7 +3,6 @@ package com.ncproject.webstore.dao;
 import com.ncproject.webstore.entity.Customer;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -21,6 +20,7 @@ public interface CustomerDao {
 	List<Customer> getAll();
 
 	void delete(String email);
+
 	void setDataSource();
 
 	Customer read(String login);

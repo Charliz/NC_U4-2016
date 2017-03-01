@@ -23,7 +23,7 @@ public interface CatalogDAO {
     };
 
     //    storeCatalog read() throws Exception;
-    List<StoreCatalog> getAll() throws Exception;
-    List<CartWithNames> getByCustomerId(int id) throws Exception;
+    List<StoreCatalog> getAll();
+    List<CartWithNames> getByCustomerId(int id);
     void setDataSource();
 }

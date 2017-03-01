@@ -7,12 +7,16 @@ import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
 import javax.sql.DataSource;
 import java.util.List;
+
+import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 
 /**
  * Created by admin on 23.02.2017.
  */
+@TransactionAttribute(REQUIRES_NEW)
 @Stateful
 public class OrderBean implements OrderBeanInterface {
     @Override

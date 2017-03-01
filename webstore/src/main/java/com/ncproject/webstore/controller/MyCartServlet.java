@@ -1,12 +1,8 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CartDAO;
-import com.ncproject.webstore.dao.CatalogDAO;
 import com.ncproject.webstore.dao.POJO.CartWithNames;
-import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
-import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 import com.ncproject.webstore.ejb.CartBeanInterface;
-import com.ncproject.webstore.ejb.beans.CartBean;
+import com.ncproject.webstore.ejb.CatalogBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
@@ -31,6 +27,8 @@ public class MyCartServlet extends HttpServlet {
     private DataSource dataSource;
     @EJB
     private CartBeanInterface cartBean;
+    @EJB
+    private CatalogBeanInterface catalogBean;
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // read the hidden "command" parameter
@@ -46,14 +44,13 @@ public class MyCartServlet extends HttpServlet {
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp){
         List<CartWithNames> alCat = null;
-        CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
         String sumInCart = "";
 
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
         try {
-            alCat = catalogDAO.getByCustomerId(customer.getId());
+            alCat = catalogBean.getByCustomerId(customer.getId(), dataSource);
         } catch (Exception e) {
             e.printStackTrace();
         }

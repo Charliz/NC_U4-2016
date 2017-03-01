@@ -29,12 +29,12 @@ public class PostgreCatalogDAO implements CatalogDAO{
         this.jdbcTemplate = new JdbcTemplate((DataSource)dataSource);
     }
 
-    public List<StoreCatalog> getAll() throws Exception{
+    public List<StoreCatalog> getAll(){
 
         return jdbcTemplate.query("select * from products;", ROW_MAPPER_SC);
     }
 
-    public List<CartWithNames> getByCustomerId(int id) throws Exception{
+    public List<CartWithNames> getByCustomerId(int id){
         String sql = "select c.id, p.name, c.count, s.summary " +
                 "from products p, cart c, cart_sum s " +
                 "where p.id = c.product_id and c.id = s.cart_id and c.customer_id = ?;";
