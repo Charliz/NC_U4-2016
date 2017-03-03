@@ -8,13 +8,21 @@ import com.ncproject.webstore.entity.Product;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/admin/",
@@ -25,9 +33,10 @@ import java.util.List;
         "/admin/updateProduct",
         "/admin/deleteProduct",
         "/admin/customerManager",
-        "/admin/deleteCustomer"
+        "/admin/deleteCustomer",
+        "/admin/uploadPicture"
         })
-
+@MultipartConfig
 public class ControllerServlet extends HttpServlet {
     @EJB
     private CustomerBeanInterface customerBean;
@@ -35,6 +44,7 @@ public class ControllerServlet extends HttpServlet {
     private ProductBeanInterface productBean;
 
     private static final long serialVersionUID = 1L;
+    private String pathToSaveNewFile;
 
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
@@ -43,6 +53,8 @@ public class ControllerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+        System.setProperty("upload", System.getProperty("jboss.server.data.dir"));
+        pathToSaveNewFile = System.getProperty("upload");
     }
 
     @Override
@@ -61,6 +73,7 @@ public class ControllerServlet extends HttpServlet {
 
             // add products to the request
             request.setAttribute("PRODUCT_LIST", products);
+            request.setAttribute("UPLOAD", pathToSaveNewFile);
 
             userPath = "/list-products";
 
@@ -152,6 +165,30 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setBrand(request.getParameter("brand"));
 
             productBean.createProduct(theProduct, dataSource);
+
+            response.sendRedirect("/webstore/admin/listProducts");
+        }
+
+        //part for upload picture ========================================================
+
+        else if (userPath.equals("/admin/uploadPicture")) {
+//            Product theProduct = new Product();
+//            theProduct.setDescription(request.getParameter("description"));
+//            theProduct.setProductName(request.getParameter("productName"));
+//            theProduct.setPrice(new BigDecimal(request.getParameter("price")));
+//            theProduct.setBrand(request.getParameter("brand"));
+//
+//            productBean.createProduct(theProduct, dataSource);
+
+            String description = request.getParameter("description"); // Retrieves <input type="text" name="description">
+            System.setProperty("upload", System.getProperty("jboss.server.data.dir"));
+            pathToSaveNewFile = System.getProperty("upload"); //System.getProperty("jboss.server.data.dir");
+            Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+            InputStream fileContent = filePart.getInputStream();
+            File f = new File(pathToSaveNewFile + "\\" + description + ".jpg");
+
+            Files.copy(fileContent, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             response.sendRedirect("/webstore/admin/listProducts");
         }

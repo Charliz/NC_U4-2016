@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+<c:set var="upload" value="${UPLOAD}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +14,13 @@
 
   <!-- Bootstrap -->
   <link href="${root}/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="${root}/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+  <link href="${root}/css/slider.css" rel="stylesheet" type="text/css" media="all"/>
+  <script type="text/javascript" src="${root}/js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="${root}/js/move-top.js"></script>
+  <script type="text/javascript" src="${root}/js/easing.js"></script>
+  <script type="text/javascript" src="${root}/js/startstop-slider.js"></script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,14 +35,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="${root}/js/bootstrap.min.js"></script>
-<%--<div class="panel panel-primary">--%>
-  <%--&lt;%&ndash;<div class="panel panel-default">&ndash;%&gt;--%>
-    <%--<div class="panel-title">--%>
-      <%--Panel content--%>
-    <%--</div>--%>
-    <%--<div class="panel-body">Panel footer</div>--%>
-  <%--</div>--%>
-<%--</div>--%>
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h4 align="right"><%=((Customer)request.getSession().getAttribute("myUser")).getLogin()%></h4>
@@ -80,5 +80,72 @@
 
   </div>
 </div>
+
+<div class="section group">
+  <c:forEach var="tempProduct" items="${cata}">
+  <c:url var = "addToCart" value="/customer/mts">
+    <c:param name="command" value="ADD" />
+    <c:param name="id" value="${tempProduct.id}"/>
+  </c:url>
+  <div class="content">
+				<div class="grid_1_of_4 images_1_of_4">
+					 <a href="preview.html"><img src="${upload}/images/wer.jpg" alt="" /></a>
+					 <h2>${tempProduct.description}  </h2>
+					<div class="price-details">
+				       <div class="price-number">
+							<p><span class="rupees">${tempProduct.price} </span></p>
+					    </div>
+					       		<div class="add-cart">								
+									<h4><a href="${addToCart}">Add to Cart</a></h4>
+							     </div>
+							 <div class="clear"></div>
+					</div>
+					 
+				</div>
+
+				<%--<div class="grid_1_of_4 images_1_of_4">--%>
+					<%--<a href="preview.html"><img src="${root}/images/feature-pic2.jpg" alt="" /></a>--%>
+					 <%--<h2>Lorem Ipsum is simply </h2>--%>
+					<%--<div class="price-details">--%>
+				       <%--<div class="price-number">--%>
+							<%--<p><span class="rupees">$899.75</span></p>--%>
+					    <%--</div>--%>
+					       		<%--<div class="add-cart">								--%>
+									<%--<h4><a href="preview.html">Add to Cart</a></h4>--%>
+							     <%--</div>--%>
+							 <%--<div class="clear"></div>--%>
+					<%--</div>--%>
+				    <%----%>
+				<%--</div>--%>
+				<%--<div class="grid_1_of_4 images_1_of_4">--%>
+					<%--<a href="preview.html"><img src="${root}/images/feature-pic3.jpg" alt="" /></a>--%>
+					 <%--<h2>Lorem Ipsum is simply </h2>--%>
+					 <%--<div class="price-details">--%>
+				       <%--<div class="price-number">--%>
+							<%--<p><span class="rupees">$599.00</span></p>--%>
+					    <%--</div>--%>
+					       		<%--<div class="add-cart">								--%>
+									<%--<h4><a href="preview.html">Add to Cart</a></h4>--%>
+							     <%--</div>--%>
+							 <%--<div class="clear"></div>--%>
+					<%--</div>--%>
+				<%--</div>--%>
+				<%--<div class="grid_1_of_4 images_1_of_4">--%>
+					<%--<a href="preview.html"><img src="${root}/images/feature-pic4.jpg" alt="" /></a>--%>
+					 <%--<h2>Lorem Ipsum is simply </h2>--%>
+					<%--<div class="price-details">--%>
+				       <%--<div class="price-number">--%>
+							<%--<p><span class="rupees">$679.87</span></p>--%>
+					    <%--</div>--%>
+					       		<%--<div class="add-cart">								--%>
+									<%--<h4><a href="preview.html">Add to Cart</a></h4>--%>
+							     <%--</div>--%>
+							 <%--<div class="clear"></div>--%>
+					<%--</div>				     --%>
+				<%--</div>--%>
+  </div>
+  </c:forEach>
+</div>
+
 </body>
 </html>

@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -33,6 +35,13 @@ public class ProductListForCustomerServlet extends HttpServlet {
     private CustomerBeanInterface customerBean;
     @EJB
     private CatalogBeanInterface catalogBean;
+
+    private String imagePath;
+
+    @Override
+    public void init() throws ServletException {
+        this.imagePath = System.getProperty("jboss.server.data.dir");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -76,10 +85,16 @@ public class ProductListForCustomerServlet extends HttpServlet {
             if(allCatalog.get(i).getQuantity() == 0) allCatalog.remove(i);
         }
 
+//        File image = new File(imagePath, URLDecoder.decode(requestedImage, "UTF-8"));
+
+        System.setProperty("upload", System.getProperty("jboss.server.data.dir"));
+        String pathToSaveNewFile = req.getPathInfo();///System.getProperty("upload");
+
         String s = allCatalog.toString();
         req.setAttribute("cata", allCatalog);
         req.setAttribute("cart", carts);
         req.setAttribute("cart_sum", sumInCart);
+        req.setAttribute("UPLOAD", pathToSaveNewFile);
 
         // send to JSP page (view)
         RequestDispatcher dispatcher = req.getRequestDispatcher("/customer/p2.jsp");
