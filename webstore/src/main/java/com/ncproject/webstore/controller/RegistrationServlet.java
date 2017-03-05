@@ -1,10 +1,10 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CustomerDao;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
+import com.ncproject.webstore.ejb.CustomerBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +23,8 @@ import static com.ncproject.webstore.utils.EncryptionUtil.hash;
 public class RegistrationServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
+    @EJB
+    private CustomerBeanInterface customerBean;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,8 +49,7 @@ public class RegistrationServlet extends HttpServlet {
         Customer customer = new Customer(login, hashedPassword, email, name, address, payment);
 
         try {
-            CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
-            customerDao.create(customer);
+            customerBean.create(customer, dataSource);
         } catch (Exception e) {
             e.printStackTrace();
             return;

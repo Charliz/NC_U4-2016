@@ -1,7 +1,5 @@
 package com.ncproject.webstore.entity;
 
-import com.ncproject.webstore.entity.Customer;
-
 import java.sql.Array;
 import java.sql.Timestamp;
 

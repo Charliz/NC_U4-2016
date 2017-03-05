@@ -1,7 +1,6 @@
 package com.ncproject.webstore.entity;
 
 
-import java.util.ArrayList;
 
 public class Cart {
     private int id;

@@ -1,12 +1,10 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.entity.Cart;
 import com.ncproject.webstore.entity.StoreCatalog;
-import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
 import com.ncproject.webstore.ejb.CartBeanInterface;
+import com.ncproject.webstore.ejb.CatalogBeanInterface;
+import com.ncproject.webstore.ejb.CustomerBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
@@ -29,57 +27,39 @@ import java.util.List;
 public class ProductListForCustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
-    private CustomerDao customerDao;
     @EJB
     private CartBeanInterface cartBean;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            customerDao = new PostgreSqlCustomerDao(dataSource);
-        } catch (Exception exc) {
-            throw new ServletException(exc);
-        }
-    }
+    @EJB
+    private CustomerBeanInterface customerBean;
+    @EJB
+    private CatalogBeanInterface catalogBean;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /*Add our customer to session
-        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
-        Customer customer = customerDao.read(req.getRemoteUser());
+        //Add our customer to session
+        Customer customer = customerBean.read(req.getRemoteUser(), dataSource);
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
-        */
-        Customer customer;
-        String username = req.getRemoteUser();
-
-        if (username != null && req.getSession().getAttribute("myUser") == null) {
-            // First-time login. You can do your thing here.
-            customer = customerDao.read(username);
-            req.getSession().setAttribute("myUser", customer);
-        }
 
         // read the hidden "command" parameter
         String theCommand = req.getParameter("command");
 
-        if ("ADD".equals(theCommand)) {
+        if("ADD".equals(theCommand)){
             addToCart(req, resp);
             listProducts(req, resp);
-        } else {
+        }else {
             listProducts(req, resp);
         }
     }
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) {
         List<StoreCatalog> allCatalog = null;
-        CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
 
         List<Cart> carts = null;
         String sumInCart = "";
 
         try {
-            allCatalog = catalogDAO.getAll();
+            allCatalog = catalogBean.getAll(dataSource);
         } catch (Exception e) {
             System.out.println("Product list exception");
             e.printStackTrace();
@@ -92,8 +72,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
         sumInCart = cartBean.getCartSumById(customer, dataSource);
 
         //If out of stock, it is not displayed in the store
-        for (int i = allCatalog.size() - 1; i >= 0; i--) {
-            if (allCatalog.get(i).getQuantity() == 0) allCatalog.remove(i);
+        for(int i = allCatalog.size()-1; i>=0; i--){
+            if(allCatalog.get(i).getQuantity() == 0) allCatalog.remove(i);
         }
 
         String s = allCatalog.toString();

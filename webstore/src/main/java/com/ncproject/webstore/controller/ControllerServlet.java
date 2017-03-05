@@ -1,5 +1,8 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.ejb.CustomerBeanInterface;
+import com.ncproject.webstore.ejb.ProductBeanInterface;
+import com.ncproject.webstore.entity.Customer;
 import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.entity.Orders;
@@ -11,6 +14,7 @@ import com.ncproject.webstore.entity.Customer;
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,11 +32,17 @@ import java.util.List;
         "/admin/createProduct",
         "/admin/updateProduct",
         "/admin/deleteProduct",
+        "/admin/customerManager",
+        "/admin/deleteCustomer"
         "/admin/listOrders",
         "/admin/loadEmailForm",
         })
 
 public class ControllerServlet extends HttpServlet {
+    @EJB
+    private CustomerBeanInterface customerBean;
+    @EJB
+    private ProductBeanInterface productBean;
 
     private static final long serialVersionUID = 1L;
 
@@ -63,11 +73,12 @@ public class ControllerServlet extends HttpServlet {
         List<Product> products;
         List<Orders> orders;
         Customer customer;
+        List<Customer> customers;
 
         if (userPath.equals("/admin/listProducts")) {
 
             // get products from the PostgreSqlProductDao
-            products = postgreSqlProductDao.getAllProducts();
+            products = productBean.getAllProducts(dataSource);
 
             // add products to the request
             request.setAttribute("PRODUCT_LIST", products);
@@ -78,7 +89,7 @@ public class ControllerServlet extends HttpServlet {
                 String nameString = request.getParameter("productName");
 
                 if (nameString != null && !nameString.trim().isEmpty()) {
-                    products = postgreSqlProductDao.searchProducts(nameString);
+                    products = productBean.searchProducts(nameString, dataSource);
                     request.setAttribute("PRODUCTS", products);
                 }
                 userPath = "/search-products";
@@ -89,7 +100,7 @@ public class ControllerServlet extends HttpServlet {
             String idString = request.getParameter("productId");
             int id = Integer.parseInt(idString);
 
-            Product theProduct = postgreSqlProductDao.getProductById(id);
+            Product theProduct = productBean.getProductById(id, dataSource);
 
             // place product object in the request attribute so the JSP can use it to pre-populate the form
             request.setAttribute("THE_PRODUCT", theProduct);
@@ -102,7 +113,7 @@ public class ControllerServlet extends HttpServlet {
             int id = Integer.parseInt(idString);
 
             // delete product from the DB
-            postgreSqlProductDao.deleteProduct(id);
+            productBean.deleteProduct(id, dataSource);
             response.sendRedirect("/webstore/admin/listProducts");
 
         } else if (userPath.equals("/admin/listOrders")) {
@@ -123,13 +134,33 @@ public class ControllerServlet extends HttpServlet {
             userPath = "/status-update";
 
         }
-            // use RequestDispatcher to forward request internally
-            String url = "/admin" + userPath + ".jsp";
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+
+        //here my task =====================================================
+        else if (userPath.equals("/admin/customerManager")) {
+            customers = customerBean.getAll(dataSource);
+
+            // add products to the request
+            request.setAttribute("users", customers);
+            userPath = "/customer-manager";
+        }
+        else if (userPath.equals("/admin/deleteCustomer")) {
+            String idEmail = request.getParameter("custEmail");
+//            Customer customerToDel = pscd.getByEmail(idEmail);
+            customerBean.delete(idEmail, dataSource);
+
+            customers = customerBean.getAll(dataSource);
+            request.setAttribute("users", customers);
+            userPath = "/customer-manager";
+        }
+
+
+        // use RequestDispatcher to forward request internally
+        String url = "/admin" + userPath + ".jsp";
+        try {
+            request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -146,7 +177,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
             theProduct.setBrand(request.getParameter("brand"));
 
-            postgreSqlProductDao.updateProduct(theProduct);
+            productBean.updateProduct(theProduct, dataSource);
 
             response.sendRedirect("/webstore/admin/listProducts");
 
@@ -158,7 +189,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setBrand(request.getParameter("brand"));
             theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
 
-            postgreSqlProductDao.createProduct(theProduct);
+            productBean.createProduct(theProduct, dataSource);
 
             response.sendRedirect("/webstore/admin/listProducts");
         }

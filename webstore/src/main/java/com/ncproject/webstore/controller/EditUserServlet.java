@@ -1,10 +1,10 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CustomerDao;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
+import com.ncproject.webstore.ejb.CustomerBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +18,9 @@ import java.io.IOException;
  */
 @WebServlet("/customer/editUser")
 public class EditUserServlet extends HttpServlet {
+    @EJB
+    private CustomerBeanInterface customerBean;
+
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
 
@@ -48,8 +51,7 @@ public class EditUserServlet extends HttpServlet {
         if(address != customer.getAddress()) customer.setAddress(address);
 
         try {
-            CustomerDao customerDao =  new PostgreSqlCustomerDao(dataSource);
-            customerDao.update(customer);
+            customerBean.update(customer, dataSource);
         } catch (Exception e) {
             e.printStackTrace();
             return;
