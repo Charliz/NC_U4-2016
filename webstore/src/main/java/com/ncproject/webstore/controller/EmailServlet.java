@@ -1,6 +1,7 @@
 package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.ejb.beans.EmailSessionBean;
+import com.ncproject.webstore.entity.MailEvent;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,11 +21,13 @@ public class EmailServlet extends HttpServlet {
     private EmailSessionBean emailBean;
 
     protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String to = request.getParameter("to");
-        String subject = request.getParameter("subject");
-        String body = request.getParameter("body");
 
-        emailBean.SendOrderStatus(to, subject, body);
+        MailEvent mailEvent = new MailEvent();
+        mailEvent.set_To(request.getParameter("to"));
+        mailEvent.setSubject(request.getParameter("subject"));
+        mailEvent.setMessage(request.getParameter("body"));
+
+        emailBean.SendOrderStatus(mailEvent);
     }
 
     @Override

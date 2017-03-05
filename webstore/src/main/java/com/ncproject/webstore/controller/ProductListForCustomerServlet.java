@@ -29,24 +29,44 @@ import java.util.List;
 public class ProductListForCustomerServlet extends HttpServlet {
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
+    private CustomerDao customerDao;
     @EJB
     private CartBeanInterface cartBean;
 
     @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            customerDao = new PostgreSqlCustomerDao(dataSource);
+        } catch (Exception exc) {
+            throw new ServletException(exc);
+        }
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Add our customer to session
+        /*Add our customer to session
         CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
         Customer customer = customerDao.read(req.getRemoteUser());
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
+        */
+        Customer customer;
+        String username = req.getRemoteUser();
+
+        if (username != null && req.getSession().getAttribute("myUser") == null) {
+            // First-time login. You can do your thing here.
+            customer = customerDao.read(username);
+            req.getSession().setAttribute("myUser", customer);
+        }
 
         // read the hidden "command" parameter
         String theCommand = req.getParameter("command");
 
-        if("ADD".equals(theCommand)){
+        if ("ADD".equals(theCommand)) {
             addToCart(req, resp);
             listProducts(req, resp);
-        }else {
+        } else {
             listProducts(req, resp);
         }
     }
@@ -72,8 +92,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
         sumInCart = cartBean.getCartSumById(customer, dataSource);
 
         //If out of stock, it is not displayed in the store
-        for(int i = allCatalog.size()-1; i>=0; i--){
-            if(allCatalog.get(i).getQuantity() == 0) allCatalog.remove(i);
+        for (int i = allCatalog.size() - 1; i >= 0; i--) {
+            if (allCatalog.get(i).getQuantity() == 0) allCatalog.remove(i);
         }
 
         String s = allCatalog.toString();

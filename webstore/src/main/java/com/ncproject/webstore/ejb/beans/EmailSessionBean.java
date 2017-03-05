@@ -1,8 +1,12 @@
 package com.ncproject.webstore.ejb.beans;
 
+import com.ncproject.webstore.entity.MailEvent;
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.*;
+
+import static java.lang.System.out;
 
 /**
  * Created by Champion on 27.02.2017.
@@ -17,31 +21,39 @@ public class EmailSessionBean {
     @Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
 
-    @Resource(mappedName = "java:/StatusMessageTopic")
-    private Topic statusTopic;
+    @Resource(mappedName = "java:/jms/queue/MyQueue")
+    private Queue queue;
 
-    private String from = "urwinday555@gmail.com";
+    public void SendOrderStatus(MailEvent mailEvent) {
 
-    public void SendOrderStatus(String to, String subject, String body) {
+        Connection connection = null;
 
     try {
-        Connection connection = connectionFactory.createConnection();
-        connection.start();
-        Session topicSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        MessageProducer publisher = topicSession.createProducer(statusTopic);
+        connection = connectionFactory.createConnection();
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        MessageProducer messageProducer = session.createProducer(queue);
 
-        MapMessage message = topicSession.createMapMessage();
+        ObjectMessage objMsg = session.createObjectMessage();
+        objMsg.setObject(mailEvent);
 
-        message.setStringProperty("from", from);
-        message.setStringProperty("to", to);
-        message.setStringProperty("subject", subject);
-        message.setStringProperty("body", body);
-
-        publisher.send(message);
+        messageProducer.send(objMsg);
+        out.println("Sent ObjectMessage to the Queue");
+        //session.close();
 
     } catch (JMSException e) {
-        e.printStackTrace();
+        System.out.println("Couldn't send JMS message: ");
+      } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (JMSException ex) {
+                    System.out.println("Couldn't close JMSConnection: ");
+                  }
+            }
+
+        }
+
     }
-}}
+}
 
 

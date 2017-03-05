@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Champion
@@ -6,13 +7,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="root" value="${pageContext.request.contextPath}"/>
+
 <html>
 <head>
     <title>Email</title>
 </head>
 <body>
 <h1>Email Status</h1>
-<form method="POST" action="/emailServlet">
+<form action="${root}/emailServlet">
     <label for="to">To:</label><input id="to" name="to" type="text" value="${THE_CUSTOMER.email}" required/><br/>
     <label for="subject">Subject:</label><input id="subject" name="subject" type="text" required/><br/>
     <textarea name="body" cols="60" rows="15" required></textarea><br/>
