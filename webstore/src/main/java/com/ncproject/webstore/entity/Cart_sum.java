@@ -1,4 +1,4 @@
-package com.ncproject.webstore.dao.POJO;
+package com.ncproject.webstore.entity;
 
 
 

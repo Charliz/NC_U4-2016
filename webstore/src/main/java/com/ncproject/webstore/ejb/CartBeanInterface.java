@@ -1,6 +1,6 @@
 package com.ncproject.webstore.ejb;
 
-import com.ncproject.webstore.dao.POJO.Cart;
+import com.ncproject.webstore.entity.Cart;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Local;

@@ -1,7 +1,7 @@
 package com.ncproject.webstore.ejb.beans;
 
 import com.ncproject.webstore.dao.OrdersDAO;
-import com.ncproject.webstore.dao.POJO.Orders;
+import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
 import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;

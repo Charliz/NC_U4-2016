@@ -1,9 +1,8 @@
 package com.ncproject.webstore.dao;
 
-import com.ncproject.webstore.dao.POJO.Cart;
+import com.ncproject.webstore.entity.Cart;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.util.List;
 

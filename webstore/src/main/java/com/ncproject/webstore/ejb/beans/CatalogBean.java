@@ -1,8 +1,8 @@
 package com.ncproject.webstore.ejb.beans;
 
 import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.POJO.CartWithNames;
-import com.ncproject.webstore.dao.POJO.StoreCatalog;
+import com.ncproject.webstore.entity.CartWithNames;
+import com.ncproject.webstore.entity.StoreCatalog;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 import com.ncproject.webstore.ejb.CatalogBeanInterface;
 

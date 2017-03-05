@@ -1,9 +1,8 @@
 package com.ncproject.webstore.dao;
 
-import com.ncproject.webstore.dao.POJO.Orders;
+import com.ncproject.webstore.entity.Orders;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.util.List;
 

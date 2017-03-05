@@ -1,7 +1,7 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CartDAO;
-import com.ncproject.webstore.dao.POJO.Cart;
+import com.ncproject.webstore.entity.Cart;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;

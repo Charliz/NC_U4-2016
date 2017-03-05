@@ -1,6 +1,6 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.POJO.CartWithNames;
+import com.ncproject.webstore.entity.CartWithNames;
 import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.ejb.CatalogBeanInterface;
 import com.ncproject.webstore.entity.Customer;

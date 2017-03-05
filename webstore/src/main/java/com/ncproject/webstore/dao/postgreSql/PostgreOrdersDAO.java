@@ -1,7 +1,7 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.OrdersDAO;
-import com.ncproject.webstore.dao.POJO.Orders;
+import com.ncproject.webstore.entity.Orders;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
