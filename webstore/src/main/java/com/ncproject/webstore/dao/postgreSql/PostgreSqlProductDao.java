@@ -9,17 +9,14 @@ import javax.sql.DataSource;
 import java.util.List;
 
 public class PostgreSqlProductDao implements ProductDao {
-
     private JdbcTemplate jdbcTemplate;
 
     public PostgreSqlProductDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
     @Override
     public List<Product> getAllProducts() {
-
         String sql = "SELECT * FROM products ORDER BY id\n" + "ASC";
         return jdbcTemplate.query(sql, new ProductRowMapper());
     }
@@ -34,7 +31,6 @@ public class PostgreSqlProductDao implements ProductDao {
     @Override
     public Product getProductById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
-
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ProductRowMapper());
     }
 
@@ -42,7 +38,6 @@ public class PostgreSqlProductDao implements ProductDao {
     public void createProduct(Product theProduct) {
         String sql = "INSERT INTO products (description, name, price, brand) "
                 + "VALUES (?, ?, ?, ?)";
-        //
         jdbcTemplate.update(sql, theProduct.getDescription(), theProduct.getProductName(),
                 theProduct.getPrice(), theProduct.getBrand());
     }
@@ -61,5 +56,4 @@ public class PostgreSqlProductDao implements ProductDao {
         String sql = "DELETE FROM products WHERE id=?";
         jdbcTemplate.update(sql, id);
     }
-
 }

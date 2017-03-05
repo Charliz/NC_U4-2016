@@ -25,5 +25,4 @@ public interface CatalogDAO {
     //    storeCatalog read() throws Exception;
     List<StoreCatalog> getAll();
     List<CartWithNames> getByCustomerId(int id);
-    void setDataSource();
 }

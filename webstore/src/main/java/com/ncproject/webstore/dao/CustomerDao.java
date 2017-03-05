@@ -9,10 +9,12 @@ import java.util.List;
 public interface CustomerDao {
 
 	RowMapper<Customer> ROW_MAPPER_CUST = (ResultSet resultSet, int rowNum) -> {
-		return new Customer(resultSet.getString("login"),
+		Customer customer = new Customer(resultSet.getString("login"),
 				resultSet.getString("password"), resultSet.getString("email"),
 				resultSet.getString("name"), resultSet.getString("address"),
 				resultSet.getString("payment"));
+		customer.setId(resultSet.getInt("id"));
+		return customer;
 	};
 
 	void create(Customer customer);
@@ -20,8 +22,6 @@ public interface CustomerDao {
 	List<Customer> getAll();
 
 	void delete(String email);
-
-	void setDataSource();
 
 	Customer read(String login);
 

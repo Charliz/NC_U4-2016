@@ -17,16 +17,10 @@ import java.util.List;
 
 
 public class PostgreCatalogDAO implements CatalogDAO{
-    private DataSource dataSource = null;
     private JdbcTemplate jdbcTemplate;
 
     public PostgreCatalogDAO(DataSource dataSource){
-        this.dataSource = dataSource;
-        setDataSource();
-    }
-
-    public void setDataSource() {
-        this.jdbcTemplate = new JdbcTemplate((DataSource)dataSource);
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public List<StoreCatalog> getAll(){
