@@ -1,12 +1,10 @@
 package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CustomerDao;
-import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.entity.Customer;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.sql.*;
 import java.util.List;
 
 
