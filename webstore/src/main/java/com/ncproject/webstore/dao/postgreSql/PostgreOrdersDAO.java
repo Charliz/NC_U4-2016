@@ -2,7 +2,7 @@ package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.JdbcUtils;
 import com.ncproject.webstore.dao.OrdersDAO;
-import com.ncproject.webstore.dao.POJO.Orders;
+import com.ncproject.webstore.entity.Orders;
 
 import javax.sql.DataSource;
 import java.sql.*;

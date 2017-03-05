@@ -1,12 +1,9 @@
 package com.ncproject.webstore.controller;
 
-import com.ncproject.webstore.dao.CartDAO;
 import com.ncproject.webstore.dao.CatalogDAO;
-import com.ncproject.webstore.dao.POJO.CartWithNames;
-import com.ncproject.webstore.dao.postgreSql.PostgreCartDAO;
+import com.ncproject.webstore.entity.CartWithNames;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 import com.ncproject.webstore.ejb.CartBeanInterface;
-import com.ncproject.webstore.ejb.beans.CartBean;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;

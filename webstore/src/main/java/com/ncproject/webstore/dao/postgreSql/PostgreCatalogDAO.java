@@ -2,8 +2,8 @@ package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.CatalogDAO;
 import com.ncproject.webstore.dao.JdbcUtils;
-import com.ncproject.webstore.dao.POJO.CartWithNames;
-import com.ncproject.webstore.dao.POJO.StoreCatalog;
+import com.ncproject.webstore.entity.CartWithNames;
+import com.ncproject.webstore.entity.StoreCatalog;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

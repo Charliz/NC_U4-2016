@@ -1,6 +1,6 @@
 package com.ncproject.webstore.dao;
 
-import com.ncproject.webstore.dao.POJO.Cart;
+import com.ncproject.webstore.entity.Cart;
 
 import java.util.List;
 

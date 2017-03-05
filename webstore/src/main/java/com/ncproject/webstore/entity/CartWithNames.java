@@ -1,4 +1,4 @@
-package com.ncproject.webstore.dao.POJO;
+package com.ncproject.webstore.entity;
 
 /**
  * Created by book on 30.12.2016.

@@ -2,7 +2,7 @@ package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.dao.CustomerDao;
 import com.ncproject.webstore.dao.OrdersDAO;
-import com.ncproject.webstore.dao.POJO.Orders;
+import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.dao.ProductDao;
 import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
 import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
@@ -11,7 +11,6 @@ import com.ncproject.webstore.entity.Customer;
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

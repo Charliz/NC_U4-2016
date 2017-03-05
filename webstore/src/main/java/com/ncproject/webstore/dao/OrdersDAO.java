@@ -1,6 +1,6 @@
 package com.ncproject.webstore.dao;
 
-import com.ncproject.webstore.dao.POJO.Orders;
+import com.ncproject.webstore.entity.Orders;
 
 import java.util.List;
 
