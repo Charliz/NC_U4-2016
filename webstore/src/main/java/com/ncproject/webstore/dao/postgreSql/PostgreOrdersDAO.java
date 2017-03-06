@@ -2,6 +2,7 @@ package com.ncproject.webstore.dao.postgreSql;
 
 import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.entity.Orders;
+import com.ncproject.webstore.entity.Orders;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -25,6 +26,14 @@ public class PostgreOrdersDAO implements OrdersDAO {
 
     public void setDataSource() {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    @Override
+    public List<Orders> getAllOrders() {
+        String sql = "SELECT * FROM orders ORDER BY id\n" +
+                "ASC";
+        return jdbcTemplate.query(sql, ROW_MAPPER_ORD);
+
     }
 
     @Override

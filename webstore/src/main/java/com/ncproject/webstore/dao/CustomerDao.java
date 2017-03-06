@@ -25,6 +25,8 @@ public interface CustomerDao {
 
 	Customer read(String login);
 
+	Customer readById(int id);
+
 	void update(Customer customer);
 
 }

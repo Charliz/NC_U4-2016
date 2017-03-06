@@ -57,6 +57,7 @@
             <th>Product Name</th>
             <th>Description</th>
             <th>Price</th>
+            <th>Quantity</th>
         </tr>
         </thead>
 
@@ -69,6 +70,7 @@
             <td> <div style="width: 270px; height: 40px; text-align:center; padding: 14px; overflow: auto;">
                     ${tempProduct.description} </div></td>
             <td> ${tempProduct.price} </td>
+            <td> ${tempProduct.quantity} </td>
         </tr>
     </c:forEach>
     </c:when>

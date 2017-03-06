@@ -1,8 +1,11 @@
 package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.ejb.CustomerBeanInterface;
+import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.ejb.ProductBeanInterface;
 import com.ncproject.webstore.entity.Customer;
+import com.ncproject.webstore.entity.Orders;
+
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
@@ -33,6 +36,8 @@ import java.util.List;
         "/admin/updateProduct",
         "/admin/deleteProduct",
         "/admin/customerManager",
+        "/admin/listOrders",
+        "/admin/loadEmailForm",
         "/admin/deleteCustomer",
         "/admin/uploadPicture"
         })
@@ -42,6 +47,8 @@ public class ControllerServlet extends HttpServlet {
     private CustomerBeanInterface customerBean;
     @EJB
     private ProductBeanInterface productBean;
+    @EJB
+    private OrderBeanInterface orderBean;
 
     private static final long serialVersionUID = 1L;
     private String pathToSaveNewFile;
@@ -61,9 +68,10 @@ public class ControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         String userPath = request.getServletPath();
         List<Product> products;
+        List<Orders> orders;
+        Customer customer;
         List<Customer> customers;
 
         if (userPath.equals("/admin/listProducts")) {
@@ -83,11 +91,9 @@ public class ControllerServlet extends HttpServlet {
                 if (nameString != null && !nameString.trim().isEmpty()) {
                     products = productBean.searchProducts(nameString, dataSource);
                     request.setAttribute("PRODUCTS", products);
-
                 }
                 userPath = "/search-products";
                 //response.sendRedirect("/webstore/admin/listProducts");
-
 
         } else if (userPath.equals("/admin/loadProductToForm")) {
             // read product id parameter from the "Update" link
@@ -110,6 +116,23 @@ public class ControllerServlet extends HttpServlet {
             productBean.deleteProduct(id, dataSource);
             response.sendRedirect("/webstore/admin/listProducts");
 
+        } else if (userPath.equals("/admin/listOrders")) {
+            orders = orderBean.getAllOrders(dataSource);
+
+            // add orders to the request
+            request.setAttribute("ORDERS_LIST", orders);
+
+            userPath = "/list-orders";
+        } else if (userPath.equals("/admin/loadEmailForm")) {
+            // read customer id parameter from the "Update" link
+            String idString = request.getParameter("customerId");
+            int id = Integer.parseInt(idString);
+
+            customer = customerBean.readById(id, dataSource);
+            request.setAttribute("THE_CUSTOMER", customer);
+
+            userPath = "/status-update";
+
         }
 
         //here my task =====================================================
@@ -129,7 +152,6 @@ public class ControllerServlet extends HttpServlet {
             request.setAttribute("users", customers);
             userPath = "/customer-manager";
         }
-
 
         // use RequestDispatcher to forward request internally
         String url = "/admin" + userPath + ".jsp";
@@ -151,6 +173,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setDescription(request.getParameter("description"));
             theProduct.setProductName(request.getParameter("productName"));
             theProduct.setPrice(new BigDecimal(request.getParameter("price")));
+            theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
             theProduct.setBrand(request.getParameter("brand"));
 
             productBean.updateProduct(theProduct, dataSource);
@@ -163,6 +186,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setProductName(request.getParameter("productName"));
             theProduct.setPrice(new BigDecimal(request.getParameter("price")));
             theProduct.setBrand(request.getParameter("brand"));
+            theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
 
             productBean.createProduct(theProduct, dataSource);
 

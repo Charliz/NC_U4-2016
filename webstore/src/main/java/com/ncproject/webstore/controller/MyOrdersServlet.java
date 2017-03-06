@@ -1,5 +1,7 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.ejb.beans.EmailSessionBean;
+import com.ncproject.webstore.entity.MailEvent;
 import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.ejb.CartBeanInterface;
 import com.ncproject.webstore.ejb.OrderBeanInterface;
@@ -30,6 +32,8 @@ public class MyOrdersServlet extends HttpServlet {
     private CartBeanInterface cartBean;
     @EJB
     private OrderBeanInterface orderBean;
+    @EJB
+    private EmailSessionBean emailBean;
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // read the hidden "command" parameter
@@ -66,6 +70,7 @@ public class MyOrdersServlet extends HttpServlet {
         List<Orders> orders = null;
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
+        String emailTo = customer.getEmail();
 
         try {
             orders = orderBean.readById(customer, dataSource);
@@ -82,6 +87,7 @@ public class MyOrdersServlet extends HttpServlet {
 
         // send to JSP page (view)
         RequestDispatcher dispatcher = req.getRequestDispatcher("/order.jsp");
+        sendEmail(emailTo);
         try {
             dispatcher.forward(req, resp);
         } catch (Exception e) {
@@ -104,5 +110,14 @@ public class MyOrdersServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void sendEmail(String to) {
+        MailEvent mailEvent = new MailEvent();
+        mailEvent.set_To(to);
+        mailEvent.setSubject("Order Confirmation");
+        mailEvent.setMessage("Hello!) Your Order is confirmed! We'll ship it soon! Best regards from NC Shop =)");
+
+        emailBean.SendOrderStatus(mailEvent); //firing mail event!
     }
 }

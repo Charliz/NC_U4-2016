@@ -14,6 +14,8 @@ public class Orders {
     private Array product_list;
     private double total;
 
+    public Orders() {
+    }
     public Orders(int id, int customer_id, Timestamp data, String status, Array product_list, double total) {
         this.id = id;
         this.customer_id = customer_id;

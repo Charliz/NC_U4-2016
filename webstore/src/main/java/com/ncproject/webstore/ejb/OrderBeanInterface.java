@@ -14,4 +14,5 @@ import java.util.List;
 public interface OrderBeanInterface {
     List<Orders> readById(Customer customer, DataSource dataSource);
     void createOrder(Customer customer, DataSource dataSource);
+    List<Orders> getAllOrders(DataSource dataSource);
 }

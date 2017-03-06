@@ -39,4 +39,15 @@ public class OrderBean implements OrderBeanInterface {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Orders> getAllOrders(DataSource dataSource) {
+        OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
+        try {
+            return ordersDAO.getAllOrders();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

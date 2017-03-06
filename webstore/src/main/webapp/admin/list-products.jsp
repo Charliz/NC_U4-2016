@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>BootstrapTemplate</title>
+    <title>Admin control panel</title>
 
     <!-- Bootstrap -->
     <link href="${root}/css/bootstrap.min.css" rel="stylesheet">
@@ -40,7 +40,8 @@
 <form class="form-style" action="${root}/admin/searchProducts">
 
     <div>
-        <label>Product Name:<input type="text" name ="productName" required/></label> <input type="submit" value="Search">
+        <label>Product Name:<input type="text" name ="productName" required/></label>
+        <input type="submit" value="Search">
     </div>
 
 </form>
@@ -48,9 +49,14 @@
 
 <form class="form-style" action="${root}/admin/listProducts" method = "get">
 
-    <input type="button" value="Add Product"
-           onclick="window.location.href='/webstore/admin/add-product-form.jsp'"
-    /> <br><br>
+    <c:url var = "addLink" value="/admin/add-product-form.jsp"></c:url>
+    <div class="col-md-6"><a role="button" href="${addLink}" class="btn btn-default">Add Product</a></div>
+
+    <c:url var = "ordersLink" value="/admin/listOrders"></c:url>
+    <div class="col-md-6"><a role="button" href="${ordersLink}" class="btn btn-default">View Orders</a></div>
+
+
+    <br>
 
     <table class ="table" id = "myTable">
 
@@ -60,10 +66,11 @@
             <th>Product Name</th>
             <th>Description</th>
             <th>Price</th>
+            <th>Quantity</th>
             <th>Action</th>
         </tr>
         </thead>
-</form>
+
         <%--- the attribute "PRODUCT_LIST" comes from the "request" object ---%>
         <c:forEach var="tempProduct" items="${PRODUCT_LIST}">
 
@@ -84,6 +91,7 @@
                         ${tempProduct.description} </div>
                 </td>
                 <td> ${tempProduct.price} </td>
+                <td> ${tempProduct.quantity} </td>
                 <td>
                     <form class="form-style" action="${root}/admin/uploadPicture" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="description" value="${tempProduct.prod_id}" />
@@ -101,6 +109,6 @@
             </tr>
         </c:forEach>
     </table>
-
+</form>
 </body>
 </html>
