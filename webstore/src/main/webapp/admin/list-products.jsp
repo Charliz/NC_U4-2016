@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+<c:set var="upload" value="${UPLOAD}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,14 +27,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="${root}/js/bootstrap.min.js"></script>
-<%--<div class="panel panel-primary">--%>
-<%--&lt;%&ndash;<div class="panel panel-default">&ndash;%&gt;--%>
-<%--<div class="panel-title">--%>
-<%--Panel content--%>
-<%--</div>--%>
-<%--<div class="panel-body">Panel footer</div>--%>
-<%--</div>--%>
-<%--</div>--%>
+
 <div class="panel panel-primary">
     <div class="panel-heading">
         <br><br>
@@ -69,7 +63,7 @@
             <th>Action</th>
         </tr>
         </thead>
-
+</form>
         <%--- the attribute "PRODUCT_LIST" comes from the "request" object ---%>
         <c:forEach var="tempProduct" items="${PRODUCT_LIST}">
 
@@ -90,6 +84,14 @@
                         ${tempProduct.description} </div>
                 </td>
                 <td> ${tempProduct.price} </td>
+                <td>
+                    <form class="form-style" action="${root}/admin/uploadPicture" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="description" value="${tempProduct.prod_id}" />
+                        <input type="file" name="file" />
+                        <input type="submit" value="UPLOAD" />
+                    </form>
+                    <img src="${root}/images/${tempProduct.prod_id}.jpg" alt=""width="100" height="70"/>
+                </td>
 
                 <td>
                     <a href="${updateLink}">Update</a><br>
@@ -99,6 +101,6 @@
             </tr>
         </c:forEach>
     </table>
-</form>
+
 </body>
 </html>
