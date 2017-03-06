@@ -44,6 +44,13 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	@Override
 	public void delete(String email) {
 		String sql = "delete from users where email = ?;";
-		jdbcTemplate.update(sql, email);
+		String sql1 = "select * from users where email = ?;";
+		String sql2 = "delete from cart where customer_id = ?;";
+		String sql3 = "delete from orders where customer_id = ?;";
+
+		Customer cus = jdbcTemplate.queryForObject(sql1, ROW_MAPPER_CUST, email);
+        jdbcTemplate.update(sql2, cus.getId());
+        jdbcTemplate.update(sql3, cus.getId());
+        jdbcTemplate.update(sql, email);
 	}
 }
