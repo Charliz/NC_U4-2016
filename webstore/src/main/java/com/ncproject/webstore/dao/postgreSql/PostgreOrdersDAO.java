@@ -30,42 +30,10 @@ public class PostgreOrdersDAO implements OrdersDAO {
 
     @Override
     public List<Orders> getAllOrders() {
+        String sql = "SELECT * FROM orders ORDER BY id\n" +
+                "ASC";
+        return jdbcTemplate.query(sql, ROW_MAPPER_ORD);
 
-        List<Orders> ordersList = new ArrayList<>();
-        Orders orders = null;
-
-        Connection myConnection = null;
-        Statement myStatement = null;
-        ResultSet resultSet = null;
-        try {
-            // get a connection
-            myConnection = dataSource.getConnection();
-            String sql = "SELECT * FROM orders ORDER BY id\n" +
-                    "ASC";
-
-            myStatement = myConnection.createStatement();
-            resultSet = myStatement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                orders = parseResultSet(resultSet);
-                ordersList.add(orders);
-            }
-        } catch (SQLException e) {
-                System.out.println("Cannot read orders");
-        }
-
-         finally {
-            // close JDBC objects
-            JdbcUtils.closeQuietly(resultSet);
-            JdbcUtils.closeQuietly(myStatement);
-            JdbcUtils.closeQuietly(myConnection);
-        } if (null == orders) {
-            System.out.println("Orders not found");
-        } else {
-            System.out.println("Orders found");
-        }
-        System.out.println("Returning orders");
-        return ordersList;
     }
 
     @Override

@@ -20,4 +20,6 @@ public interface CustomerBeanInterface {
     Customer read(String login, DataSource dataSource);
 
     void update(Customer customer, DataSource dataSource);
+
+    Customer readById(int id, DataSource dataSource);
 }

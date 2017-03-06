@@ -30,6 +30,12 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	}
 
 	@Override
+	public Customer readById(int id) {
+		String sql = "select * from users where id = ?;";
+		return jdbcTemplate.queryForObject(sql, new Object[]{id}, ROW_MAPPER_CUST);
+	}
+
+	@Override
 	public void update(Customer cus){
 		String sql = "update users set name = ?, address = ?, login = ?, email = ?, payment = ? where id = ?;";
 		jdbcTemplate.update(sql, cus.getName(), cus.getAddress(), cus.getLogin(), cus.getEmail(), cus.getPayment(), cus.getId());

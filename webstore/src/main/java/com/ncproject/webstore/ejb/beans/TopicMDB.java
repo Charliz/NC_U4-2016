@@ -20,19 +20,19 @@ import java.util.Date;
 
 @MessageDriven(activationConfig = {
         @ActivationConfigProperty(
-                propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+                propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
         @ActivationConfigProperty(
-                propertyName = "destination", propertyValue = "java:/jms/queue/MyQueue") })
+                propertyName = "destination", propertyValue = "java:/jms/topic/MyTopic") })
 
 
-public class EmailMDB implements javax.jms.MessageListener {
+public class TopicMDB implements javax.jms.MessageListener {
     @Resource(mappedName = "java:jboss/mail/Gmail")
     private Session mailSession;
 
     public void onMessage(Message message){
         try {
             if (message instanceof ObjectMessage) {
-                System.out.println("Queue: I received an ObjectMessage " +
+                System.out.println("Topic: I received an ObjectMessage " +
                         " at " + new Date());
                 ObjectMessage objectMessage = (ObjectMessage) message;
                 MailEvent mailEvent = (MailEvent) objectMessage.getObject();
@@ -42,7 +42,6 @@ public class EmailMDB implements javax.jms.MessageListener {
 
                 javax.mail.Message msg = new MimeMessage(mailSession);
 
-                //msg.setFrom(fromAddress);
                 msg.setFrom(new InternetAddress(fromString,"NC Onlinestore"));
                 InternetAddress[] address = {new InternetAddress(mailEvent.get_To())};
                 msg.setRecipients(javax.mail.Message.RecipientType.TO, address);

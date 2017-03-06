@@ -49,4 +49,10 @@ public class CustomerBean implements CustomerBeanInterface {
         CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
         customerDao.update(customer);
     }
+
+    @Override
+    public Customer readById(int id, DataSource dataSource) {
+        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
+        return customerDao.readById(id);
+    }
 }

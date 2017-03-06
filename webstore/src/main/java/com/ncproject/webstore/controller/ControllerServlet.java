@@ -1,16 +1,11 @@
 package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.ejb.CustomerBeanInterface;
+import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.ejb.ProductBeanInterface;
 import com.ncproject.webstore.entity.Customer;
-import com.ncproject.webstore.dao.CustomerDao;
-import com.ncproject.webstore.dao.OrdersDAO;
 import com.ncproject.webstore.entity.Orders;
-import com.ncproject.webstore.dao.ProductDao;
-import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlCustomerDao;
-import com.ncproject.webstore.dao.postgreSql.PostgreSqlProductDao;
-import com.ncproject.webstore.entity.Customer;
+
 import com.ncproject.webstore.entity.Product;
 
 import javax.annotation.Resource;
@@ -33,7 +28,7 @@ import java.util.List;
         "/admin/updateProduct",
         "/admin/deleteProduct",
         "/admin/customerManager",
-        "/admin/deleteCustomer"
+        "/admin/deleteCustomer",
         "/admin/listOrders",
         "/admin/loadEmailForm",
         })
@@ -43,27 +38,13 @@ public class ControllerServlet extends HttpServlet {
     private CustomerBeanInterface customerBean;
     @EJB
     private ProductBeanInterface productBean;
+    @EJB
+    private OrderBeanInterface orderBean;
 
     private static final long serialVersionUID = 1L;
 
-    private ProductDao postgreSqlProductDao;
-    private OrdersDAO postgreOrdersDAO;
-    private CustomerDao postgreSqlCustomerDao;
-
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            postgreSqlProductDao = new PostgreSqlProductDao(dataSource);
-            postgreOrdersDAO = new PostgreOrdersDAO(dataSource);
-            postgreSqlCustomerDao = new PostgreSqlCustomerDao(dataSource);
-        } catch (Exception exc) {
-            throw new ServletException(exc);
-        }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -117,7 +98,7 @@ public class ControllerServlet extends HttpServlet {
             response.sendRedirect("/webstore/admin/listProducts");
 
         } else if (userPath.equals("/admin/listOrders")) {
-            orders = postgreOrdersDAO.getAllOrders();
+            orders = orderBean.getAllOrders(dataSource);
 
             // add orders to the request
             request.setAttribute("ORDERS_LIST", orders);
@@ -128,7 +109,7 @@ public class ControllerServlet extends HttpServlet {
             String idString = request.getParameter("customerId");
             int id = Integer.parseInt(idString);
 
-            customer = postgreSqlCustomerDao.readById(id);
+            customer = customerBean.readById(id, dataSource);
             request.setAttribute("THE_CUSTOMER", customer);
 
             userPath = "/status-update";
@@ -152,7 +133,6 @@ public class ControllerServlet extends HttpServlet {
             request.setAttribute("users", customers);
             userPath = "/customer-manager";
         }
-
 
         // use RequestDispatcher to forward request internally
         String url = "/admin" + userPath + ".jsp";

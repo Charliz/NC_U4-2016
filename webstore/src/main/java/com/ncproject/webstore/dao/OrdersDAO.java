@@ -18,4 +18,5 @@ public interface OrdersDAO {
     List<Orders> readById(int id) throws Exception;
     void createOrder(int customer_id) throws Exception;
     void setDataSource();
+    List<Orders> getAllOrders();
 }
