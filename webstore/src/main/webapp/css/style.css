@@ -359,11 +359,11 @@ body {
 .images_1_of_4  p span.price {
 	font-size: 18px;
 	font-family: 'ambleregular';
-	color:#CC3636;
+	color:#1679aa;
 }
 .price-details{
 	margin-top:10px;
-	border-top:1px solid #CD1F25;
+	border-top:1px solid #1679aa;
 }
 .price-number{
 	float: left;
@@ -383,7 +383,7 @@ body {
 	display: block;
 	padding:10px 15px;
 	font-family: 'ambleregular';
-	background:#CD1F25;
+	background:#1679aa;
 	color: #FFF;
 	text-decoration: none;
 	outline: 0;
@@ -1047,19 +1047,28 @@ body {
     zoom:1;
 }
 .grid_1_of_3{
-	display: block;
+	/*display: block;*/
 	float:left;
-	margin: 1% 0 1% 1.6%;
+	/*margin: 1% 0 1% 1.6%;*/
+
+	position: relative;
+	width: 50%;
+	padding-bottom: 30%;
+	margin: 1.66%;
 }
 .grid_1_of_3:first-child { 
 	margin-left: 0; 
 } 
 .images_1_of_3 {
-	width: 29.2%;
-	padding:1.5%; 
+	width: 49.2%;
+	/*width: 220px;*/
+	/*height: 180px;*/
+	padding:1.5%;
 }
 .images_1_of_3  img {
-	max-width:100%;
+	max-width:50%;
+	/*width: 220px;*/
+	/*height: 180px;*/
 	display:block;
 	border: 1px solid #ECE6E6;
 }

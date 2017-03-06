@@ -47,55 +47,75 @@
   <div class="panel-body">sum of all items is <c:out value="${cart_sum}"></c:out></div>
 </div>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
+<%--<div class="row">--%>
+  <%--<div class="col-md-6 col-md-offset-3">--%>
 
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <td>name</td>
-          <td>description</td>
-          <td>price</td>
-          <td>quantity</td>
-          <td></td>
-        </tr>
-      </thead>
+    <%--<table class="table table-hover">--%>
+      <%--<thead>--%>
         <%--<tr>--%>
-      <c:forEach var="tempProduct" items="${cata}">
-            <c:url var = "addToCart" value="/customer/mts">
-              <c:param name="command" value="ADD" />
-              <c:param name="id" value="${tempProduct.id}"/>
-            </c:url>
-        <tr>
-            <td><b> ${tempProduct.name} </b> </td>
-          <td> ${tempProduct.description} </td>
-          <td> ${tempProduct.price} </td>
-          <td> ${tempProduct.quantity} </td>
-          <td><a role="button" href="${addToCart}" class="btn btn-default btn-block">add to cart</a></td>
-        </tr>
-      </c:forEach>
+          <%--<td>name</td>--%>
+          <%--<td>description</td>--%>
+          <%--<td>price</td>--%>
+          <%--<td>quantity</td>--%>
+          <%--<td></td>--%>
         <%--</tr>--%>
-        <br>
-    </table>
+      <%--</thead>--%>
+        <%--&lt;%&ndash;<tr>&ndash;%&gt;--%>
+      <%--<c:forEach var="tempProduct" items="${cata}">--%>
+            <%--<c:url var = "addToCart" value="/customer/mts">--%>
+              <%--<c:param name="command" value="ADD" />--%>
+              <%--<c:param name="id" value="${tempProduct.id}"/>--%>
+            <%--</c:url>--%>
+        <%--<tr>--%>
+            <%--<td><b> ${tempProduct.name} </b> </td>--%>
+          <%--<td> ${tempProduct.description} </td>--%>
+          <%--<td> ${tempProduct.price} </td>--%>
+          <%--<td> ${tempProduct.quantity} </td>--%>
+          <%--<td><a role="button" href="${addToCart}" class="btn btn-default btn-block">add to cart</a></td>--%>
+        <%--</tr>--%>
+      <%--</c:forEach>--%>
+        <%--&lt;%&ndash;</tr>&ndash;%&gt;--%>
+        <%--<br>--%>
+    <%--</table>--%>
 
-  </div>
-</div>
+  <%--</div>--%>
+<%--</div>--%>
+
+
 
 <div class="section group">
-  <c:forEach var="tempProduct" items="${cata}">
-  <c:url var = "addToCart" value="/customer/mts">
-    <c:param name="command" value="ADD" />
-    <c:param name="id" value="${tempProduct.id}"/>
-  </c:url>
   <div class="content">
-				<div class="grid_1_of_4 images_1_of_4">
-					 <a href="preview.html"><img src="${upload}/images/wer.jpg" alt="" /></a>
-					 <h2>${tempProduct.description}  </h2>
+  <c:forEach var="tempProduct" items="${cata}">
+    <c:url var = "addToCart" value="/customer/mts">
+      <c:param name="command" value="ADD" />
+      <c:param name="id" value="${tempProduct.id}"/>
+    </c:url>
+				<div class="grid_1_of_3 images_1_of_3">
+					 <a href="preview.html"><img src="${root}/images/${tempProduct.id}.jpg" alt="" width="240" height="180"/></a>
+                  <style>
+                    p.clip {
+                      white-space: nowrap; /* Запрещаем перенос строк */
+                      overflow: hidden; /* Обрезаем все, что не помещается в область */
+                      background: #fc0; /* Цвет фона */
+                      padding: 5px; /* Поля вокруг текста */
+                      text-overflow: ellipsis; /* Добавляем многоточие */
+                    }
+                    h2.clipH2 {
+                      font-size: 12pt;
+                      white-space: nowrap; /* Запрещаем перенос строк */
+                      overflow: hidden; /* Обрезаем все, что не помещается в область */
+                      background: #f4f1a8; /* Цвет фона */
+                      padding: 5px; /* Поля вокруг текста */
+                      text-overflow: ellipsis; /* Добавляем многоточие */
+                    }
+                  </style>
+                     <h2 class="clipH2"> ${tempProduct.name} </h2>
+                     <p class="clip">${tempProduct.description}</p>
 					<div class="price-details">
 				       <div class="price-number">
 							<p><span class="rupees">${tempProduct.price} </span></p>
 					    </div>
-					       		<div class="add-cart">								
+					       		<div class="add-cart">
 									<h4><a href="${addToCart}">Add to Cart</a></h4>
 							     </div>
 							 <div class="clear"></div>
@@ -143,8 +163,9 @@
 							 <%--<div class="clear"></div>--%>
 					<%--</div>				     --%>
 				<%--</div>--%>
-  </div>
   </c:forEach>
+  </div>
+
 </div>
 
 </body>

@@ -86,10 +86,11 @@
                 <td> ${tempProduct.price} </td>
                 <td>
                     <form class="form-style" action="${root}/admin/uploadPicture" method="post" enctype="multipart/form-data">
-                        <input type="text" name="description" />
+                        <input type="hidden" name="description" value="${tempProduct.prod_id}" />
                         <input type="file" name="file" />
                         <input type="submit" value="UPLOAD" />
                     </form>
+                    <img src="${root}/images/${tempProduct.prod_id}.jpg" alt=""width="100" height="70"/>
                 </td>
 
                 <td>
