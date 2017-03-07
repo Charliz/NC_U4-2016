@@ -57,8 +57,10 @@ public class RegistrationServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
+        req.login(login, password);
 
-        getServletContext().getRequestDispatcher("/customer/registrationSuccess.jsp").forward(req, resp);
+        resp.sendRedirect("/webstore/customer/registrationSuccess.jsp");
+        // getServletContext().getRequestDispatcher("/customer/registrationSuccess.jsp").forward(req, resp);
     }
 
 }
