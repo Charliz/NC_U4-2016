@@ -23,8 +23,8 @@ import java.util.List;
  */
 @WebServlet("/cart")
 public class MyCartServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresXADS")
-    private DataSource dataSource;
+
+
     @EJB
     private CartBeanInterface cartBean;
     @EJB
@@ -50,12 +50,12 @@ public class MyCartServlet extends HttpServlet {
         Customer customer = (Customer) session.getAttribute("myUser");
 
         try {
-            alCat = catalogBean.getByCustomerId(customer.getId(), dataSource);
+            alCat = catalogBean.getByCustomerId(customer.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        sumInCart = cartBean.getCartSumById(customer, dataSource);
+        sumInCart = cartBean.getCartSumById(customer);
 
         req.setAttribute("cata", alCat);
         req.setAttribute("cart_sum", sumInCart);
@@ -72,6 +72,6 @@ public class MyCartServlet extends HttpServlet {
     }
 
     private void delFromCart(HttpServletRequest req, HttpServletResponse resp){
-        cartBean.delFromCart(Integer.parseInt(req.getParameter("id")), dataSource);
+        cartBean.delFromCart(Integer.parseInt(req.getParameter("id")));
     }
 }

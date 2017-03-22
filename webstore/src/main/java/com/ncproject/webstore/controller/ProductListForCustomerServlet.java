@@ -46,7 +46,7 @@ public class ProductListForCustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Add our customer to session
-        Customer customer = customerBean.read(req.getRemoteUser(), dataSource);
+        Customer customer = customerBean.read(req.getRemoteUser());
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
 
@@ -68,7 +68,7 @@ public class ProductListForCustomerServlet extends HttpServlet {
         String sumInCart = "";
 
         try {
-            allCatalog = catalogBean.getAll(dataSource);
+            allCatalog = catalogBean.getAll();
         } catch (Exception e) {
             System.out.println("Product list exception");
             e.printStackTrace();
@@ -77,8 +77,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        carts = cartBean.getCart(customer, dataSource);
-        sumInCart = cartBean.getCartSumById(customer, dataSource);
+        carts = cartBean.getCart(customer);
+        sumInCart = cartBean.getCartSumById(customer);
 
         //If out of stock, it is not displayed in the store
         for(int i = allCatalog.size()-1; i>=0; i--){
@@ -108,6 +108,6 @@ public class ProductListForCustomerServlet extends HttpServlet {
     private void addToCart(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
-        cartBean.addToCart(customer, req.getParameter("id"), dataSource);
+        cartBean.addToCart(customer, req.getParameter("id"));
     }
 }

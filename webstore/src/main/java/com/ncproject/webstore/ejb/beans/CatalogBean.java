@@ -6,6 +6,8 @@ import com.ncproject.webstore.entity.StoreCatalog;
 import com.ncproject.webstore.dao.postgreSql.PostgreCatalogDAO;
 import com.ncproject.webstore.ejb.CatalogBeanInterface;
 
+import javax.annotation.Resource;
+import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.sql.DataSource;
@@ -18,15 +20,20 @@ import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
  */
 @TransactionAttribute(REQUIRES_NEW)
 @Stateful
+@Remote(CatalogBeanInterface.class)
 public class CatalogBean implements CatalogBeanInterface {
+
+    @Resource(lookup = "java:/PostgresXADS")
+    private DataSource dataSource;
+
     @Override
-    public List<StoreCatalog> getAll(DataSource dataSource) {
+    public List<StoreCatalog> getAll() {
         CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
         return catalogDAO.getAll();
     }
 
     @Override
-    public List<CartWithNames> getByCustomerId(int id, DataSource dataSource) {
+    public List<CartWithNames> getByCustomerId(int id) {
         CatalogDAO catalogDAO = new PostgreCatalogDAO(dataSource);
         return catalogDAO.getByCustomerId(id);
     }

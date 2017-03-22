@@ -1,6 +1,8 @@
 package com.ncproject.webstore.entity;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
 	private int id;
 	private String login;
 	private String password;

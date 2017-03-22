@@ -4,19 +4,21 @@ import com.ncproject.webstore.entity.Cart;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 
 /**
  * Created by Черный on 21.02.2017.
  */
-@Local
+@Remote
 public interface CartBeanInterface {
-    public ArrayList<Cart> getCart(Customer customer, DataSource dataSource);
 
-    void addToCart(Customer customer, String product_id, DataSource dataSource);
+    public ArrayList<Cart> getCart(Customer customer);
 
-    String getCartSumById(Customer customer, DataSource dataSource);
+    void addToCart(Customer customer, String product_id);
 
-    void delFromCart(int id, DataSource dataSource);
+    String getCartSumById(Customer customer);
+
+    void delFromCart(int id);
 }

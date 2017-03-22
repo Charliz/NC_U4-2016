@@ -2,10 +2,12 @@ package com.ncproject.webstore.entity;
 
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by One on 01.12.2016.
  */
-public class StoreCatalog {
+public class StoreCatalog implements Serializable {
     private int id;
     private String name;
     private String description;

@@ -6,6 +6,8 @@ import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
 import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.annotation.Resource;
+import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.sql.DataSource;
@@ -18,9 +20,15 @@ import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
  */
 @TransactionAttribute(REQUIRES_NEW)
 @Stateful
+@Remote(OrderBeanInterface.class)
 public class OrderBean implements OrderBeanInterface {
+
+
+    @Resource(lookup = "java:/PostgresXADS")
+    private DataSource dataSource;
+
     @Override
-    public List<Orders> readById(Customer customer, DataSource dataSource) {
+    public List<Orders> readById(Customer customer) {
         OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
         try {
             return ordersDAO.readById(customer.getId());
@@ -31,7 +39,7 @@ public class OrderBean implements OrderBeanInterface {
     }
 
     @Override
-    public void createOrder(Customer customer, DataSource dataSource) {
+    public void createOrder(Customer customer) {
         OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
         try {
             ordersDAO.createOrder(customer.getId());
@@ -41,7 +49,7 @@ public class OrderBean implements OrderBeanInterface {
     }
 
     @Override
-    public List<Orders> getAllOrders(DataSource dataSource) {
+    public List<Orders> getAllOrders() {
         OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
         try {
             return ordersDAO.getAllOrders();

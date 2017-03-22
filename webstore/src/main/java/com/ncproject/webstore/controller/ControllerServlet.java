@@ -50,11 +50,11 @@ public class ControllerServlet extends HttpServlet {
     @EJB
     private OrderBeanInterface orderBean;
 
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
     private String pathToSaveNewFile;
 
-    @Resource(lookup = "java:/PostgresXADS")
-    private DataSource dataSource;
+//    @Resource(lookup = "java:/PostgresXADS")
+//    private DataSource dataSource;
 
 
     @Override
@@ -77,7 +77,7 @@ public class ControllerServlet extends HttpServlet {
         if (userPath.equals("/admin/listProducts")) {
 
             // get products from the PostgreSqlProductDao
-            products = productBean.getAllProducts(dataSource);
+            products = productBean.getAllProducts();
 
             // add products to the request
             request.setAttribute("PRODUCT_LIST", products);
@@ -89,7 +89,7 @@ public class ControllerServlet extends HttpServlet {
                 String nameString = request.getParameter("productName");
 
                 if (nameString != null && !nameString.trim().isEmpty()) {
-                    products = productBean.searchProducts(nameString, dataSource);
+                    products = productBean.searchProducts(nameString);
                     request.setAttribute("PRODUCTS", products);
                 }
                 userPath = "/search-products";
@@ -100,7 +100,7 @@ public class ControllerServlet extends HttpServlet {
             String idString = request.getParameter("productId");
             int id = Integer.parseInt(idString);
 
-            Product theProduct = productBean.getProductById(id, dataSource);
+            Product theProduct = productBean.getProductById(id);
 
             // place product object in the request attribute so the JSP can use it to pre-populate the form
             request.setAttribute("THE_PRODUCT", theProduct);
@@ -113,11 +113,11 @@ public class ControllerServlet extends HttpServlet {
             int id = Integer.parseInt(idString);
 
             // delete product from the DB
-            productBean.deleteProduct(id, dataSource);
+            productBean.deleteProduct(id);
             response.sendRedirect("/webstore/admin/listProducts");
 
         } else if (userPath.equals("/admin/listOrders")) {
-            orders = orderBean.getAllOrders(dataSource);
+            orders = orderBean.getAllOrders();
 
             // add orders to the request
             request.setAttribute("ORDERS_LIST", orders);
@@ -128,7 +128,7 @@ public class ControllerServlet extends HttpServlet {
             String idString = request.getParameter("customerId");
             int id = Integer.parseInt(idString);
 
-            customer = customerBean.readById(id, dataSource);
+            customer = customerBean.readById(id);
             request.setAttribute("THE_CUSTOMER", customer);
 
             userPath = "/status-update";
@@ -137,7 +137,7 @@ public class ControllerServlet extends HttpServlet {
 
         //here my task =====================================================
         else if (userPath.equals("/admin/customerManager")) {
-            customers = customerBean.getAll(dataSource);
+            customers = customerBean.getAll();
 
             // add products to the request
             request.setAttribute("users", customers);
@@ -146,9 +146,9 @@ public class ControllerServlet extends HttpServlet {
         else if (userPath.equals("/admin/deleteCustomer")) {
             String idEmail = request.getParameter("custEmail");
 //            Customer customerToDel = pscd.getByEmail(idEmail);
-            customerBean.delete(idEmail, dataSource);
+            customerBean.delete(idEmail);
 
-            customers = customerBean.getAll(dataSource);
+            customers = customerBean.getAll();
             request.setAttribute("users", customers);
             userPath = "/customer-manager";
         }
@@ -176,7 +176,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
             theProduct.setBrand(request.getParameter("brand"));
 
-            productBean.updateProduct(theProduct, dataSource);
+            productBean.updateProduct(theProduct);
 
             response.sendRedirect("/webstore/admin/listProducts");
 
@@ -188,7 +188,7 @@ public class ControllerServlet extends HttpServlet {
             theProduct.setBrand(request.getParameter("brand"));
             theProduct.setQuantity(Integer.parseInt(request.getParameter("quantity")));
 
-            productBean.createProduct(theProduct, dataSource);
+            productBean.createProduct(theProduct);
 
             response.sendRedirect("/webstore/admin/listProducts");
         }

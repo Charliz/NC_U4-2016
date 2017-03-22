@@ -1,12 +1,13 @@
 package com.ncproject.webstore.entity;
 
+import java.io.Serializable;
 import java.sql.Array;
 import java.sql.Timestamp;
 
 /**
  * Created by book on 01.01.2017.
  */
-public class Orders {
+public class Orders implements Serializable {
     private int id;
     private int customer_id;
     private Timestamp data;

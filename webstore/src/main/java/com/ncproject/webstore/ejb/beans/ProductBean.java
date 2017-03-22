@@ -5,6 +5,8 @@ import com.ncproject.webstore.dao.postgreSql.PostgreSqlProductDao;
 import com.ncproject.webstore.ejb.ProductBeanInterface;
 import com.ncproject.webstore.entity.Product;
 
+import javax.annotation.Resource;
+import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.sql.DataSource;
@@ -18,39 +20,44 @@ import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
  */
 @TransactionAttribute(REQUIRES_NEW)
 @Stateful
+@Remote(ProductBeanInterface.class)
 public class ProductBean implements ProductBeanInterface {
+
+    @Resource(lookup = "java:/PostgresXADS")
+    private DataSource dataSource;
+
     @Override
-    public List<Product> getAllProducts(DataSource dataSource) {
+    public List<Product> getAllProducts() {
         ProductDao productDao = new PostgreSqlProductDao(dataSource);
         return productDao.getAllProducts();
     }
 
     @Override
-    public List<Product> searchProducts(String productName, DataSource dataSource) {
+    public List<Product> searchProducts(String productName) {
         ProductDao productDao = new PostgreSqlProductDao(dataSource);
         return productDao.searchProducts(productName);
     }
 
     @Override
-    public Product getProductById(int idString, DataSource dataSource) {
+    public Product getProductById(int idString) {
         ProductDao productDao = new PostgreSqlProductDao(dataSource);
         return productDao.getProductById(idString);
     }
 
     @Override
-    public void createProduct(Product newProduct, DataSource dataSource) {
+    public void createProduct(Product newProduct) {
         ProductDao productDao = new PostgreSqlProductDao(dataSource);
         productDao.createProduct(newProduct);
     }
 
     @Override
-    public void updateProduct(Product theProduct, DataSource dataSource) {
+    public void updateProduct(Product theProduct) {
         ProductDao productDao = new PostgreSqlProductDao(dataSource);
         productDao.updateProduct(theProduct);
     }
 
     @Override
-    public void deleteProduct(int id, DataSource dataSource) {
+    public void deleteProduct(int id) {
         ProductDao productDao = new PostgreSqlProductDao(dataSource);
         productDao.deleteProduct(id);
     }

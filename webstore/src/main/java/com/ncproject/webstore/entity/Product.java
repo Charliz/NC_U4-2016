@@ -1,8 +1,9 @@
 package com.ncproject.webstore.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Product {
+public class Product implements Serializable {
 
     private int prod_id;
     private String description;

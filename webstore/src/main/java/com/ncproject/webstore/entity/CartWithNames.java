@@ -1,9 +1,11 @@
 package com.ncproject.webstore.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by book on 30.12.2016.
  */
-public class CartWithNames {
+public class CartWithNames implements Serializable {
 
     private int id;
     private String name;

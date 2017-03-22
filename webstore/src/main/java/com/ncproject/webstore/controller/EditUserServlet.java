@@ -51,7 +51,7 @@ public class EditUserServlet extends HttpServlet {
         if(address != customer.getAddress()) customer.setAddress(address);
 
         try {
-            customerBean.update(customer, dataSource);
+            customerBean.update(customer);
         } catch (Exception e) {
             e.printStackTrace();
             return;

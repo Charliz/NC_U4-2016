@@ -3,16 +3,15 @@ package com.ncproject.webstore.ejb;
 import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.entity.Customer;
 
-import javax.ejb.Local;
-import javax.sql.DataSource;
+import javax.ejb.Remote;
 import java.util.List;
 
 /**
  * Created by admin on 23.02.2017.
  */
-@Local
+@Remote
 public interface OrderBeanInterface {
-    List<Orders> readById(Customer customer, DataSource dataSource);
-    void createOrder(Customer customer, DataSource dataSource);
-    List<Orders> getAllOrders(DataSource dataSource);
+    List<Orders> readById(Customer customer);
+    void createOrder(Customer customer);
+    List<Orders> getAllOrders();
 }

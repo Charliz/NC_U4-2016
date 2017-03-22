@@ -2,19 +2,18 @@ package com.ncproject.webstore.ejb;
 
 import com.ncproject.webstore.entity.Product;
 
-import javax.ejb.Local;
-import javax.sql.DataSource;
+import javax.ejb.Remote;
 import java.util.List;
 
 /**
  * Created by Черный on 01.03.2017.
  */
-@Local
+@Remote
 public interface ProductBeanInterface {
-    List<Product> getAllProducts(DataSource dataSource);
-    List<Product> searchProducts(String productName, DataSource dataSource);
-    Product getProductById(int idString, DataSource dataSource);
-    void createProduct(Product newProduct, DataSource dataSource);
-    void updateProduct(Product theProduct, DataSource dataSource);
-    void deleteProduct(int id, DataSource dataSource);
+    List<Product> getAllProducts();
+    List<Product> searchProducts(String productName);
+    Product getProductById(int idString);
+    void createProduct(Product newProduct);
+    void updateProduct(Product theProduct);
+    void deleteProduct(int id);
 }

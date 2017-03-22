@@ -1,8 +1,9 @@
 package com.ncproject.webstore.entity;
 
 
+import java.io.Serializable;
 
-public class Cart {
+public class Cart implements Serializable {
     private int id;
     private int customer_id;
     private int product_id;

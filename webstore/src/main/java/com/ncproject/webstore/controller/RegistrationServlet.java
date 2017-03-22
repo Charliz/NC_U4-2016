@@ -49,7 +49,7 @@ public class RegistrationServlet extends HttpServlet {
         Customer customer = new Customer(login, hashedPassword, email, name, address, payment);
 
         try {
-            customerBean.create(customer, dataSource);
+            customerBean.create(customer);
         } catch (Exception e) {
             e.printStackTrace();
             return;

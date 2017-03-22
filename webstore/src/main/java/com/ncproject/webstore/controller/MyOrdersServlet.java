@@ -26,8 +26,7 @@ import java.util.List;
  */
 @WebServlet("/myorders")
 public class MyOrdersServlet extends HttpServlet {
-    @Resource(lookup = "java:/PostgresXADS")
-    private DataSource dataSource;
+
     @EJB
     private CartBeanInterface cartBean;
     @EJB
@@ -51,8 +50,8 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        orders = orderBean.readById(customer, dataSource);
-        String sumInCart = cartBean.getCartSumById(customer, dataSource);
+        orders = orderBean.readById(customer);
+        String sumInCart = cartBean.getCartSumById(customer);
 
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
@@ -73,14 +72,14 @@ public class MyOrdersServlet extends HttpServlet {
         String emailTo = customer.getEmail();
 
         try {
-            orders = orderBean.readById(customer, dataSource);
+            orders = orderBean.readById(customer);
             List<Orders> orders1 = new ArrayList<Orders>();
             orders1.add(orders.get(orders.size()-1));
             orders = orders1;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String sumInCart = cartBean.getCartSumById(customer, dataSource);
+        String sumInCart = cartBean.getCartSumById(customer);
 
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
@@ -99,8 +98,8 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
-        if (Double.parseDouble(cartBean.getCartSumById(customer, dataSource)) > 0) {
-            orderBean.createOrder(customer, dataSource);
+        if (Double.parseDouble(cartBean.getCartSumById(customer)) > 0) {
+            orderBean.createOrder(customer);
             newOrder(req, resp);
         }else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/cart.jsp");

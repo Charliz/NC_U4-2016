@@ -2,24 +2,25 @@ package com.ncproject.webstore.ejb;
 
 import com.ncproject.webstore.entity.Customer;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.sql.DataSource;
 import java.util.List;
 
 /**
  * Created by Черный on 01.03.2017.
  */
-@Local
+@Remote
 public interface CustomerBeanInterface {
-    void create(Customer customer, DataSource dataSource);
 
-    List<Customer> getAll(DataSource dataSource);
+    void create(Customer customer);
 
-    void delete(String email, DataSource dataSource);
+    List<Customer> getAll();
 
-    Customer read(String login, DataSource dataSource);
+    void delete(String email);
 
-    void update(Customer customer, DataSource dataSource);
+    Customer read(String login);
 
-    Customer readById(int id, DataSource dataSource);
+    void update(Customer customer);
+
+    Customer readById(int id);
 }
