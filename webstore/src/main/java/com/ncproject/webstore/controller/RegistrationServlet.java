@@ -2,6 +2,7 @@ package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.ejb.CustomerBeanInterface;
 import com.ncproject.webstore.entity.Customer;
+import com.ncproject.webstore.utils.EncryptionUtil;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -13,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
-import static com.ncproject.webstore.utils.EncryptionUtil.hash;
+//import static com.ncproject.webstore.utils.EncryptionUtil.hash;
 
 /**
  * Created by Черный on 28.12.2016.
@@ -44,12 +47,20 @@ public class RegistrationServlet extends HttpServlet {
             return;
         }
 
-        String hashedPassword = hash(password, null);
+        String hashedPassword = null;
+        try {
+            hashedPassword = EncryptionUtil.generateStorngPasswordHash(password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
 
         Customer customer = new Customer(login, hashedPassword, email, name, address, payment);
-
+//        customerBean.getAll();
+        System.out.println("go to the error!");
         try {
-            customerBean.create(customer);
+            customerBean.create(customer); // UnknownSessionID error
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -57,7 +68,7 @@ public class RegistrationServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.setAttribute("myUser", customer);
-        req.login(login, password);
+//        req.login(login, password);
 
         resp.sendRedirect("/webstore/customer/registrationSuccess.jsp");
         // getServletContext().getRequestDispatcher("/customer/registrationSuccess.jsp").forward(req, resp);

@@ -3,6 +3,7 @@ package com.ncproject.webstore.ejb;
 import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.entity.Customer;
 
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import java.util.List;
 
@@ -11,7 +12,10 @@ import java.util.List;
  */
 @Remote
 public interface OrderBeanInterface {
+
     List<Orders> readById(Customer customer);
+
     void createOrder(Customer customer);
+
     List<Orders> getAllOrders();
 }

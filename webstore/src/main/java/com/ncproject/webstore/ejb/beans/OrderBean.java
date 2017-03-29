@@ -1,9 +1,9 @@
 package com.ncproject.webstore.ejb.beans;
 
 import com.ncproject.webstore.dao.OrdersDAO;
+import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.dao.postgreSql.PostgreOrdersDAO;
-import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
 import javax.annotation.Resource;
@@ -30,12 +30,15 @@ public class OrderBean implements OrderBeanInterface {
     @Override
     public List<Orders> readById(Customer customer) {
         OrdersDAO ordersDAO = new PostgreOrdersDAO(dataSource);
+        System.out.println("was in order bean");
+        List<Orders> lo = null;
         try {
-            return ordersDAO.readById(customer.getId());
+            lo = ordersDAO.readById(customer.getId());
+            System.out.println("was in order bean, after return list orders");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return lo;
     }
 
     @Override

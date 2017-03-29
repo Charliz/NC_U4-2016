@@ -1,13 +1,12 @@
 package com.ncproject.webstore.controller;
 
+import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.ejb.beans.EmailSessionBean;
 import com.ncproject.webstore.entity.MailEvent;
 import com.ncproject.webstore.entity.Orders;
 import com.ncproject.webstore.ejb.CartBeanInterface;
-import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +48,10 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
 
+        System.out.println("was in ORDERS ****************");
+
         orders = orderBean.readById(customer);
+        System.out.println("was in ORDERS 2 ****************");
         String sumInCart = cartBean.getCartSumById(customer);
 
         req.setAttribute("ords", orders);

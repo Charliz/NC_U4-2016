@@ -12,6 +12,7 @@ import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.List;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 
@@ -27,11 +28,11 @@ public class CartBean implements CartBeanInterface {
     private DataSource dataSource;
 
     @Override
-    public ArrayList<Cart> getCart(Customer customer) {
+    public List<Cart> getCart(Customer customer) {
         CartDAO cartDAO = new PostgreCartDAO(dataSource);
-        ArrayList<Cart> cart = null;
+        List<Cart> cart = null;
         try {
-            cartDAO.readById(customer.getId());
+            cart = cartDAO.readById(customer.getId());
         } catch (Exception e) {
             System.out.println("Get cart Bean exception");
             e.printStackTrace();

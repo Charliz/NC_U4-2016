@@ -42,7 +42,9 @@
 
 <h2 align="center">Hello! Please, Login</h2>
 
-<form action="j_security_check" method=post >
+<%--j_security_check--%>
+
+<form action="/webstore/customer/mts" method=post >
     <table align="center">
         <tr>
             <td align="right"><strong>Login:</strong></td>

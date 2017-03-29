@@ -13,10 +13,10 @@ public interface OrdersDAO {
     RowMapper<Orders> ROW_MAPPER_ORD = (ResultSet resultSet, int rowNum) -> {
         return new Orders(resultSet.getInt("id"), resultSet.getInt("customer_id"),
                 resultSet.getTimestamp("data"), resultSet.getString("status"),
-                resultSet.getArray("product_list"), resultSet.getDouble("total"));
+                resultSet.getString("productlist"), resultSet.getDouble("total"));
     };
     List<Orders> readById(int id) throws Exception;
     void createOrder(int customer_id) throws Exception;
-    void setDataSource();
+//    void setDataSource();
     List<Orders> getAllOrders();
 }

@@ -21,12 +21,12 @@ public class PostgreOrdersDAO implements OrdersDAO {
 
     public PostgreOrdersDAO(DataSource dataSource){
         this.dataSource = dataSource;
-        setDataSource();
-    }
-
-    public void setDataSource() {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+//    private void setDataSource() {
+//
+//    }
 
     @Override
     public List<Orders> getAllOrders() {
@@ -40,6 +40,7 @@ public class PostgreOrdersDAO implements OrdersDAO {
     public List<Orders> readById(int id){
 
         String sql = "select * from orders where customer_id=?;";
+        System.out.println("was in order dao!!!");
 
         return jdbcTemplate.query(sql, new Object[] {id}, ROW_MAPPER_ORD);
     }

@@ -41,7 +41,7 @@
                 <tr>
                     <td> ${tempProduct.data} </td>
                     <td> ${tempProduct.status} </td>
-                    <td> ${tempProduct.product_list} </td>
+                    <td> ${tempProduct.productlist} </td>
                     <td> ${tempProduct.total} </td>
                 </tr>
             </c:forEach>
