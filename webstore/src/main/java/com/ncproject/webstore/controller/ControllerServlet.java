@@ -1,8 +1,7 @@
 package com.ncproject.webstore.controller;
 
 import com.ncproject.webstore.ejb.CustomerBeanInterface;
-//import com.ncproject.webstore.ejb.OrderBeanInterface;
-import com.ncproject.webstore.ejb.MorderBeanInterface;
+import com.ncproject.webstore.ejb.OrderBeanInterface;
 import com.ncproject.webstore.ejb.ProductBeanInterface;
 import com.ncproject.webstore.entity.Customer;
 import com.ncproject.webstore.entity.Orders;
@@ -49,7 +48,7 @@ public class ControllerServlet extends HttpServlet {
     @EJB
     private ProductBeanInterface productBean;
     @EJB
-    private MorderBeanInterface orderBean;
+    private OrderBeanInterface orderBean;
 
 //    private static final long serialVersionUID = 1L;
     private String pathToSaveNewFile;

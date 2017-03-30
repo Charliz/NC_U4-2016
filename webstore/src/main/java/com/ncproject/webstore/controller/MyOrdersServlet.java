@@ -71,7 +71,7 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Customer customer = (Customer) session.getAttribute("myUser");
         String emailTo = customer.getEmail();
-
+        System.out.println("was in new order ++++++++++++++");
         try {
             orders = orderBean.readById(customer);
             List<Orders> orders1 = new ArrayList<Orders>();
@@ -81,10 +81,10 @@ public class MyOrdersServlet extends HttpServlet {
             e.printStackTrace();
         }
         String sumInCart = cartBean.getCartSumById(customer);
-
+        System.out.println("was in new order ++++++++++++++ go over try");
         req.setAttribute("ords", orders);
         req.setAttribute("cart_sum", sumInCart);
-
+        System.out.println("was in new order ++++++++++++++ go over set attr");
         // send to JSP page (view)
         RequestDispatcher dispatcher = req.getRequestDispatcher("/order.jsp");
         sendEmail(emailTo);

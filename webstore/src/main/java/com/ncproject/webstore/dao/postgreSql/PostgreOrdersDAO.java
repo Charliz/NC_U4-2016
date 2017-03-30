@@ -24,16 +24,12 @@ public class PostgreOrdersDAO implements OrdersDAO {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-//    private void setDataSource() {
-//
-//    }
 
     @Override
     public List<Orders> getAllOrders() {
         String sql = "SELECT * FROM orders ORDER BY id\n" +
                 "ASC";
         return jdbcTemplate.query(sql, ROW_MAPPER_ORD);
-
     }
 
     @Override

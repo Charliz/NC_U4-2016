@@ -2,6 +2,10 @@ package com.ncproject.webstore.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Array;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Product implements Serializable {
 
@@ -31,6 +35,7 @@ public class Product implements Serializable {
     public Product() {
 
     }
+
 
     public int getProd_id() {
         return prod_id;

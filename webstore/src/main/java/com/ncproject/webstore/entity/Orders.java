@@ -1,8 +1,8 @@
 package com.ncproject.webstore.entity;
 
 import java.io.Serializable;
-import java.sql.Array;
 import java.sql.Timestamp;
+
 
 /**
  * Created by book on 01.01.2017.
@@ -12,20 +12,19 @@ public class Orders implements Serializable{
     private int customer_id;
     private Timestamp data;
     private String status;
-    private String productlist;
+    private String product_list;
     private double total;
 
     public Orders() {
     }
-    public Orders(int id, int customer_id, Timestamp data, String status, String productlist, double total) {
+    public Orders(int id, int customer_id, Timestamp data, String status, String product_list, double total) {
         this.id = id;
         this.customer_id = customer_id;
         this.data = data;
         this.status = status;
-        this.productlist = productlist;
+        this.product_list = product_list;
         this.total = total;
     }
-
 
 
     public int getId() {
@@ -60,12 +59,12 @@ public class Orders implements Serializable{
         this.status = status;
     }
 
-    public String getProductlist() {
-        return productlist;
+    public String getProduct_list() {
+        return product_list;
     }
 
-    public void setProductlist(String productlist) {
-        this.productlist = productlist;
+    public void setProduct_list(String product_list) {
+        this.product_list = product_list;
     }
 
     public double getTotal() {
