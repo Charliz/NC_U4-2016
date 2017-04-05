@@ -13,6 +13,8 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession session= req.getSession();
+        session.removeAttribute("myUser");
+        session.removeAttribute("myAdmin");
         session.invalidate();
         RequestDispatcher rd = req.getRequestDispatcher("/userIndex.jsp"); //The url where go after logout
         rd.forward(req,res);

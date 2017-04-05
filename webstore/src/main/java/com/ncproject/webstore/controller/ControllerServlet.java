@@ -13,10 +13,7 @@ import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.*;
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -78,18 +75,22 @@ public class ControllerServlet extends HttpServlet {
         Customer customer;
         List<Customer> customers;
 
-        if (userPath.equals("/admin/listProducts")) {
+        HttpSession s = request.getSession();
+        //Object user = s.getAttribute("myUser");
+        boolean loggedIn = s != null && s.getAttribute("myUser") != null;
+        if (loggedIn) {
+            if (userPath.equals("/admin/listProducts")) {
 
-            // get products from the PostgreSqlProductDao
-            products = productBean.getAllProducts();
+                // get products from the PostgreSqlProductDao
+                products = productBean.getAllProducts();
 
-            // add products to the request
-            request.setAttribute("PRODUCT_LIST", products);
-            request.setAttribute("UPLOAD", pathToSaveNewFile);
+                // add products to the request
+                request.setAttribute("PRODUCT_LIST", products);
+                request.setAttribute("UPLOAD", pathToSaveNewFile);
 
-            userPath = "/list-products";
+                userPath = "/list-products";
 
-        } else if (userPath.equals("/admin/searchProducts")) {
+            } else if (userPath.equals("/admin/searchProducts")) {
                 String nameString = request.getParameter("productName");
 
                 if (nameString != null && !nameString.trim().isEmpty()) {
@@ -99,71 +100,76 @@ public class ControllerServlet extends HttpServlet {
                 userPath = "/search-products";
                 //response.sendRedirect("/webstore/admin/listProducts");
 
-        } else if (userPath.equals("/admin/loadProductToForm")) {
-            // read product id parameter from the "Update" link
-            String idString = request.getParameter("productId");
-            int id = Integer.parseInt(idString);
+            } else if (userPath.equals("/admin/loadProductToForm")) {
+                // read product id parameter from the "Update" link
+                String idString = request.getParameter("productId");
+                int id = Integer.parseInt(idString);
 
-            Product theProduct = productBean.getProductById(id);
+                Product theProduct = productBean.getProductById(id);
 
-            // place product object in the request attribute so the JSP can use it to pre-populate the form
-            request.setAttribute("THE_PRODUCT", theProduct);
+                // place product object in the request attribute so the JSP can use it to pre-populate the form
+                request.setAttribute("THE_PRODUCT", theProduct);
 
-            userPath = "/update-product-form";
+                userPath = "/update-product-form";
 
-        } else if (userPath.equals("/admin/deleteProduct")) {
-            // read product id parameter from the "Delete" link
-            String idString = request.getParameter("productId");
-            int id = Integer.parseInt(idString);
+            } else if (userPath.equals("/admin/deleteProduct")) {
+                // read product id parameter from the "Delete" link
+                String idString = request.getParameter("productId");
+                int id = Integer.parseInt(idString);
 
-            // delete product from the DB
-            productBean.deleteProduct(id);
-            response.sendRedirect("/webstore/admin/listProducts");
+                // delete product from the DB
+                productBean.deleteProduct(id);
+                response.sendRedirect("/webstore/admin/listProducts");
 
-        } else if (userPath.equals("/admin/listOrders")) {
-            orders = orderBean.getAllOrders();
+            } else if (userPath.equals("/admin/listOrders")) {
+                orders = orderBean.getAllOrders();
 
-            // add orders to the request
-            request.setAttribute("ORDERS_LIST", orders);
+                // add orders to the request
+                request.setAttribute("ORDERS_LIST", orders);
 
-            userPath = "/list-orders";
-        } else if (userPath.equals("/admin/loadEmailForm")) {
-            // read customer id parameter from the "Update" link
-            String idString = request.getParameter("customerId");
-            int id = Integer.parseInt(idString);
+                userPath = "/list-orders";
+            } else if (userPath.equals("/admin/loadEmailForm")) {
+                // read customer id parameter from the "Update" link
+                String idString = request.getParameter("customerId");
+                int id = Integer.parseInt(idString);
 
-            customer = customerBean.readById(id);
-            request.setAttribute("THE_CUSTOMER", customer);
+                customer = customerBean.readById(id);
+                request.setAttribute("THE_CUSTOMER", customer);
 
-            userPath = "/status-update";
+                userPath = "/status-update";
 
-        }
+            }
 
-        //here my task =====================================================
-        else if (userPath.equals("/admin/customerManager")) {
-            customers = customerBean.getAll();
+            //here my task =====================================================
+            else if (userPath.equals("/admin/customerManager")) {
+                customers = customerBean.getAll();
 
-            // add products to the request
-            request.setAttribute("users", customers);
-            userPath = "/customer-manager";
-        }
-        else if (userPath.equals("/admin/deleteCustomer")) {
-            String idEmail = request.getParameter("custEmail");
+                // add products to the request
+                request.setAttribute("users", customers);
+                userPath = "/customer-manager";
+            } else if (userPath.equals("/admin/deleteCustomer")) {
+                String idEmail = request.getParameter("custEmail");
 //            Customer customerToDel = pscd.getByEmail(idEmail);
-            customerBean.delete(idEmail);
+                customerBean.delete(idEmail);
 
-            customers = customerBean.getAll();
-            request.setAttribute("users", customers);
-            userPath = "/customer-manager";
+                customers = customerBean.getAll();
+                request.setAttribute("users", customers);
+                userPath = "/customer-manager";
+            }
+
+
+            // use RequestDispatcher to forward request internally
+            String url = "/admin" + userPath + ".jsp";
+            try {
+                request.getRequestDispatcher(url).forward(request, response);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        else {
+            response.sendRedirect("/customer/mts");
         }
 
-        // use RequestDispatcher to forward request internally
-        String url = "/admin" + userPath + ".jsp";
-        try {
-            request.getRequestDispatcher(url).forward(request, response);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @Override

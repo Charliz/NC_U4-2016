@@ -90,7 +90,7 @@
       <c:param name="command" value="ADD" />
       <c:param name="id" value="${tempProduct.id}"/>
     </c:url>
-				<div class="grid_1_of_3 images_1_of_3">
+				<div class="grid_1_of_4 images_1_of_4">
 					 <a href="preview.html"><img src="${root}/images/${tempProduct.id}.jpg" alt="" width="240" height="180"/></a>
                   <style>
                     p.clip {
