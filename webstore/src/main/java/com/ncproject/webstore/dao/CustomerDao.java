@@ -4,6 +4,7 @@ import com.ncproject.webstore.entity.Customer;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface CustomerDao {
@@ -28,5 +29,7 @@ public interface CustomerDao {
 	Customer readById(int id);
 
 	void update(Customer customer);
+
+	boolean isAdmin(Customer customer) throws SQLException;
 
 }

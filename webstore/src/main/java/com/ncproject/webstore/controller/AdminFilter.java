@@ -26,7 +26,7 @@ public class AdminFilter implements Filter {
         HttpSession session = request.getSession(false);
         String loginURI = request.getContextPath() + "/";
 
-        System.out.println(loginURI + " WAS IN FILTER");
+        System.out.println(loginURI + " WAS IN admin FILTER");
 
         boolean loggedIn = session != null && session.getAttribute("user") != null;
         boolean loginRequest = request.getRequestURI().equals(loginURI);

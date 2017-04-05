@@ -11,6 +11,8 @@ import com.ncproject.webstore.utils.EncryptionUtil;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -57,7 +60,13 @@ public class ProductListForCustomerServlet extends HttpServlet {
 //                                                            // и тут как раз ошибка бинная
 //        HttpSession session = req.getSession();
 //        session.setAttribute("myUser", customer);
-        System.out.println("WAS in SERVLET -------------------------------" + loggedIn);
+        System.out.println("WAS in SERVLET -------------------------------logged in - " + loggedIn);
+
+        ServletContext servletContext = getServletContext();
+        ServletConfig servletConfig = getServletConfig();
+        System.out.println("servlet context " + servletContext.toString());
+        System.out.println("servlet config " + servletConfig.toString());
+        System.out.println("server info" + servletContext.getServerInfo());
         // read the hidden "command" parameter
         if (loggedIn) {
             String theCommand = req.getParameter("command");
@@ -81,26 +90,41 @@ public class ProductListForCustomerServlet extends HttpServlet {
         Customer customer = customerBean.read(user);
         System.err.println("WAS IN login SERVLET POST");
         boolean hashedPass = false;
-        try {
-            hashedPass = EncryptionUtil.validatePassword(pass, customer.getPassword());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
+        if (customer != null) {
+            try {
+                hashedPass = EncryptionUtil.validatePassword(pass, customer.getPassword());
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
 
-        System.out.println(hashedPass + "hashed pass");
-        System.out.println(customer.getPassword() + "pass from db");
 
-        if (user.equals(customer.getLogin()) && hashedPass ) {
-//            req.getRequestDispatcher("/index.html").forward(req, resp);
-            req.getSession().setAttribute("myUser", customer);
-            resp.sendRedirect("/webstore/customer/mts");
-        }
-        else {
-//            req.getRequestDispatcher("/error.html").forward(req, resp);
+            System.out.println(hashedPass + "hashed pass");
+            System.out.println(customer.getPassword() + "pass from db");
+
+            if (user.equals(customer.getLogin()) && hashedPass ) {
+    //            req.getRequestDispatcher("/index.html").forward(req, resp);
+                req.getSession().setAttribute("myUser", customer);
+            //проверка на админа
+                try {
+                    if (customerBean.isAdmin(customer)) {
+                        req.getSession().setAttribute("myAdmin", customer);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                resp.sendRedirect("/webstore/customer/mts");
+
+            }
+            else {
+    //            req.getRequestDispatcher("/webstore/loginIndex.jsp").forward(req, resp);
+                resp.sendRedirect("/webstore/loginIndex.jsp");
+            }
+        } else {
             resp.sendRedirect("/webstore/loginIndex.jsp");
         }
+
     }
 
     private void listProducts(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -108,6 +132,8 @@ public class ProductListForCustomerServlet extends HttpServlet {
 
         List<Cart> carts = null;
         String sumInCart = "";
+
+
 
         try {
             allCatalog = catalogBean.getAll();

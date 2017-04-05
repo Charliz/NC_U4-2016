@@ -5,6 +5,10 @@ import com.ncproject.webstore.entity.Customer;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -26,7 +30,13 @@ public class PostgreSqlCustomerDao implements CustomerDao {
 	@Override
 	public Customer read(String login){
 		String sql = "select * from users where login = ?;";
-		return jdbcTemplate.queryForObject(sql, ROW_MAPPER_CUST, login);
+		List<Customer> lc = jdbcTemplate.query(sql, new Object[] {login}, ROW_MAPPER_CUST);
+		if (lc.size() > 0) {
+			return lc.get(0);
+
+		}
+		else
+			return null;
 	}
 
 	@Override
@@ -58,5 +68,28 @@ public class PostgreSqlCustomerDao implements CustomerDao {
         jdbcTemplate.update(sql2, cus.getId());
         jdbcTemplate.update(sql3, cus.getId());
         jdbcTemplate.update(sql, email);
+	}
+
+	@Override
+	public boolean isAdmin(Customer customer) throws SQLException {
+
+		String sql = "select r.role from roles r, user_roles ur, users u " +
+				"where r.id = ur.role_id and ur.user_id = u.id and u.login = ?;";
+		Connection connection = jdbcTemplate.getDataSource().getConnection();
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setString(1, customer.getLogin());
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+
+		String s = rs.getString("role");
+
+		if (s.equalsIgnoreCase("ADMIN")) {
+			System.out.println("ADMIN IN DA HOUSE - " + customer.getLogin());
+			return true;
+		}
+		else {
+			System.out.println("ITS CUSTOMER BABY - " + customer.getLogin());
+			return false;
+		}
 	}
 }

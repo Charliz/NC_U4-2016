@@ -68,6 +68,10 @@ public class ControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+
+
+//    if ()
+
         String userPath = request.getServletPath();
         List<Product> products;
         List<Orders> orders;

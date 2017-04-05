@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
@@ -26,6 +27,8 @@ public class CustomerBean implements CustomerBeanInterface {
 
     @Resource(lookup = "java:/PostgresXADS")
     private DataSource dataSource;
+
+//    CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
 
     @Override
     public void create(Customer customer) {
@@ -61,5 +64,11 @@ public class CustomerBean implements CustomerBeanInterface {
     public Customer readById(int id) {
         CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
         return customerDao.readById(id);
+    }
+
+    @Override
+    public boolean isAdmin(Customer customer) throws SQLException {
+        CustomerDao customerDao = new PostgreSqlCustomerDao(dataSource);
+        return customerDao.isAdmin(customer);
     }
 }
